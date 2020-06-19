@@ -1,2 +1,2 @@
-vbdos /Ah /Ea /Es /G /H dv.mak
+vbdos /L /Ah /Es /G /H dv.mak
 
