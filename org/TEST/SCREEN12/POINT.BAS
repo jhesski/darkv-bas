@@ -1,6 +1,5 @@
-DECLARE SUB unsetTimer ()
-DECLARE FUNCTION setupTimer# (freq#)
-DECLARE FUNCTION pxl2chr$ (p1%, p2%)
+DECLARE SUB drawUi ()
+DECLARE FUNCTION jInkey% ()
 DECLARE SUB loadOldPic ()
 DECLARE SUB selectColor (clr%)
 DECLARE FUNCTION cRGB& (r AS LONG, g AS LONG, B AS LONG)
@@ -9,10 +8,17 @@ DECLARE SUB cursor (x%, y%, cUp%, cColor%)
 DEFINT A-Z
 SCREEN 12
 
+CONST False = 0, True = -1
+
 DIM KeyPress AS STRING
 DIM SHARED sUnderCursor(7)
-DIM SHARED false: false = 0
-DIM SHARED true: true = 1
+DIM SHARED showPreview: showPreview = True
+
+DIM kbUp AS STRING: kbUp = CHR$(0) + CHR$(72)
+DIM kbDn AS STRING: kbDn = CHR$(0) + CHR$(80)
+DIM kbLt AS STRING: kbLt = CHR$(0) + CHR$(75)
+DIM kbRt AS STRING: kbRt = CHR$(0) + CHR$(77)
+DIM kbEsc AS STRING: kbEsc = CHR$(27)
 
 h = 479
 w = 639
@@ -21,41 +27,33 @@ wm = w / 2
 cX = wm
 cY = hm
 
-PALETTE 0, cRGB(5, 5, 7)
 cColor = 15
-cUp = true
+cUp = True
 
-CALL cursor(cX, cY, cUp, cColor)
+drawUi
 
-' preview frame
-LINE (639, 0)-(318, 201), 15, B
-
-c = 0
-FOR i = 1 TO (16 * 8) STEP 8
-  LINE (i, 1)-(i + 6, 7), c, BF
-  c = c + 1
-NEXT i
+cursor cX, cY, cUp, cColor
 
 selectColor (cColor)
 
+mainLoop:
 DO
-  KeyPress = UCASE$(INKEY$)
-
-  SELECT CASE KeyPress
-
-    CASE UCASE$("w")
+  KeyPress = INKEY$
+  LOCATE 1, 1: PRINT KeyPress
+  SELECT CASE UCASE$(KeyPress)
+    CASE "W", kbUp
       IF cY - 2 >= 0 THEN cY = cY - 2
       CALL cursor(cX, cY, cUp, cColor)
 
-    CASE UCASE$("s")
+    CASE "S", kbDn
       IF cY + 2 < h THEN cY = cY + 2
       CALL cursor(cX, cY, cUp, cColor)
 
-    CASE UCASE$("d")
+    CASE "D", kbRt
       IF cX + 2 < w THEN cX = cX + 2
       CALL cursor(cX, cY, cUp, cColor)
 
-    CASE UCASE$("a")
+    CASE "A", kbLt
       IF cX - 2 >= 0 THEN cX = cX - 2
       CALL cursor(cX, cY, cUp, cColor)
 
@@ -74,10 +72,34 @@ DO
       END IF
 
     CASE UCASE$("l")
-      loadOldPic
+      GOSUB repaintUI
   END SELECT
-LOOP UNTIL KeyPress = CHR$(27)
+LOOP UNTIL KeyPress = kbEsc
 
+LOCATE 28, 1
+PRINT "Exit program?"
+' GET (0, 240)-(639, 479), sHalf(0)
+
+
+DO
+  KeyPress$ = INKEY$
+LOOP WHILE KeyPress$ = ""
+             
+IF UCASE$(KeyPress$) <> "Y" THEN
+  'PUT (0, 240), BL(0)
+  'PUT (320, 240), BR(0)
+  drawUi
+  GOTO mainLoop
+END IF
+
+END
+
+repaintUI:
+  loadOldPic
+  cursor cX, cY, cUp, cColor
+RETURN
+
+REM $DYNAMIC
 SUB cPxl2Hex (p1 AS INTEGER, p2 AS INTEGER, retunrP AS STRING)
   'returnP1 = HEX$(pi)
 END SUB
@@ -94,23 +116,43 @@ DEFINT R
 STATIC SUB cursor (x, y, penUp, clr)
 
   '----check underCursor is valid ----
-  IF init = false THEN
-    GET (cX, cY)-(cX + 1, cY + 1), sUnderCursor
+  IF init = False THEN
+    GET (cX, cY)-(cX + 1, cY + 1), sUnderCursor(0)
     cX = x: cY = y
-    init = true
+    init = True
   END IF
 
   ' put under graphic back
-  PUT (cX, cY), sUnderCursor, PSET
+  PUT (cX, cY), sUnderCursor(0), PSET
 
   ' get new under cursor
-  GET (x, y)-(x + 1, y + 1), sUnderCursor
+  GET (x, y)-(x + 1, y + 1), sUnderCursor(0)
 
   ' draw new cursor
   LINE (x, y)-(x + 1, y + 1), clr, B
   
   cX = x: cY = y
 END SUB
+
+REM $STATIC
+SUB drawUi ()
+  PALETTE 0, cRGB(5, 5, 7)
+2
+  ' preview frame
+  IF showPreview THEN LINE (639, 0)-(318, 201), 15, B
+
+  colur = 0
+  FOR i = 1 TO (16 * 8) STEP 8
+    LINE (i, 1)-(i + 6, 7), colur, BF
+    colur = colur + 1
+  NEXT i
+
+END SUB
+
+REM $DYNAMIC
+FUNCTION jInkey ()
+  jInkey = INP(96)
+END FUNCTION
 
 SUB loadOldPic ()
   'Screen Text Segment = &HB800
@@ -119,34 +161,28 @@ SUB loadOldPic ()
   DIM p(8269)
   ' For screen 1 ;4 bits per pixel
   ' A Char is 8 bits 0 - 255
-  DIM s(16004)
   DIM sp(319, 200)
 
-  DIM TL(27901)
-  DIM TR(27901)
   DIM filename AS STRING: filename = "..\org\burn.pic"
   DIM pal(3)
 
-'--carr.pic
+  '--carr.pic
   pal(1) = 2
   pal(2) = 11
   pal(3) = 6
 
-'--burn.pic
+  '--burn.pic
   pal(1) = 14
   pal(2) = 12
   pal(3) = 4
 
 
-  GET (0, 0)-(319, 339), TL(0)
-  GET (320, 0)-(639, 339), TR(0)
+  'GET (0, 0)-(639, 339), sHalf(0)
 
   SCREEN 1
   DEF SEG = &HB800
-    BLOAD filename, 0
+  BLOAD filename, 0
   DEF SEG
-
-  GET (0, 0)-(319, 199), s
 
   SLEEP
 
@@ -162,28 +198,42 @@ SUB loadOldPic ()
     NEXT x
   NEXT y
 
-'+------------------------------+
-'|  screen 12  --draw data--    |
-'+------------------------------+
+  '+------------------------------+
+  '|  screen 12  --draw data--    |
+  '+------------------------------+
 
   SCREEN 12
-  PUT (0, 0), TL(0), PSET
-  PUT (320, 0), TR(0), PSET
 
-'+-----------------+
-'|   draw screen   |
-'+-----------------+
-  FOR y = 0 TO 199
-    FOR x = 0 TO 319
-      x2 = x * 2
-      y2 = y * 2
-      PSET (x2, y2), sp(x, y)
-      PSET (x2 + 1, y2), sp(x, y)
-      PSET (x2, y2 + 1), sp(x, y)
-      PSET (x2 + 1, y2 + 1), sp(x, y)
-    NEXT x
-  NEXT y
+  '+-----------------+
+  '|   draw screen   |
+  '+-----------------+
 
+  '----2X
+  doubleScale = False
+  IF doubleScale THEN
+    FOR y = 0 TO 199
+      FOR x = 0 TO 319
+        x2 = x * 2
+        y2 = y * 2
+        PSET (x2, y2), sp(x, y)
+        PSET (x2 + 1, y2), sp(x, y)
+        PSET (x2, y2 + 1), sp(x, y)
+        PSET (x2 + 1, y2 + 1), sp(x, y)
+      NEXT x
+    NEXT y
+    showPreview = False
+  ELSE
+    FOR y = 0 TO 199
+      FOR x = 0 TO 319
+        offsetX = x + 320
+        offsetY = y + 1
+        PSET (offsetX, offsetY), sp(x, y)
+      NEXT x
+    NEXT y
+    showPreview = True
+  END IF
+
+  drawUi
 
 END SUB
 
@@ -192,23 +242,5 @@ STATIC SUB selectColor (clr)
   x1 = clr * 8
   x2 = (clr * 8) + 8
   LINE (x1, 0)-(x2, 8), 15, B
-END SUB
-
-FUNCTION setupTimer# (frequency#)
-
-  IF (frequency# > 1193181) OR (frequency# < 10) THEN ERROR 5'Illegal function call
-
-  ticksPerTimer& = 1193181# / frequency#
-
-  OUT &H43, &H34                          'Specifies a bitmask setting the timer style and initializing the ports for receiving a clock rate
-  OUT &H40, ticksPerTimer& AND 255        'Send low 8 bits first
-  OUT &H40, ticksPerTimer& \ 256          'Then sent high 8 bits
-  setupTimer# = 1193181 / ticksPerTimer&  'And finally, return the resulting clock rate
-END FUNCTION
-
-SUB unsetTimer ()
-  OUT &H43, &H34
-  OUT &H40, 0 ' SET low 8 bits of trigger to 0
-  OUT &H40, 0 'Set high 8 bits of trigger to 0
 END SUB
 
