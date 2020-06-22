@@ -3,10 +3,12 @@ DEFINT A-Z
 DIM g.screen.1(640 * 480 + 4)
 DIM SHARED s.UnderCur(2 * 2 + 4)
 
+'--- Screen object
 CONST screen.width = 639
 CONST screen.height = 479
 CONST screen.midW = screen.width / 2
 CONST screen.midH = screen.height / 2
+
 CONST false = 0
 CONST true = -1
 CONST color.12.white = 15
@@ -73,10 +75,9 @@ LOOP UNTIL keyPressed$ = CHR$(27)
 SUB ui.drawUi
   '---- draw color palette
   FOR i = 0 TO 15
-    offset = 10 * i
-    LINE (offset + 2, 1)-(offset + 10, 10), i, BF
+    offset = 5 * i
+    LINE (offset + 2, 1)-(offset + 5, 5), i, BF
   NEXT i
-  '---- draw cursor
 
 END SUB
 
@@ -87,16 +88,20 @@ SUB ui.drawCursor (x, y, penUp, colur) STATIC
     init = true
   END IF
 
-  IF CX >= screen.width THEN CX = screen.width
+  IF x <= 0 THEN x = 0
+  IF y <= 0 THEN y = 0
+
+  IF x >= screen.width - 1 THEN x = screen.width - 1
+  IF y >= screen.height - 1 THEN y = screen.height - 1
+
   IF CX <= 0 THEN CX = 0
-  IF CY >= screen.height THEN CY = xscreen.height78
   IF CY <= 0 THEN CY = 0
 
   ' put under graphic back
-  PUT (CX, CY), s.UnderCur(0), PSET
+  PUT (CX, CY), s.UnderCur(0), _CLIP PSET
 
   ' get new under cursor
-  GET (x, y)-(x + 1, y + 1), s.UnderCur(0)
+  GET (x, y)-(x + 1, y + 1), s.UnderCur(0), offscreenColor
 
   ' draw new cursor
   LINE (x, y)-(x + 1, y + 1), colur, B
