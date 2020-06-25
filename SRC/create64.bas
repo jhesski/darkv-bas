@@ -16,6 +16,7 @@ CONST screen.topRight = "TR"
 CONST false = 0
 CONST true = -1
 CONST color.12.white = 15
+CONST picLocation = "..\org\"
 
 '--- Cursor object
 DIM SHARED cur.X: cur.X = screen.midW
@@ -74,7 +75,7 @@ DO
     CASE "L"
       selectedFile$ = ui.selectPic
       ui.hideWindow
-      PRINT selectedFile$
+      ui.12.loadPic selectedFile$
   END SELECT
   IF updateCursor THEN ui.drawCursor cur.X, cur.Y, cur.penUp, cur.color
 LOOP UNTIL keyPressed = kbEsc
@@ -146,12 +147,13 @@ END SUB
 
 SUB ui.hideWindow
   PUT (10, 10), s.UnderWinodow(0), PSET
+  ERASE s.UnderWinodow
 END SUB
 
 FUNCTION ui.selectPic$ ()
   ui.drawWindow
   COLOR 0, 7: LOCATE 2, 3: PRINT "Choose Picture to load..."
-  foo$ = DIR$("..\org\*.pic")
+  foo$ = DIR$(picLocation + "*.pic")
   topFile = 0
   bottomFile = 7
   fileCount = UBOUND(DirList$) - 1
@@ -195,6 +197,23 @@ FUNCTION ui.selectPic$ ()
   RETURN
 
 END FUNCTION
+
+SUB ui.12.loadPic (pic AS STRING)
+  DIM pal(3)
+  '$dynamic
+  DIM s(16004)
+  PRINT picLocation + pic
+  pal(1) = 14
+  pal(2) = 12
+  pal(3) = 4
+
+  SCREEN 1
+  DEF SEG = &HA000 'VARSEG(s(0))
+  BLOAD picLocation + pic, 0 ' VARPTR(s(0))
+  DEF SEG
+
+  'PUT (0, 0), s(0), PSET
+END SUB
 
 FUNCTION DIR$ (spec$)
   CONST TmpFile$ = "DIR$INF0.INF", ListMAX% = 500 'change maximum to suit your needs
