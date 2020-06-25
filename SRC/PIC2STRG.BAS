@@ -8,7 +8,7 @@ SCREEN 1
 
 vidSeg = &HA000
 imgDir = "..\org\"
-filename$ = "end"
+filename$ = "lightn"
 
 DIM pal(4)
 pal(1) = 11: pal(2) = 13: pal(3) = 15
@@ -30,29 +30,24 @@ FOR y = 0 TO 199
   line$ = ""
   FOR x = 0 TO 319
     line$ = line$ + pad$(HEX$(pal(POINT(x, y))))
-    ' PSET (x, y), 15
+    PSET (x, y), 15
   NEXT x
   PRINT #1, line$
 NEXT y
 CLOSE
-
-
-
 
 FUNCTION pad$ (strg AS STRING)
   pad$ = RIGHT$("0000" + strg, 2)
 END FUNCTION
 
 SUB switchPal (BYVAL filename AS STRING, pal())
-  blue = 1
-  green = 2
-  red = 4
-  orange = 6
-  lightGray = 7
-  gray = 8
-  lightCyan = 11
-  lightOrange = 12
-  yellow = 14
+  blue = 1: green = 2
+  cyan = 3: red = 4
+  magenta = 5: orange = 6
+  lightGray = 7: gray = 8
+  lightBlue = 9: lightGreen = 10
+  lightCyan = 11: lightOrange = 12
+  lightMagenta = 13: yellow = 14
   white = 15
 
   IF MID$(filename, 1, 4) = "room" THEN filename = "room"
@@ -75,6 +70,21 @@ SUB switchPal (BYVAL filename AS STRING, pal())
 
     CASE "end"
       pal(1) = gray: pal(2) = red: pal(3) = yellow
+
+    CASE "end1"
+      pal(1) = gray: pal(2) = cyan: pal(3) = yellow
+
+    CASE "end2"
+      pal(1) = gray: pal(2) = green: pal(3) = orange
+
+    CASE "enter"
+      pal(1) = gray: pal(2) = blue: pal(3) = orange
+
+    CASE "hill"
+      pal(1) = green: pal(2) = lightCyan: pal(3) = cyan
+
+    CASE "lightn"
+      pal(1) = blue: pal(2) = lightBlue: pal(3) = white
 
     CASE "room"
       pal(1) = gray: pal(2) = blue: pal(3) = orange
