@@ -8,7 +8,7 @@ SCREEN 1
 
 vidSeg = &HA000
 imgDir = "..\org\"
-filename$ = "room11"
+filename$ = "rack"
 
 DIM pal(4)
 pal(1) = 11: pal(2) = 13: pal(3) = 15
