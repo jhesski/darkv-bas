@@ -8,7 +8,7 @@ SCREEN 1
 
 vidSeg = &HA000
 imgDir = "..\org\"
-filename$ = "lightn"
+filename$ = "room11"
 
 DIM pal(4)
 pal(1) = 11: pal(2) = 13: pal(3) = 15
@@ -54,49 +54,47 @@ SUB switchPal (BYVAL filename AS STRING, pal())
   SELECT CASE filename
     CASE "book"
       pal(1) = lightGray: pal(2) = green: pal(3) = white
-
     CASE "burn"
       pal(1) = yellow: pal(2) = lightOrange: pal(3) = red
       'pal(1) = white: pal(2) = yellow: pal(3) = lightOrange
-
-    CASE "death"
-      pal(1) = lightGray: pal(2) = red: pal(3) = lightOrange
-
-    CASE "desk"
-      pal(1) = lightGray: pal(2) = lightOrange: pal(3) = orange
-
-    CASE "dindead"
-      pal(1) = lightOrange: pal(2) = gray: pal(3) = orange
-
-    CASE "end"
-      pal(1) = gray: pal(2) = red: pal(3) = yellow
-
-    CASE "end1"
-      pal(1) = gray: pal(2) = cyan: pal(3) = yellow
-
-    CASE "end2"
-      pal(1) = gray: pal(2) = green: pal(3) = orange
-
-    CASE "enter"
-      pal(1) = gray: pal(2) = blue: pal(3) = orange
-
-    CASE "hill"
-      pal(1) = green: pal(2) = lightCyan: pal(3) = cyan
-
-    CASE "lightn"
-      pal(1) = blue: pal(2) = lightBlue: pal(3) = white
-
-    CASE "room"
-      pal(1) = gray: pal(2) = blue: pal(3) = orange
-
-    CASE "safe"
-      pal(1) = gray: pal(2) = lightGray: pal(3) = white
-
-    CASE "map1"
-      pal(1) = orange: pal(2) = red: pal(3) = gray
-
     CASE "carr"
       pal(1) = green: pal(2) = lightCyan: pal(3) = orange
+    CASE "death"
+      pal(1) = lightGray: pal(2) = red: pal(3) = lightOrange
+    CASE "desk"
+      pal(1) = lightGray: pal(2) = lightOrange: pal(3) = orange
+    CASE "dindead"
+      pal(1) = lightOrange: pal(2) = gray: pal(3) = orange
+    CASE "end"
+      pal(1) = gray: pal(2) = red: pal(3) = yellow
+    CASE "end1"
+      pal(1) = gray: pal(2) = cyan: pal(3) = yellow
+    CASE "end2"
+      pal(1) = gray: pal(2) = green: pal(3) = orange
+    CASE "enter"
+      pal(1) = gray: pal(2) = blue: pal(3) = orange
+    CASE "hill"
+      pal(1) = green: pal(2) = lightCyan: pal(3) = cyan
+    CASE "lightn"
+      pal(1) = blue: pal(2) = lightBlue: pal(3) = white
+    CASE "map1"
+      pal(1) = orange: pal(2) = red: pal(3) = gray
+    CASE "openclos"
+      pal(1) = green: pal(2) = cyan: pal(3) = gray
+    CASE "rack"
+      pal(1) = lightGray: pal(2) = magenta: pal(3) = orange
+    CASE "room"
+      pal(1) = gray: pal(2) = blue: pal(3) = orange
+    CASE "safe"
+      pal(1) = gray: pal(2) = lightGray: pal(3) = white
+    CASE "table"
+      pal(1) = green: pal(2) = red: pal(3) = gray
+    CASE "talk"
+      pal(1) = lightOrange: pal(2) = orange: pal(3) = gray
+    CASE "title"
+      pal(1) = lightCyan: pal(2) = lightBlue: pal(3) = blue
+    CASE "window"
+      pal(1) = blue: pal(2) = green: pal(3) = gray
   END SELECT
 END SUB
 
