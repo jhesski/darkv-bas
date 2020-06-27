@@ -1,54 +1,79 @@
+DECLARE SUB intro.hill ()
+DECLARE SUB intro.car ()
+DECLARE SUB loadBG (imageName AS STRING)
 DECLARE FUNCTION setupTimer# (freq#)
 DECLARE SUB delay (ms%)
 DEFINT A-Z
 
 SCREEN 13
-DIM pCur(4)
-DIM pCurUnder(4)
-DIM strt AS SINGLE
-sW = 319        ' Screen Width
-sH = 199        ' Screen Height
-sMidW = 319 / 2 ' Screen Mid Width
-sMidH = 199 / 2 ' Screen Med Height
-sCurX = sMidW
-sCurY = sMidH
+DIM SHARED imageFolder AS STRING
+DIM SHARED dataFolder AS STRING
+imageFolder = ".\"
+'dataFolder = ".\res\data\"
 
+intro:
+intro.car
+intro.hill
 
-PRINT "lets create"
-
-LINE (sMidW - 10, sMidH - 10)-(sMidW + 10, sMidH + 10), 2, BF
-
-' GET (sMidW, sMidH)-(sMidW, sMidH), pCurUnder
-
-' Draw cursor
-PSET (sMidW, sMidH), 2
-
-' Get cursor
-GET (sMidW, sMidH)-(sMidW, sMidH), pCur
-
-
-' SLEEP 1
-' PUT (sMidW, sMidH), pCurUnder, PSET
-SLEEP 1
-PUT (sMidW, sMidH), pCur, XOR
-
-s# = TIMER
-
-FOR i = 0 TO 199
-	s# = TIMER
-	PUT (sCurX, sCurY), pCur, XOR
-	sCurY = i
-	PUT (sCurX, sCurY), pCur, XOR
-	FOR j = 0 TO 200
-	NEXT j
-NEXT i
-
-PRINT INT((TIMER - s#) * 1000)
+SLEEP
 
 SUB delay (ms)
 	start# = TIMER
 	DO
 	LOOP WHILE INT((TIMER - start#) * 1000) <= ms
+END SUB
+
+SUB intro.car ()
+	DIM car(2108)
+	DIM carM(2108)
+
+	carY# = 133
+
+	loadBG "carr"
+
+	DEF SEG = VARSEG(carM(0))
+		BLOAD imageFolder + "carmask.pct", VARPTR(carM(0))
+	DEF SEG
+
+'---pull out the car
+	GET (8, 133)-(105, 175), car(0)
+	PUT (8, 133), car(0), XOR
+
+'---paint road back in.
+	LINE (8, 155)-(105, 145), 6
+	LINE (69, 176)-(120, 170), 6
+
+	moter = 37
+	FOR carX = 8 TO 220 STEP 4
+		carY# = carY# - .5
+		'PUT (carX, carY#), carM(0), AND
+
+		PUT (carX, carY#), car(0), XOR
+
+		FOR moter = 50 TO 200 STEP 18
+			SOUND 100, .06
+			SOUND moter, .06
+		NEXT moter
+	
+		PUT (carX, carY#), car(0), XOR
+	NEXT carX
+
+
+	FOR i = 1 TO 2
+		SOUND 32676, 1
+	NEXT i
+
+END SUB
+
+SUB intro.hill ()
+	loadBG "hill"
+END SUB
+
+SUB loadBG (imageName AS STRING)
+	CONST videoSeg = &HB800
+	DEF SEG = videoSeg
+		BLOAD imageFolder + imageName + ".vga"
+	DEF SEG
 END SUB
 
 FUNCTION setupTimer# (freq#)
