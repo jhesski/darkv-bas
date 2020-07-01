@@ -13,7 +13,7 @@ imageFolder = ".\res\bg\vga\"
 
 intro:
 intro.car
-'intro.hill
+intro.hill
 
 SLEEP
 
@@ -66,11 +66,10 @@ SUB intro.car ()
 		PUT (carX, carY), car(0), XOR
 
 	
-		GOSUB 10
+		GOSUB into.CarSound
 
 		PUT (carX, carY), car(0), XOR
 		PUT (8, 123), ground(0), PSET
-		PUT (0, 0), buffer(0), PSET
 	NEXT carX
 
 
@@ -83,64 +82,79 @@ SUB intro.car ()
 
 	ERASE carMask
 	EXIT SUB
-10 GOTO 30
-20
+
+'+------------------+
+'|    Sound loop    |
+'+------------------+
+into.CarSound:
+	GOTO intro.carCheckSound
+
+into.CarIncSound:
 	SOUND motor, .06
 	SOUND 69, .06
 	motor = motor + 18
-30 IF motor <= 200 THEN GOTO 20
+
+intro.carCheckSound:
+	IF motor <= 200 THEN GOTO into.CarIncSound
+
 RETURN
 END SUB
 
 SUB intro.hill ()
-	DIM bg1(32001)
+	DIM bg1(19681)
 	DIM bg2(19681)
+	r76 = 0#
 
 	bgCaptured = 0
 
 	loadBG "hill"
-	GET (0, 0)-(319, 199), bg1(0)
+	GET (0, 0)-(319, 122), bg1(0)
+	'---Lenghtning
+	OUT &H3C8, 0: OUT &H3C9, 33
+	OUT &H3C9, 33: OUT &H3C9, 33
+	GET (0, 0)-(319, 122), bg2(0)
 
-	SLEEP
-	
-	FOR i = 1 TO 300
-
-	NEXT i
+	PUT (0, 0), bg1(0), PSET
 
 	FOR i = 1 TO 35
+		motor = 37
+		GOSUB into.hillSound
 
-		FOR moter = 50 TO 200 STEP 18
-		 SOUND 69, .06
-		 SOUND moter, .06
-		NEXT moter
+		IF RND <= .8 THEN
+			PUT (0, 0), bg2(0), PSET
+			GOTO into.hillLSound
 
-		IF RND > .8 THEN
-			OUT &H3C8, 0
-			OUT &H3C9, 0
-			OUT &H3C9, 0
-			OUT &H3C9, 0
-
-			'SOUND 32676, .04
-			'SOUND 32676, .04
-			'SOUND 32676, .04
+			PUT (0, 0), bg1(0), PSET
 
 		ELSE
-			OUT &H3C8, 0
-			OUT &H3C9, 33
-			OUT &H3C9, 33
-			OUT &H3C9, 33
-
-			FOR j = 0 TO 30000
-			NEXT j
-
-			OUT &H3C8, 0
-			OUT &H3C9, 0
-			OUT &H3C9, 0
-			OUT &H3C9, 0
-
+			PUT (0, 0), bg1(0), PSET
 		END IF
 	NEXT i
 
+'+------------------+
+'|    Sound loop    |
+'+------------------+
+into.hillSound:
+	GOTO intro.hillCheckSound
+
+into.hillIncSound:
+	SOUND motor, .06
+	SOUND 69, .06
+	motor = motor + 18
+
+intro.hillCheckSound:
+	IF motor <= 200 THEN GOTO into.hillIncSound
+RETURN
+
+'+------------------+
+'|    Sound loop    |
+'+------------------+
+
+into.hillLSound:
+	SOUND 76, .04
+	r76 = r76 + 1
+	IF r76 <= 2 THEN GOTO into.hillLSound
+RETURN
 END SUB
 
 SUB loadBG (imageName AS STRING)
