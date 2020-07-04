@@ -68,7 +68,6 @@ SUB intro.car ()
 		GOSUB into.CarSound
 
 		PUT (carX, carY), car(0), XOR
-		PUT (8, 123), ground(0), PSET
 	NEXT carX
 
 
@@ -146,10 +145,10 @@ RETURN
 '+------------------+
 EXIT SUB
 
-into.hillLSound:
+intro.hillLSound:
 	SOUND 76, .04
 	r76 = r76 + 1
-	IF r76 <= 2 THEN GOTO into.hillLSound
+	IF r76 <= 2 THEN GOTO intro.hillLSound
 RETURN
 
 into.hillWalk:
