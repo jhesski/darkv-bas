@@ -101,35 +101,31 @@ RETURN
 END SUB
 
 SUB intro.hill ()
-	DIM bg1(19681)
-	DIM bg2(19681)
 	r76 = 0#
 
-	bgCaptured = 0
-
 	loadBG "hill"
-	GET (0, 0)-(319, 122), bg1(0)
 	'---Lenghtning
-	OUT &H3C8, 0: OUT &H3C9, 33
-	OUT &H3C9, 33: OUT &H3C9, 33
-	GET (0, 0)-(319, 122), bg2(0)
-
-	PUT (0, 0), bg1(0), PSET
+	'OUT &H3C8, 0: OUT &H3C9, 33
+	'OUT &H3C9, 33: OUT &H3C9, 33
 
 	FOR i = 1 TO 35
-		motor = 37
+		motor = 50
 		GOSUB into.hillSound
 
 		IF RND <= .8 THEN
-			PUT (0, 0), bg2(0), PSET
-			GOTO into.hillLSound
-
-			PUT (0, 0), bg1(0), PSET
-
+			loadBG "hill2"
+			
+			GOSUB into.hillLSound
+			
+			loadBG "hill"
 		ELSE
-			PUT (0, 0), bg1(0), PSET
+			loadBG "hill"
 		END IF
 	NEXT i
+
+	GOSUB into.hillWalk
+
+EXIT SUB
 
 '+------------------+
 '|    Sound loop    |
@@ -149,12 +145,25 @@ RETURN
 '+------------------+
 '|    Sound loop    |
 '+------------------+
+EXIT SUB
 
 into.hillLSound:
 	SOUND 76, .04
 	r76 = r76 + 1
 	IF r76 <= 2 THEN GOTO into.hillLSound
 RETURN
+
+into.hillWalk:
+	GOTO into.hillwalkCheck
+into.hillWalkSound:
+	SOUND motor, .1
+	SOUND 75, .1
+	SOUND 32676, 1
+	motor = motor - 10
+into.hillwalkCheck:
+	IF motor >= 50 THEN GOTO into.hillWalkSound
+RETURN
+
 END SUB
 
 SUB loadBG (imageName AS STRING)
