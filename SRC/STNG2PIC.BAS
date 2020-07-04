@@ -7,7 +7,7 @@ mode = 13
 SCREEN mode
 
 imgDir = ".\RES\BG\"
-filename$ = "burn"
+filename$ = "hill2"
 
 OPEN imgDir + "PXT  \" + filename$ + ".pxt" FOR INPUT AS #1
 
@@ -23,6 +23,9 @@ IF mode = 13 THEN
     NEXT i
     y = y + 1
   LOOP UNTIL EOF(1)
+
+  PAINT (2, 2), 15
+
   '-----------SAVE
   DEF SEG = &HA000
     BSAVE imgDir + "VGA\" + filename$ + ".vga", 0, 64000
@@ -58,6 +61,8 @@ IF mode = 12 THEN
     y = y + 2
   LOOP UNTIL EOF(1)
 
+  PAINT (2, 2), 15
+
   '----------save screen
   GET (0, 0)-(639, 159), sp.screen(0)
 
@@ -70,6 +75,8 @@ IF mode = 12 THEN
   DEF SEG = VARSEG(sp.screen(0))
     BSAVE imgDir + "SGA\" + filename$ + ".sgb", 0, 64000
   DEF SEG
+
+  PAINT (2, 2), 15
 
   GET (0, 321)-(639, 479), sp.screen(0)
 
