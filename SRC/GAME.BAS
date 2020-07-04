@@ -1,7 +1,6 @@
 DECLARE SUB intro.hill ()
 DECLARE SUB intro.car ()
 DECLARE SUB loadBG (imageName AS STRING)
-DECLARE FUNCTION setupTimer# (freq#)
 DECLARE SUB delay (ms%)
 DEFINT A-Z
 
@@ -55,14 +54,14 @@ SUB intro.car ()
 	'+----------------------------+
 	'|   Get ground for repaint   |
 	'+----------------------------+
-	GET (8, 123)-(310, 158), ground(0)
+	'GET (8, 123)-(310, 158), ground(0)
 
 
 	
 	FOR carX = 8 TO 220 STEP 4
 		motor = 37
 		carY = carY - .5
-		PUT (carX, carY), carMask(0), AND
+		'PUT (carX, carY), carMask(0), AND
 		PUT (carX, carY), car(0), XOR
 
 	
@@ -163,16 +162,4 @@ SUB loadBG (imageName AS STRING)
 		BLOAD imageFolder + imageName + ".vga"
 	DEF SEG
 END SUB
-
-FUNCTION setupTimer# (freq#)
-
-IF (freq# > 1193181) OR (freq# < 18.3) THEN ERROR 5'Illegal function call
-
-ticksPerTimer& = 1193181# / freq#
-
-OUT &H43, &H34                          'Specifies a bitmask setting the timer style and initializing the ports for receiving a clock rate
-OUT &H40, ticksPerTimer& AND 255        'Send low 8 bits first
-OUT &H40, ticksPerTimer& \ 256          'Then sent high 8 bits
-setupTimer# = 1193181 / ticksPerTimer&  'And finally, return the resulting clock rate
-END FUNCTION
 
