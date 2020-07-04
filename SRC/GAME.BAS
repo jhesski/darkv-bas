@@ -54,20 +54,21 @@ SUB intro.car ()
 	'+----------------------------+
 	'|   Get ground for repaint   |
 	'+----------------------------+
-	'GET (8, 123)-(310, 158), ground(0)
+	GET (8, 123)-(310, 158), ground(0)
 
 
 	
 	FOR carX = 8 TO 220 STEP 4
 		motor = 37
 		carY = carY - .5
-		'PUT (carX, carY), carMask(0), AND
+		PUT (carX, carY), carMask(0), AND
 		PUT (carX, carY), car(0), XOR
 
 	
-		GOSUB into.CarSound
+		GOSUB intro.CarSound
 
 		PUT (carX, carY), car(0), XOR
+		PUT (8, 123), ground(0), PSET
 	NEXT carX
 
 
@@ -84,16 +85,16 @@ SUB intro.car ()
 '+------------------+
 '|    Sound loop    |
 '+------------------+
-into.CarSound:
+intro.CarSound:
 	GOTO intro.carCheckSound
 
-into.CarIncSound:
+intro.CarIncSound:
 	SOUND motor, .06
 	SOUND 69, .06
 	motor = motor + 18
 
 intro.carCheckSound:
-	IF motor <= 200 THEN GOTO into.CarIncSound
+	IF motor <= 200 THEN GOTO intro.CarIncSound
 
 RETURN
 END SUB
@@ -103,41 +104,43 @@ SUB intro.hill ()
 
 	loadBG "hill"
 	'---Lenghtning
-	'OUT &H3C8, 0: OUT &H3C9, 33
-	'OUT &H3C9, 33: OUT &H3C9, 33
+
+	OUT &H3C8, 15: OUT &H3C9, 45
+	OUT &H3C9, 45: OUT &H3C9, 48
 
 	FOR i = 1 TO 35
 		motor = 50
-		GOSUB into.hillSound
+		GOSUB intro.hillSound
 
-		IF RND <= .8 THEN
+		IF RND > .8 THEN
 			loadBG "hill2"
 			
-			GOSUB into.hillLSound
-			
+			GOSUB intro.hillLSound
+
 			loadBG "hill"
 		ELSE
 			loadBG "hill"
 		END IF
+
 	NEXT i
 
-	GOSUB into.hillWalk
+	GOSUB intro.hillWalk
 
 EXIT SUB
 
 '+------------------+
 '|    Sound loop    |
 '+------------------+
-into.hillSound:
+intro.hillSound:
 	GOTO intro.hillCheckSound
 
-into.hillIncSound:
+intro.hillIncSound:
 	SOUND motor, .06
 	SOUND 69, .06
 	motor = motor + 18
 
 intro.hillCheckSound:
-	IF motor <= 200 THEN GOTO into.hillIncSound
+	IF motor <= 200 THEN GOTO intro.hillIncSound
 RETURN
 
 '+------------------+
@@ -151,15 +154,15 @@ intro.hillLSound:
 	IF r76 <= 2 THEN GOTO intro.hillLSound
 RETURN
 
-into.hillWalk:
-	GOTO into.hillwalkCheck
-into.hillWalkSound:
+intro.hillWalk:
+	GOTO intro.hillwalkCheck
+intro.hillWalkSound:
 	SOUND motor, .1
 	SOUND 75, .1
 	SOUND 32676, 1
 	motor = motor - 10
-into.hillwalkCheck:
-	IF motor >= 50 THEN GOTO into.hillWalkSound
+intro.hillwalkCheck:
+	IF motor >= 50 THEN GOTO intro.hillWalkSound
 RETURN
 
 END SUB
