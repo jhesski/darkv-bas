@@ -116,16 +116,17 @@ SUB intro.hill ()
 			loadBG "hill2"
 			
 			GOSUB intro.hillLSound
-
-			loadBG "hill"
 		ELSE
 			loadBG "hill"
 		END IF
 
 	NEXT i
 
+	loadBG "hill"
+
 	GOSUB intro.hillWalk
 
+	delay 400
 EXIT SUB
 
 '+------------------+
