@@ -117,6 +117,8 @@ SUB intro.enter ()
 	'$DYNAMIC
 	DIM joe2M(364)
 
+	DIM BG(937)
+
 	joeStartY = 6
 
 	loadBG "enter"
@@ -133,18 +135,26 @@ SUB intro.enter ()
 		END IF
 	NEXT i
 
-	FOR i = 0 TO 10
-		start# = TIMER
+	GET (143, 114)-(168, 185), BG(0)
+
+	
+	FOR i = 155 TO 138 STEP -1
+		stp = 0
+		PUT (143, 114), BG(0), PSET
 		IF i MOD 2 = 0 THEN
-			'PUT (143, 136), joe2M(0), AND
-			PUT (143, 136), joe2(0), PSET
+			PUT (143, i), joe2M(0), AND
+			PUT (143, i), joe2(0), XOR
 		ELSE
-			'PUT (143, 136), joe1M(0), AND
-			PUT (143, 136), joe1(0), PSET
+			PUT (143, i), joe1M(0), AND
+			PUT (143, i), joe1(0), XOR
 		END IF
-		SOUND 100, 1
-		SOUND 32767, 2
-		
+
+		FOR j = 37 TO 250 STEP 10
+			SOUND 100, .05
+			SOUND stp, .05
+
+			SOUND j, .05
+		NEXT j
 	NEXT i
 
 
