@@ -87,9 +87,9 @@ done: DEF SEG
 
 
   'This code will write the video buffer onto the disk as test.pct
-
+  'size = 4 + INT(((22) * 8 + 7) / 8) * 31
   DEF SEG = VARSEG(car(0))
-  BSAVE "joe02M.pct", 0, 4216
+  BSAVE "joe02M.pct", 0, 686
   DEF SEG
 
   WHILE INKEY$ = "": WEND

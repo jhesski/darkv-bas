@@ -17,8 +17,8 @@ spriteFolder = ".\res\sp\"
 'dataFolder = ".\res\data\"
 
 intro:
-intro.car
-intro.hill
+'intro.car
+'intro.hill
 intro.enter
 SLEEP
 
@@ -37,7 +37,6 @@ SUB intro.car ()
 	DIM ground(5455)
 	DIM carY AS DOUBLE
 	carY = 133
-	motor = 37
 
 	loadBG "carr"
 	'+--------------------+
@@ -98,7 +97,7 @@ intro.CarSound:
 
 intro.CarIncSound:
 	SOUND motor, .06
-	SOUND 69, .06
+	SOUND 80, .06
 	motor = motor + 18
 
 intro.carCheckSound:
@@ -110,9 +109,13 @@ END SUB
 REM $STATIC
 SUB intro.enter ()
 	'$DYNAMIC
-	DIM joe1(130)
+	DIM joe1(364)
 	'$DYNAMIC
-	DIM joe2(130)
+	DIM joe1M(364)
+	'$DYNAMIC
+	DIM joe2(364)
+	'$DYNAMIC
+	DIM joe2M(364)
 
 	joeStartY = 6
 
@@ -120,39 +123,34 @@ SUB intro.enter ()
 
 
 	CLOSE
-	OPEN spriteFolder + "joew2.pct" FOR INPUT AS #1
+	OPEN spriteFolder + "joew2.pga" FOR INPUT AS #1
 
-	FOR i = 0 TO 125
-		INPUT #1, joe1(i), joe2(i)
-	NEXT i
+	INPUT #1, foo$, foo2$, foo3$, foo4$
 
-	joeStartY = 126
-	SCREEN 1
-
-	PALETTE 1, 8
-	PALETTE 2, 1
-	PALETTE 3, 6
-
-	PUT (1, 1), joe1(0)
-	PUT (24, 1), joe2(0)
-	LINE (0, 0)-(23, 32), 1, B
-	LINE (23, 0)-(23 + 23, 32), 1, B
-	SLEEP
-
-	FOR i = 126 TO 118 STEP -1
-		IF i MOD 2 = 0 THEN
-			PUT (143, i), joe1(0), PSET
-			delay 80
-			PUT (143, i), joe1(0), XOR
-		ELSE
-			PUT (143, i), joe2(0), PSET
-			delay 80
-			PUT (143, i), joe2(0), XOR
-
+	FOR i = 0 TO 364
+		IF i <> 0 THEN
+			INPUT #1, joe1(i - 1), joe1M(i - 1), joe2(i - 1), joe2M(i - 1)
 		END IF
-
 	NEXT i
+
+	FOR i = 0 TO 10
+		start# = TIMER
+		IF i MOD 2 = 0 THEN
+			'PUT (143, 136), joe2M(0), AND
+			PUT (143, 136), joe2(0), PSET
+		ELSE
+			'PUT (143, 136), joe1M(0), AND
+			PUT (143, 136), joe1(0), PSET
+		END IF
+		SOUND 100, 1
+		SOUND 32767, 2
+		
+	NEXT i
+
+
 	
+	joeStartY = 126
+
 END SUB
 
 REM $STATIC
