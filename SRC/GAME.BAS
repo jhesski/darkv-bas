@@ -7,8 +7,6 @@ DEFINT A-Z
 
 SCREEN 13, 0
 
-delay 800
-
 DIM SHARED imageFolder AS STRING
 DIM SHARED dataFolder AS STRING
 DIM SHARED spriteFolder AS STRING
@@ -149,7 +147,7 @@ SUB intro.enter ()
 			PUT (143, i), joe1(0), XOR
 		END IF
 
-		FOR j = 37 TO 250 STEP 10
+		FOR j = 100 TO 250 STEP 10
 			SOUND 100, .05
 			SOUND stp, .05
 
