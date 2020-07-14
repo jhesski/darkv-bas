@@ -16,7 +16,7 @@ DIM bytepos AS LONG, buffercount AS LONG, bufferadd AS LONG, ende AS LONG
 SCREEN 13
 
 'LOAD PALLETE
-OPEN "JOE02M.pcx" FOR BINARY AS #1
+OPEN "TP320.pcx" FOR BINARY AS #1
 ende = LOF(1)
 SEEK #1, ende - 767
 FOR i = 0 TO 255
@@ -65,31 +65,36 @@ again:
 done: DEF SEG
   CLOSE
 
-  SLEEP
+  'SLEEP
 
-  DIM car(342)
+  'DIM car(342)
+  DIM sp.screen13(32001)
   PALETTE 0, 0
   PALETTE 255, CLNG(63 + (63 * 256) + (63 * (256 ^ 2)))
 
-  FOR y = 78 TO 120
-    FOR x = 111 TO 208
-      col = 255
-      IF POINT(x, y) = 255 THEN col = 0
-      PSET (x, y), col
-    NEXT x
-  NEXT y
-  CLOSE
+  'FOR y = 78 TO 120
+  '  FOR x = 111 TO 208
+  '    col = 255
+  '    IF POINT(x, y) = 255 THEN col = 0
+  '    PSET (x, y), col
+  '  NEXT x
+  'NEXT y
+  'CLOSE
 
-  GET (149, 84)-(170, 114), car(0)
+  GET (0, 0)-(319, 199), sp.screen13(0)
+
+  'GET (149, 84)-(170, 114), car(0)
   CLS
-  PUT (149, 84), car(0)
+  'SLEEP
+
+  PUT (0, 0), sp.screen13(0), PSET
 
 
 
   'This code will write the video buffer onto the disk as test.pct
-  'size = 4 + INT(((22) * 8 + 7) / 8) * 31
-  DEF SEG = VARSEG(car(0))
-  BSAVE "joe02M.pct", 0, 686
+  size = 4 + INT((((319 - 0) + 1) * (8) + 7) / 8) * ((199 - 0) + 1)
+  DEF SEG = &HA000
+    BSAVE "tplogo.pct", 0, 64000
   DEF SEG
 
   WHILE INKEY$ = "": WEND

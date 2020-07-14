@@ -1434,7 +1434,8 @@ Rem error 41 ()
 14220 I567 = Round((I566 * 100) / 47)
 14230 Print I567; "% complete";
 14240 Subroutine S14250
-14250 Call S15540
+14250 Call 
+15540
 14260 If I358 <> 1 Then GoTo 14290
 14270 GoTo 14250
 14280 GoTo 14300
@@ -1564,348 +1565,358 @@ Rem error 41 ()
 15510 PLAY "<g8a8b-8b8<c8g8a8b-8a8a8b8a8>>"
 15520 Subroutine S15530
 15530 GoTo 16750
-15540 SUB S15540
-15550 Dim R28(600)
-15560 Screen 1
-15570 Palette 1, 8
-15580 Palette 2, 4
-15590 Palette 3, 14
-15600 Key OFF
-15610 PLAY "e-6d5e-5d5f7p7"
-15620 PLAY "a5>c6<b6a5g6a4"
-Rem error 12 (1  ,0  ,0 )
-15630 GoTo 15650 '????
-15640 SOUND 32761, 1
-15650 R32 = R32 + 1
-15660 If R32 <= 5 Then GoTo 15640
-Rem error 12 (1 )
-15670 GoTo 15870 '????
-Rem error 12 (1 )
-15680 GoTo 15860 '????
-15690 If R36 <> 1 Then GoTo 15720
-15700 R38 = 8
-15710 GoTo 15770
-15720 If R36 <> 2 Then GoTo 15750
-15730 R38 = 7
-15740 GoTo 15770
-15750 If R36 <> 3 Then GoTo 15770
-15760 R38 = 15
-15770 Palette R42, R38
-Rem error 12 (1 )
-15780 GoTo 15840 '????
-15790 If Rnd >= 0.9 Then GoTo 15820
-15800 SOUND (Rnd * 71) + 50, (Rnd * 0.2) + 0.3
-15810 GoTo 15830
-15820 SOUND 32767, 0.5
-15830 R32 = R32 + 1
-15840 If R32 <= 5 Then GoTo 15790
-15850 R36 = R36 + 1
-15860 If R36 <= 3 Then GoTo 15690
-15870 R42 = R42 + 1
-15880 If R42 <= 3 Then GoTo 15680
-15890 Palette 0, 15
-15900 Key OFF
-Rem error 12 (1  ,0  ,0 )
-15910 GoTo 15930 '????
-15920 SOUND 32671, 0.5
-15930 R32 = R32 + 1
-15940 If R32 <= 7 Then GoTo 15920
-15950 Palette 0, 0
-Rem error 12 (1 )
-15960 GoTo 16160 '????
-Rem error 12 (1 )
-15970 GoTo 16150 '????
-15980 If R36 <> 1 Then GoTo 16010
-15990 R38 = 8
-16000 GoTo 16060
-16010 If R36 <> 2 Then GoTo 16040
-16020 R38 = 7
-16030 GoTo 16060
-16040 If R36 <> 3 Then GoTo 16060
-16050 GOSUB S16440
-16060 Palette R42, R38
-Rem error 12 (1 )
-16070 GoTo 16130 '????
-16080 If Rnd >= 0.9 Then GoTo 16110
-16090 SOUND (Rnd * 71) + 50, (Rnd * 0.2) + 0.3
-16100 GoTo 16120
-16110 SOUND 32767, 0.5
-16120 R32 = R32 + 1
-16130 If R32 <= 5 Then GoTo 16080
-16140 R36 = R36 + 1
-16150 If R36 <= 3 Then GoTo 15980
-16160 R42 = R42 + 1
-16170 If R42 <= 3 Then GoTo 15970
-Rem error 12 (1 )
-16180 GoTo 16200 '????
-16190 SOUND 32676, 0.1
-16200 R32 = R32 + 1
-16210 If R32 <= 40 Then GoTo 16190
-16220 GOSUB S16620
-Rem error 12 (1 )
-16230 GoTo 16250 '????
-16240 SOUND 32761, 1
-16250 R32 = R32 + 1
-16260 If R32 <= 20 Then GoTo 16240
-16270 GOSUB S16510
-16280 Print "You run swiftly from the flaming"
-16290 Print "building that is being consumed by"
-16300 Print "the blaze. As you look back at the"
-16310 Print "burning house, spewing fiery shrapnel"
-16320 Print "about the grounds you wonder about"
-16330 Print "your uncle and his work. What was"
-16340 Print "he really like? What was obliterated"
-16350 Print "in the house? Did you leave something"
-16360 Print "behind or undone ...."
-16370 Print "Maybe some day you'll find out."
-16380 Print ""
-16390 Print "Press a key to exit."
-16400 R46$ = INKEY$
-16410 If (R46$) <> "" Then GoTo 16430
-16420 GoTo 16400
-16430 System
-16440 If R42 <> 1 Then GoTo 16460
-16450 R38 = 8
-16460 If R42 <> 2 Then GoTo 16480
-16470 R38 = 2
-16480 If R42 <> 3 Then GoTo 16500
-16490 R38 = 6
-16500 Subroutine S16510
-Rem error 12 (1 )
-16510 GoTo 16580 '????
-Rem error 12 (1 )
-16520 GoTo 16560 '????
-16530 LOCATE Int(Rnd * 23) + 1, Int(Rnd * 40) + 1
-16540 Print " "
-16550 SOUND 32676, 0.05
-16560 R50 = R50 + 1
-16570 If R50 <= 40 Then GoTo 16530
-16580 R32 = R32 + 1
-16590 If R32 <= 23 Then GoTo 16520
-16600 Cls
-16610 Subroutine S16620
-16620 GET (212,140)-(262,160),R28
-16630 PUT (212,140),R28,XOR
-16640 Line (211, 148)-(265, 148), 1
-Rem error 12 (212 )
-16650 GoTo 16710 '????
-16660 PUT (R54,140),R28,XOR
-16670 SOUND (Rnd * 100) + 50, 0.1
-16680 SOUND L95, 0.1
-16690 PUT (R54,140),R28,XOR
-16700 R54 = R54 - 1
-16710 If R54 >= 65 Then GoTo 16660
-16720 Subroutine S16730
-16730 Erase R28
-16740 End Sub
+
+SUB 15540
+  15550 Dim R28(600)
+  15560 Screen 1
+  15570 Palette 1, 8
+  15580 Palette 2, 4
+  15590 Palette 3, 14
+  15600 Key OFF
+  15610 PLAY "e-6d5e-5d5f7p7"
+  15620 PLAY "a5>c6<b6a5g6a4"
+  Rem error 12 (1  ,0  ,0 )
+  15630 GoTo 15650 '????
+  15640 SOUND 32761, 1
+  15650 R32 = R32 + 1
+  15660 If R32 <= 5 Then GoTo 15640
+  Rem error 12 (1 )
+  15670 GoTo 15870 '????
+  Rem error 12 (1 )
+  15680 GoTo 15860 '????
+  15690 If R36 <> 1 Then GoTo 15720
+  15700 R38 = 8
+  15710 GoTo 15770
+  15720 If R36 <> 2 Then GoTo 15750
+  15730 R38 = 7
+  15740 GoTo 15770
+  15750 If R36 <> 3 Then GoTo 15770
+  15760 R38 = 15
+  15770 Palette R42, R38
+  Rem error 12 (1 )
+  15780 GoTo 15840 '????
+  15790 If Rnd >= 0.9 Then GoTo 15820
+  15800 SOUND (Rnd * 71) + 50, (Rnd * 0.2) + 0.3
+  15810 GoTo 15830
+  15820 SOUND 32767, 0.5
+  15830 R32 = R32 + 1
+  15840 If R32 <= 5 Then GoTo 15790
+  15850 R36 = R36 + 1
+  15860 If R36 <= 3 Then GoTo 15690
+  15870 R42 = R42 + 1
+  15880 If R42 <= 3 Then GoTo 15680
+  15890 Palette 0, 15
+  15900 Key OFF
+  Rem error 12 (1  ,0  ,0 )
+  15910 GoTo 15930 '????
+  15920 SOUND 32671, 0.5
+  15930 R32 = R32 + 1
+  15940 If R32 <= 7 Then GoTo 15920
+  15950 Palette 0, 0
+  Rem error 12 (1 )
+  15960 GoTo 16160 '????
+  Rem error 12 (1 )
+  15970 GoTo 16150 '????
+  15980 If R36 <> 1 Then GoTo 16010
+  15990 R38 = 8
+  16000 GoTo 16060
+  16010 If R36 <> 2 Then GoTo 16040
+  16020 R38 = 7
+  16030 GoTo 16060
+  16040 If R36 <> 3 Then GoTo 16060
+  16050 GOSUB S16440
+  16060 Palette R42, R38
+  Rem error 12 (1 )
+  16070 GoTo 16130 '????
+  16080 If Rnd >= 0.9 Then GoTo 16110
+  16090 SOUND (Rnd * 71) + 50, (Rnd * 0.2) + 0.3
+  16100 GoTo 16120
+  16110 SOUND 32767, 0.5
+  16120 R32 = R32 + 1
+  16130 If R32 <= 5 Then GoTo 16080
+  16140 R36 = R36 + 1
+  16150 If R36 <= 3 Then GoTo 15980
+  16160 R42 = R42 + 1
+  16170 If R42 <= 3 Then GoTo 15970
+  Rem error 12 (1 )
+  16180 GoTo 16200 '????
+  16190 SOUND 32676, 0.1
+  16200 R32 = R32 + 1
+  16210 If R32 <= 40 Then GoTo 16190
+  16220 GOSUB S16620
+  Rem error 12 (1 )
+  16230 GoTo 16250 '????
+  16240 SOUND 32761, 1
+  16250 R32 = R32 + 1
+  16260 If R32 <= 20 Then GoTo 16240
+  16270 GOSUB S16510
+  16280 Print "You run swiftly from the flaming"
+  16290 Print "building that is being consumed by"
+  16300 Print "the blaze. As you look back at the"
+  16310 Print "burning house, spewing fiery shrapnel"
+  16320 Print "about the grounds you wonder about"
+  16330 Print "your uncle and his work. What was"
+  16340 Print "he really like? What was obliterated"
+  16350 Print "in the house? Did you leave something"
+  16360 Print "behind or undone ...."
+  16370 Print "Maybe some day you'll find out."
+  16380 Print ""
+  16390 Print "Press a key to exit."
+  16400 R46$ = INKEY$
+  16410 If (R46$) <> "" Then GoTo 16430
+  16420 GoTo 16400
+  16430 System
+  16440 If R42 <> 1 Then GoTo 16460
+  16450 R38 = 8
+  16460 If R42 <> 2 Then GoTo 16480
+  16470 R38 = 2
+  16480 If R42 <> 3 Then GoTo 16500
+  16490 R38 = 6
+  16500 Subroutine S16510
+  Rem error 12 (1 )
+  16510 GoTo 16580 '????
+  Rem error 12 (1 )
+  16520 GoTo 16560 '????
+  16530 LOCATE Int(Rnd * 23) + 1, Int(Rnd * 40) + 1
+  16540 Print " "
+  16550 SOUND 32676, 0.05
+  16560 R50 = R50 + 1
+  16570 If R50 <= 40 Then GoTo 16530
+  16580 R32 = R32 + 1
+  16590 If R32 <= 23 Then GoTo 16520
+  16600 Cls
+  16610 Subroutine S16620
+  16620 GET (212,140)-(262,160),R28
+  16630 PUT (212,140),R28,XOR
+  16640 Line (211, 148)-(265, 148), 1
+  Rem error 12 (212 )
+  16650 GoTo 16710 '????
+  16660 PUT (R54,140),R28,XOR
+  16670 SOUND (Rnd * 100) + 50, 0.1
+  16680 SOUND L95, 0.1
+  16690 PUT (R54,140),R28,XOR
+  16700 R54 = R54 - 1
+  16710 If R54 >= 65 Then GoTo 16660
+  16720 Subroutine S16730
+  16730 Erase R28
+End Sub
 16750 GoTo 18680
-16760 SUB S16760
-16770 Screen 1
-16780 Randomize 0#
-16790 Key 16, Chr$(0) + Chr$(1)
-16800 ON KEY(16) GOSUB S????'????
-16810 KEY(16) ON
-16820 Palette 3, 6
-16830 Palette 1, 2
-16840 Palette 2, 11
-16850 Key OFF
-16860 Key 16, Chr$(0) + Chr$(1)
-16870 ON KEY(16) GOSUB S????'????
-16880 KEY(16) ON
-16890 Dim R28(1000)
-16900 Dim R46(130)
-16910 Dim R64(130)
-16920 R68 = 133
-16930 GET (20148,20148)-(20156,0),L629
-16940 PUT (8,133),R28,XOR
-16950 Line (8, 155)-(105, 145), 3
-16960 Line (75, 175)-(120, 170), 3
-16970 For IR70 = 1 To 2
-16980   SOUND 32676, 1
-16990 Next
-17000 For IR72 = 8 To 220 Step 4
-17010   R68 = R68 - 0.5
-17020   PUT (IR72,R68),R28,XOR
-17030   GOSUB S17070
-17040   PUT (IR72,R68),R28,XOR
-17050 Next
-17060 GoTo 17160
-Rem error 12 (50 )
-17070 GoTo 17140 '????
-17080 SOUND R76, 0.06
-17090 SOUND L95, 0.06
-17100 R80$ = INKEY$
-17110 If (R80$) <> "s" Then GoTo 17130
-17120 GoTo 18640
-17130 R76 = R76 + 18
-17140 If R76 <= 200 Then GoTo 17080
-17150 Subroutine S17160
-Rem error 12 (1 )
-17160 GoTo 17180 '????
-17170 R76 = R76 + 1
-17180 If R76 <= 500 Then GoTo 17170
-17190 Palette 2, 11
-17200 Palette 3, 3
-17210 Key OFF
-17220 R76 = 0#
-17230 For IR70 = 1 To 35
-17240   GOSUB S17070
-17250   If Rnd <= 0.8 Then GoTo 17310
-17260   Color 15
-Rem error 12 (1 )
-17270   GoTo 17290 '????
-17280   SOUND 32676, 0.04
-17290   R76 = R76 + 1
-17300   If R76 <= 2 Then GoTo 17280
-17310   Color 0
-17320 Next
-Rem error 12 (200 )
-17330 GoTo 17380 '????
-17340 SOUND R76, 0.1
-17350 SOUND L632, 0.1
-17360 SOUND 32676, 1
-17370 R76 = R76 - 10
-17380 If R76 >= 50 Then GoTo 17340
-17390 Color 15
-17400 Color 0
-Rem error 12 (1 )
-17410 GoTo 17430 '????
-17420 R76 = R76 + 1
-17430 If R76 <= 500 Then GoTo 17420
-Rem error 12 (200 )
-17440 GoTo 17470 '????
-17450 SOUND R76, 0.1
-17460 SOUND L87, 0.2
-17470 R76 = R76 - 30
-17480 If R76 >= 50 Then GoTo 17450
-17490 SOUND L279, 0.1
-Rem error 12 (1 )
-17500 GoTo 17510 '????
-17510 R76 = R76 + 1
-17520 If R76 <= 1000 Then GoTo 17510
-17530 Palette 1, 8
-17540 Palette 2, 1
-17550 Palette 3, 6
-17560 Key OFF
-17570 GOSUB S18310
-Rem error 12 (0  ,0 )
-17580 GoTo 17780
-17590 Key OFF
-17600 Palette 1, 12
-17610 Palette 2, 6
-17620 Palette 3, 8
-17630 R80$ = INKEY$
-17640 GOSUB S17850
-17650 R80$ = INKEY$
-17660 If (R80$) <> "" Then GoTo 17690
-17670 GoTo 17640
-17680 GoTo 17780
-17690 For IR70 = 1 To 24
-17700   LOCATE 25, 1
-17710   Print " "
-17720 Next
-17730 Key OFF
-17740 Palette 1, 8
-17750 Palette 2, 1
-17760 Palette 3, 6
-17770 Print 0
-17780 Palette 2, 9
-17790 Palette 1, 11
-17800 Palette 3, 1
-17810 Key OFF
-17820 GOSUB S18200
-17830 SOUND 32676, 1
-Rem error 12 (0  ,0 )
-17840 GoTo 18020
-Rem error 12 (50 )
-17850 GoTo 17890 '????
-17860 SOUND L95, 0.05
-17870 SOUND R84, 0.05
-17880 SOUND (450 - R84) / 2, 0.05
-17890 R84 = R84 + 10
-17900 If R84 <= 250 Then GoTo 17860
-17910 If R88 <> 1 Then GoTo 17930
-17920 Subroutine S17930
-17930 R80$ = INKEY$
-17940 If (R80$) <> "s" Then GoTo 17960
-17950 GoTo 18640
-17960 SOUND 32576, Int(Rnd * 9)
-17970 Subroutine S17980
-17980 R92 = R92 + 1
-17990 If (Int(Rnd * 4) + 2) <= R92 Then GoTo 18010
-18000 GoTo 17850
-18010 Subroutine S18020
-Rem error 12 (1 )
-18020 GoTo 18160 '????
-Rem error 12 (1 )
-18030 GoTo 18140 '????
-18040 For IR70 = 1 To 1000
-18050 Next
-18060 If R76 <> 1 Then GoTo 18080
-18070 Palette R96, 15
-18080 If R76 <> 2 Then GoTo 18100
-18090 Palette R96, 7
-18100 If R76 <> 3 Then GoTo 18120
-18110 Palette R96, 8
-18120 If R76 <> 4 Then GoTo 18140
-18130 Palette R96, 0
-18140 R96 = R96 + 1
-18150 If R96 <= 3 Then GoTo 18040
-18160 R76 = R76 + 1
-18170 If R76 <= 4 Then GoTo 18030
-18180 Screen 0
-18190 System
-18200 Key 16, Chr$(0) + Chr$(1)
-18210 ON KEY(16) GOSUB S????'????
-18220 KEY(16) ON
-18230 PLAY "<d4d8d8c+8<b8>c+4d8e4<<a8d4"
-18240 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
-18250 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
-18260 PLAY "d4d8d8c+8<b8>c+4d8e4<<a8d4"
-18270 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
-18280 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
-18290 PLAY "<d8c+8d8e4f8c+4d4"
-18300 Subroutine S18310
-18310 Close
-18320 R100$ = "joew2"
-18330 Open (R100$) + ".pct" For Input As #1
-18340 GET (1,8)-(9,18),R46
-18350 GET (1,8)-(9,18),R64
-Rem error 12 (0. )
-18360 GoTo 18380 '????
-18370 Input #1, R46(Round(R76) * 2), R64(Round(R76) * 2)
-18380 R76 = R76 + 1
-18390 If R76 <= 125 Then GoTo 18370
-18400 R104 = R104 + 1
-Rem error 12 (150 )
-18410 GoTo 18620 '????
-18420 PUT (143,R76),R46,XOR
-18430 GOSUB S17850
-18440 For IR70 = 1 To 2
-18450   SOUND 32676, 0.3
-18460 Next
-18470 PUT (143,R76),R46,XOR
-18480 If R76 <> 130 Then GoTo 18530
-18490 For IR70 = 1 To 10000
-18500 Next
-18510 R88 = 0#
-18520 GOSUB S17590
-18530 R88 = 1
-18540 R76 = R76 - 2
-18550 PUT (143,R76),R64,XOR
-18560 GOSUB S17850
-18570 For IR70 = 1 To 2
-18580   SOUND 32676, 0.3
-18590 Next
-18600 PUT (143,R76),R64,XOR
-18610 R76 = R76 - 2
-18620 If R76 >= 120 Then GoTo 18420
-18630 Subroutine S18640
-18640 Erase R28
-18650 Erase R46
-18660 Erase R64
-18670 End Sub
-18680 End
+
+SUB 16760
+  Screen 1
+  Randomize 0#
+  'Key 16, Chr$(0) + Chr$(1)
+  'KEY(16) ON
+  Palette 3, 6 'Orange
+  Palette 1, 2 'Green
+  Palette 2, 11 'CyanLight
+  'Key OFF
+  'Key 16, Chr$(0) + Chr$(1)
+  'ON KEY(16) GOSUB S????'????
+  'KEY(16) ON
+  16890 Dim R28(1000)
+  16900 Dim R46(130)
+  16910 Dim R64(130)
+  16920 R68 = 133
+  16930 GET (20148,20148)-(20156,0),L629
+  16940 PUT (8,133),R28,XOR
+  16950 Line (8, 155)-(105, 145), 3
+  16960 Line (75, 175)-(120, 170), 3
+  16970 For IR70 = 1 To 2
+  16980   SOUND 32676, 1
+  16990 Next
+  17000 For IR72 = 8 To 220 Step 4
+  17010   R68 = R68 - 0.5
+  17020   PUT (IR72,R68),R28,XOR
+  17030   GOSUB S17070
+  17040   PUT (IR72,R68),R28,XOR
+  17050 Next
+  17060 GoTo 17160
+  Rem error 12 (50 )
+  17070 GoTo 17140 '????
+  17080 SOUND R76, 0.06
+  17090 SOUND L95, 0.06
+  17100 R80$ = INKEY$
+  17110 If (R80$) <> "s" Then GoTo 17130
+  17120 GoTo 18640
+  17130 R76 = R76 + 18
+  17140 If R76 <= 200 Then GoTo 17080
+  17150 Subroutine S17160
+  Rem error 12 (1 )
+  17160 GoTo 17180 '????
+  17170 R76 = R76 + 1
+  17180 If R76 <= 500 Then GoTo 17170
+  17190 Palette 2, 11 'CyanLight
+  17200 Palette 3, 3 'Cyan
+  17210 Key OFF
+  17220 R76 = 0#
+  17230 For IR70 = 1 To 35
+  17240   GOSUB S17070
+  17250   If Rnd <= 0.8 Then GoTo 17310
+  17260   Color 15
+  Rem error 12 (1 )
+  17270   GoTo 17290 '????
+  17280   SOUND 32676, 0.04
+  17290   R76 = R76 + 1
+  17300   If R76 <= 2 Then GoTo 17280
+  17310   Color 0
+  17320 Next
+  Rem error 12 (200 )
+  17330 GoTo 17380 '????
+  17340 SOUND R76, 0.1
+  17350 SOUND L632, 0.1
+  17360 SOUND 32676, 1
+  17370 R76 = R76 - 10
+  17380 If R76 >= 50 Then GoTo 17340
+  17390 Color 15
+  17400 Color 0
+  Rem error 12 (1 )
+  17410 GoTo 17430 '????
+  17420 R76 = R76 + 1
+  17430 If R76 <= 500 Then GoTo 17420
+  Rem error 12 (200 )
+  17440 GoTo 17470 '????
+  17450 SOUND R76, 0.1
+  17460 SOUND L87, 0.2
+  17470 R76 = R76 - 30
+  17480 If R76 >= 50 Then GoTo 17450
+  17490 SOUND L279, 0.1
+  Rem error 12 (1 )
+  17500 GoTo 17510 '????
+  17510 R76 = R76 + 1
+  17520 If R76 <= 1000 Then GoTo 17510
+  17530 Palette 1, 8 'Gray
+  17540 Palette 2, 1 'Blue
+  17550 Palette 3, 6 'Orange
+  17560 Key OFF
+  17570 GOSUB S18310
+  Rem error 12 (0  ,0 )
+  17580 GoTo 17780
+  17590 Key OFF
+  17600 Palette 1, 12 'Light Orage
+  17610 Palette 2, 6 'Orage
+  17620 Palette 3, 8 'Gray
+  17630 R80$ = INKEY$
+  17640
+    GOSUB 17850
+  17650 R80$ = INKEY$
+  17660 If (R80$) <> "" Then GoTo 17690
+  17670 GoTo 17640
+  17680 GoTo 17780
+  17690 For IR70 = 1 To 24
+  17700   LOCATE 25, 1
+  17710   Print " "
+  17720 Next
+  17730 Key OFF
+  17740 Palette 1, 8 'Gray
+  17750 Palette 2, 1 'Blue
+  17760 Palette 3, 6 'Orange
+  17770 Print 0
+  17780 Palette 2, 9 'BlueLight
+  17790 Palette 1, 11 'CyanLight
+  17800 Palette 3, 1 'Blue
+  17810 Key OFF
+  17820 GOSUB S18200
+  17830 SOUND 32676, 1
+  'Rem error 12 (0  ,0 )
+  17840 GoTo 18020
+  'Rem error 12 (50 )
+
+  17850
+    GoTo 17890 '????
+  17860
+    SOUND L95, 0.05
+    SOUND R84, 0.05
+    SOUND (450 - R84) / 2, 0.05
+  17890
+    R84 = R84 + 10
+    If R84 <= 250 Then GoTo 17860
+    If R88 <> 1 Then GoTo 17930
+  17930
+    R80$ = INKEY$
+    If (R80$) <> "s" Then GoTo 17960
+    GoTo 18640
+  17960
+    SOUND 32576, Int(Rnd * 9)
+  '17970 Subroutine S17980
+  17980 R92 = R92 + 1
+  17990 If (Int(Rnd * 4) + 2) <= R92 Then GoTo 18020
+  18000 GoTo 17850
+  '18010 Subroutine S18020
+  'Rem error 12 (1 )
+  18020 GoTo 18160 '????
+  'Rem error 12 (1 )
+  18030 GoTo 18140 '????
+  18040 For IR70 = 1 To 1000
+  18050 Next
+  18060 If R76 <> 1 Then GoTo 18080
+  18070 Palette R96, 15 'White
+  18080 If R76 <> 2 Then GoTo 18100
+  18090 Palette R96, 7 'GrayLight
+  18100 If R76 <> 3 Then GoTo 18120
+  18110 Palette R96, 8 'Gray
+  18120 If R76 <> 4 Then GoTo 18140
+  18130 Palette R96, 0 'Black
+  18140 R96 = R96 + 1
+  18150 If R96 <= 3 Then GoTo 18040
+  18160 R76 = R76 + 1
+  18170 If R76 <= 4 Then GoTo 18030
+  18180 Screen 0
+  18190 System
+  18200 Key 16, Chr$(0) + Chr$(1)
+  18210 ON KEY(16) GOSUB S????'????
+  18220 KEY(16) ON
+  18230 PLAY "<d4d8d8c+8<b8>c+4d8e4<<a8d4"
+  18240 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
+  18250 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
+  18260 PLAY "d4d8d8c+8<b8>c+4d8e4<<a8d4"
+  18270 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
+  18280 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
+  18290 PLAY "<d8c+8d8e4f8c+4d4"
+  18300 Subroutine S18310
+  18310 Close
+  18320 R100$ = "joew2"
+  18330 Open (R100$) + ".pct" For Input As #1
+  18340 GET (1,8)-(9,18),R46
+  18350 GET (1,8)-(9,18),R64
+  Rem error 12 (0. )
+  18360 GoTo 18380 '????
+  18370 Input #1, R46(Round(R76) * 2), R64(Round(R76) * 2)
+  18380 R76 = R76 + 1
+  18390 If R76 <= 125 Then GoTo 18370
+  18400 R104 = R104 + 1
+  Rem error 12 (150 )
+  18410 GoTo 18620 '????
+  18420 PUT (143,R76),R46,XOR
+  18430 GOSUB S17850
+  18440 For IR70 = 1 To 2
+  18450   SOUND 32676, 0.3
+  18460 Next
+  18470 PUT (143,R76),R46,XOR
+  18480 If R76 <> 130 Then GoTo 18530
+  18490 For IR70 = 1 To 10000
+  18500 Next
+  18510 R88 = 0#
+  18520 GOSUB S17590
+  18530 R88 = 1
+  18540 R76 = R76 - 2
+  18550 PUT (143,R76),R64,XOR
+  18560 GOSUB S17850
+  18570 For IR70 = 1 To 2
+  18580   SOUND 32676, 0.3
+  18590 Next
+  18600 PUT (143,R76),R64,XOR
+  18610 R76 = R76 - 2
+  18620 If R76 >= 120 Then GoTo 18420
+
+  '18630 Subroutine S18640
+  18640
+    Erase R28
+    Erase R46
+    Erase R64
+End Sub
+18680
+  End
 'Symbol Address  Symbol Address  Symbol Address  Symbol Address
 'L0     0036 E   L10    10A3     I14    2958 IE  I15    0CE6 IA
 'L16    0DEC A   L17    0EF2 A   L18    0FF8 A   L22$   2EAE S

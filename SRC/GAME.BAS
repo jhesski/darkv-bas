@@ -1,3 +1,6 @@
+DECLARE SUB intro.tenthPlay ()
+DECLARE FUNCTION rgb2Color& (r AS LONG, g AS LONG, b AS LONG)
+DECLARE FUNCTION Exist% (filename AS STRING)
 DECLARE SUB intro.enter ()
 DECLARE SUB intro.hill ()
 DECLARE SUB intro.car ()
@@ -15,8 +18,9 @@ spriteFolder = ".\res\sp\"
 'dataFolder = ".\res\data\"
 
 intro:
-'intro.car
-'intro.hill
+intro.tenthPlay
+intro.car
+intro.hill
 intro.enter
 SLEEP
 
@@ -25,6 +29,13 @@ SUB delay (ms)
 	DO
 	LOOP WHILE INT((TIMER - start#) * 1000) <= ms
 END SUB
+
+FUNCTION Exist% (filename AS STRING)
+	f% = FREEFILE
+	OPEN filename FOR APPEND AS #f%
+	IF LOF(f%) THEN Exist% = -1 ELSE exitst% = 0: CLOSE #f%: KILL filename ' delete empty files
+	CLOSE #f%
+END FUNCTION
 
 SUB intro.car ()
 	'$DYNAMIC
@@ -231,10 +242,38 @@ RETURN
 
 END SUB
 
+SUB intro.tenthPlay ()
+	loadBG "TPLOGO"
+	SLEEP 3
+	CLS
+	SCREEN 0: SCREEN 13
+END SUB
+
 SUB loadBG (imageName AS STRING)
+	DIM palFile AS STRING: palFile = imageFolder + imageName + ".pal"
+
+	IF Exist(palFile) THEN
+		DIM pal(255) AS LONG
+		file = FREEFILE
+		OPEN palFile FOR INPUT AS #file
+		FOR i = 0 TO 255
+			INPUT #file, r&, g&, b&
+			pal(i) = rgb2Color(r&, g&, b&)
+		NEXT i
+		PALETTE USING pal
+		CLOSE
+	END IF
+
 	CONST videoSeg = &HB800
 	DEF SEG = videoSeg
 		BLOAD imageFolder + imageName + ".vga"
 	DEF SEG
 END SUB
+
+FUNCTION rgb2Color& (r AS LONG, g AS LONG, b AS LONG)
+	IF r <> 0 THEN r = (r / 255) * 63
+	IF g <> 0 THEN g = (g / 255) * 63
+	IF b <> 0 THEN b = (b / 255) * 63
+	rgb2Color& = CLNG(r + (g * 256) + (b * (256 ^ 2)))
+END FUNCTION
 
