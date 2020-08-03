@@ -1,2 +1,2 @@
-vbdos /Ah /Ea /Es /G /H dv.mak
+vbdos /Ah /ES /H /L uglvd.qlb game.bas
 
