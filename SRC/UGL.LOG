@@ -54,6 +54,16 @@ UGL {
 			alloc
 		}
 	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
 	uglRestore {
 		change
 	}
