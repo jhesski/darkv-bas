@@ -27,14 +27,14 @@ wrkPg = 1
 
 uglSetWrkPage wrkPg
 
-uglPut video, 0, 0, s.bg
+uglPut video, 2, 46, s.bg
 uglGet video, 16, 212, s.road
 
 uglSetVisPage wrkPg
 SWAP wrkPg, visPg
 
 uglSetWrkPage wrkPg
-uglPut video, 0, 0, s.bg
+uglPut video, 2, 46, s.bg
 
 uglSetVisPage wrkPg
 SWAP wrkPg, visPg
