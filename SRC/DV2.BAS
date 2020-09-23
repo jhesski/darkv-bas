@@ -14,6 +14,7 @@ DIM t1 AS TMR
 DIM video AS LONG
 DIM s.bg AS LONG
 DIM s.car AS LONG
+DIM s.car2 AS LONG
 DIM s.road AS LONG
 
 '' initialize
@@ -26,6 +27,7 @@ wrkPg = 1
 
 s.bg = uglNewBMP(ems, cFMT, "carr2x.bmp")
 s.car = uglNewBMPEx(ems, cFMT, "car.bmp", BMPOPT.MASK)
+s.car2 = uglNewBMPEx(ems, cFMT, "car2.bmp", BMPOPT.MASK)
 s.road = uglNew(ems, cFMT, 624, 155)
 
 
@@ -47,8 +49,6 @@ startPx = 16: endPx = 435: steps = 7
 
 FOR i = startPx TO endPx STEP steps
 	stp = stp + 1
-	
-	IF stp MOD 2 = 0 THEN bounce = 1 ELSE bounce = 0
 
 	carY = 266 - CINT(stp * ((endPx - startPx) / steps) / 60)
 
@@ -58,7 +58,12 @@ FOR i = startPx TO endPx STEP steps
 
 	setWrkPage wrkPg
 	uglPut video, 16, 212, s.road
-	uglPutMsk video, i, (carY + bounce), s.car
+
+	IF stp MOD 2 = 0 THEN
+		uglPutMsk video, i, carY, s.car2
+	ELSE
+		uglPutMsk video, i, carY, s.car
+	END IF
 	SWAP wrkPg, visPg
 NEXT i
 
