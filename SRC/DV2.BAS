@@ -1,3 +1,6 @@
+DECLARE SUB swapPgs (pg1 AS INTEGER, pg2 AS INTEGER)
+DECLARE SUB setVisPage (page AS INTEGER)
+DECLARE SUB setWrkPage (page AS INTEGER)
 DEFINT A-Z
 '$INCLUDE: 'ugl.bi'
 '$INCLUDE: 'tmr.bi'
@@ -18,39 +21,44 @@ IF (NOT uglInit) THEN GOTO exitError
 video = uglSetVideoDC(cFMT, xRes, yRes, 2)
 IF (video = 0) THEN GOTO exitError
 
+visPg = 0
+wrkPg = 1
+
 s.bg = uglNewBMP(ems, cFMT, "carr2x.bmp")
 s.car = uglNewBMPEx(ems, cFMT, "car.bmp", BMPOPT.MASK)
 s.road = uglNew(ems, cFMT, 624, 155)
 
-visPg = 0
-wrkPg = 1
 
-uglSetWrkPage wrkPg
+setWrkPage wrkPg
 
 uglPut video, 2, 46, s.bg
 uglGet video, 16, 212, s.road
 
-uglSetVisPage wrkPg
-SWAP wrkPg, visPg
+setVisPage wrkPg: swapPgs wrkPg, visPg
 
-uglSetWrkPage wrkPg
+setWrkPage wrkPg
 uglPut video, 2, 46, s.bg
 
-uglSetVisPage wrkPg
-SWAP wrkPg, visPg
+setVisPage wrkPg: swapPgs wrkPg, visPg
 
-SLEEP
 
-carY = 212
-stp = 0
-FOR i = 16 TO 435 STEP 7
+carY = 212: stp = 0
+startPx = 16: endPx = 435: steps = 7
+
+FOR i = startPx TO endPx STEP steps
 	stp = stp + 1
-	carY = 266 - CINT(stp * ((435 - 16) / 7) / 60)
-	uglSetVisPage visPg
+	
+	IF stp MOD 2 = 0 THEN bounce = 1 ELSE bounce = 0
+
+	carY = 266 - CINT(stp * ((endPx - startPx) / steps) / 60)
+
+	setVisPage visPg
+
 	DO: LOOP UNTIL (INP(&H3DA) AND &H8)
-	uglSetWrkPage wrkPg
+
+	setWrkPage wrkPg
 	uglPut video, 16, 212, s.road
-	uglPutMsk video, i, carY, s.car
+	uglPutMsk video, i, (carY + bounce), s.car
 	SWAP wrkPg, visPg
 NEXT i
 
@@ -65,4 +73,15 @@ exitError:
 	uglEnd
 END
 
+SUB setVisPage (page AS INTEGER)
+	uglSetVisPage page
+END SUB
+
+SUB setWrkPage (page)
+	uglSetWrkPage page
+END SUB
+
+SUB swapPgs (pg1 AS INTEGER, pg2 AS INTEGER)
+	SWAP pg1, pg2
+END SUB
 
