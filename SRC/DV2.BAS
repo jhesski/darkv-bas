@@ -71,7 +71,7 @@ SUB intro.car ()
 		setVisPage visPg
 
 		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
-
+		motor = 37
 		setWrkPage wrkPg
 		uglPut video, 16, 212, s.road
 
@@ -80,9 +80,26 @@ SUB intro.car ()
 		ELSE
 			uglPutMsk video, i, carY, s.car
 		END IF
+		GOSUB intro.CarSound
 		SWAP wrkPg, visPg
 	NEXT i
 
+	EXIT SUB
+	
+	'+------------------+
+	'|    Sound loop    |
+	'+------------------+
+	intro.CarSound:
+		GOTO intro.carCheckSound
+
+	intro.CarIncSound:
+		SOUND motor, .06
+		SOUND 80, .06
+		motor = motor + 18
+
+	intro.carCheckSound:
+		IF motor <= 200 THEN GOTO intro.CarIncSound
+	RETURN
 END SUB
 
 SUB setVisPage (page AS INTEGER)
