@@ -1,3 +1,4 @@
+DECLARE SUB intro.hill ()
 DECLARE SUB intro.car ()
 DECLARE SUB swapPgs (pg1 AS INTEGER, pg2 AS INTEGER)
 DECLARE SUB setVisPage (page AS INTEGER)
@@ -20,7 +21,8 @@ IF (NOT uglInit) THEN GOTO exitError
 video = uglSetVideoDC(cFMT, xRes, yRes, 2)
 IF (video = 0) THEN GOTO exitError
 
-intro.car
+'intro.car
+intro.hill
 
 'uglPutScl video, 0, 0, 1.5, 1.5, bg2
 'SLEEP
@@ -89,17 +91,39 @@ SUB intro.car ()
 	'+------------------+
 	'|    Sound loop    |
 	'+------------------+
-	intro.CarSound:
+intro.CarSound:
 		GOTO intro.carCheckSound
 
-	intro.CarIncSound:
+intro.CarIncSound:
 		SOUND motor, .06
 		SOUND 80, .06
 		motor = motor + 18
 
-	intro.carCheckSound:
+intro.carCheckSound:
 		IF motor <= 200 THEN GOTO intro.CarIncSound
 	RETURN
+END SUB
+
+SUB intro.hill ()
+	DIM s.hill AS LONG
+	DIM s.hill2 AS LONG
+	
+	visPg = 0
+	wrkPg = 1
+
+	s.hill = uglNewBMP(ems, cFMT, "hill22x.bmp")
+	
+	'----- SETUP screen
+	setWrkPage wrkPg
+
+	uglPut video, 0, 0, s.hill
+
+	setVisPage wrkPg: swapPgs wrkPg, visPg
+
+	SLEEP
+
+	EXIT SUB
+	
 END SUB
 
 SUB setVisPage (page AS INTEGER)
