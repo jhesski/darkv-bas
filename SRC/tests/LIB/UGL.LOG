@@ -1,0 +1,107 @@
+UGL {
+	uglInit {
+		mem_Init {
+		}
+		bnk_Init {
+		}
+		ems_Init {
+		}
+		b8_Init {
+		}
+	}
+	uglSetVideo {
+		set
+		b8_SetMode {
+			pow2
+			set
+			vbeSetMode {
+				find
+				set
+				bps
+				set_bps {
+					serv_02
+				}
+				windows
+			}
+			set332pal {
+			}
+		}
+		new
+		uglNewEx {
+			DC
+			LL New
+			bnk_New {
+			}
+		}
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
+	uglRestore {
+		change
+	}
+	uglEnd {
+		del
+		uglDel {
+			LL Del
+			bnk_Del {
+			}
+		}
+		exitq
+		mem_End {
+		}
+		bnk_End {
+		}
+		ems_End {
+		}
+		b8_End {
+		}
+	}
+}
