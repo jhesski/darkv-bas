@@ -26,9 +26,11 @@ s.hill2 = uglNewBMP(ems, cFMT, "./img/hill2f2x.bmp")
 uglPut video, 0, 0, s.hill
 uglGet video, 0, 0, s.hillMask
 
-FOR i = 0 TO 22
-  IF i MOD 12 = 0 THEN uglPut video, 0, 0, s.hill2
-  IF i MOD 2 <> 0 THEN uglPut video, 0, 0, s.hillMask
+FOR i = 0 TO 50
+	DO: LOOP UNTIL (INP(&H3DA) AND &H8)
+	IF RND > .8 THEN uglPut video, 0, 0, s.hill2
+	DO: LOOP UNTIL (INP(&H3DA) AND &H8)
+	uglPut video, 0, 0, s.hillMask
 NEXT i
 
 
