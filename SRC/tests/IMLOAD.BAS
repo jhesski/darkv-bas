@@ -19,15 +19,18 @@ IF (NOT uglInit) THEN GOTO exitError
 video = uglSetVideoDC(cFMT, xRes, yRes, 2)
 IF (video = False) THEN GOTO exitError
 
-s.hill = uglNewBMP(ems, cFMT, "./img/hill22x.bmp")
+s.hill = uglNewBMP(ems, cFMT, "./img/hill2.bmp")
 s.hillMask = uglNew(ems, cFMT, 640, 246)
 s.hill2 = uglNewBMP(ems, cFMT, "./img/hill2f2x.bmp")
 
-uglPut video, 0, 0, s.hill
-uglGet video, 0, 0, s.hillMask
+'uglPut video, 0, 0, s.hill
+'uglGet video, 0, 0, s.hillMask
+uglPutScl video, 0, 0, 2, 2, s.hill
+SLEEP
 
 FOR i = 0 TO 50
 	DO: LOOP UNTIL (INP(&H3DA) AND &H8)
+	' Flash lightening if random number is > .8
 	IF RND > .8 THEN uglPut video, 0, 0, s.hill2
 	DO: LOOP UNTIL (INP(&H3DA) AND &H8)
 	uglPut video, 0, 0, s.hillMask
