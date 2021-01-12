@@ -106,19 +106,36 @@ END SUB
 
 SUB intro.hill ()
 	DIM s.hill AS LONG
+	DIM s.house AS LONG
 	DIM s.hill2 AS LONG
 	
 	visPg = 0
 	wrkPg = 1
 
 	s.hill = uglNewBMP(ems, cFMT, "hill22x.bmp")
+	s.house = uglNew(ems, cFMT, 640, 246)
+	s.hill2 = uglNewBMP(ems, cFMT, "hill2f2x.bmp")
 	
 	'----- SETUP screen
 	setWrkPage wrkPg
 
 	uglPut video, 0, 0, s.hill
+	uglGet video, 0, 0, s.house
 
 	setVisPage wrkPg: swapPgs wrkPg, visPg
+
+	uglPut video, 0, 0, s.house
+	
+	SLEEP
+
+	FOR i = 0 TO 67
+		setVisPage visPg
+
+		uglPut video, 0, 0, s.house
+		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
+		SWAP wrkPg, visPg
+	NEXT i
+	
 
 	SLEEP
 
@@ -130,7 +147,7 @@ SUB setVisPage (page AS INTEGER)
 	uglSetVisPage page
 END SUB
 
-SUB setWrkPage (page)
+SUB setWrkPage (page AS INTEGER)
 	uglSetWrkPage page
 END SUB
 

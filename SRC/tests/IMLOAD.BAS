@@ -19,13 +19,13 @@ IF (NOT uglInit) THEN GOTO exitError
 video = uglSetVideoDC(cFMT, xRes, yRes, 2)
 IF (video = False) THEN GOTO exitError
 
-s.hill = uglNewBMP(ems, cFMT, "./img/hill2.bmp")
+s.hill = uglNewBMP(ems, cFMT, "./img/hill22x.bmp")
 s.hillMask = uglNew(ems, cFMT, 640, 246)
 s.hill2 = uglNewBMP(ems, cFMT, "./img/hill2f2x.bmp")
 
-'uglPut video, 0, 0, s.hill
-'uglGet video, 0, 0, s.hillMask
-uglPutScl video, 0, 0, 2, 2, s.hill
+uglPut video, 0, 0, s.hill
+uglGet video, 0, 0, s.hillMask
+
 SLEEP
 
 FOR i = 0 TO 50

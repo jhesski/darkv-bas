@@ -3,15 +3,10 @@ UGL {
 		mem_Init {
 		}
 		bnk_Init {
-			check
 		}
 		ems_Init {
-			check
 		}
 		b8_Init {
-			vbe check
-			voodoo check
-			ok
 		}
 	}
 	uglSetVideo {
@@ -34,14 +29,51 @@ UGL {
 		new
 		uglNewEx {
 			DC
-			ERROR!!!
+			LL New
+			bnk_New {
+			}
 		}
-		ERROR!!!
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
+	}
+	uglNew {
+		DC
+		calcBPS {
+			gt 64k
+		}
+		LL New
+		ems_New {
+			alloc
+		}
 	}
 	uglRestore {
 		change
 	}
 	uglEnd {
+		del
+		uglDel {
+			LL Del
+			bnk_Del {
+			}
+		}
 		exitq
 		mem_End {
 		}
