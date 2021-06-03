@@ -1,4 +1,5 @@
 DECLARE SUB intro.hill ()
+DECLARE SUB intro.hill ()
 DECLARE SUB intro.car ()
 DECLARE SUB swapPgs (pg1 AS INTEGER, pg2 AS INTEGER)
 DECLARE SUB setVisPage (page AS INTEGER)
@@ -113,8 +114,8 @@ SUB intro.hill ()
 	wrkPg = 1
 
 	s.hill = uglNewBMP(ems, cFMT, "hill22x.bmp")
-	s.house = uglNew(ems, cFMT, 640, 246)
 	s.hill2 = uglNewBMP(ems, cFMT, "hill2f2x.bmp")
+	s.house = uglNew(ems, cFMT, 640, 246)
 	
 	'----- SETUP screen
 	setWrkPage wrkPg
@@ -123,17 +124,28 @@ SUB intro.hill ()
 	uglGet video, 0, 0, s.house
 
 	setVisPage wrkPg: swapPgs wrkPg, visPg
+	setWrkPage wrkPg
 
-	uglPut video, 0, 0, s.house
-	
+	uglPut video, 0, 0, s.hill2
+
+	setVisPage wrkPg: swapPgs wrkPg, visPg
+	setWrkPage wrkPg
+
+	'setVisPage wrkPg: swapPgs wrkPg, visPg
+
 	SLEEP
 
 	FOR i = 0 TO 67
+		
 		setVisPage visPg
 
-		uglPut video, 0, 0, s.house
+		IF RND <= .4 THEN
+			uglPut video, 0, 0, s.hill2
+		END IF
+
 		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
 		SWAP wrkPg, visPg
+		uglPut video, 0, 0, s.house
 	NEXT i
 	
 
