@@ -58,8 +58,8 @@ SUB intro.car ()
 	setVisPage wrkPg: swapPgs wrkPg, visPg
 
 	setWrkPage wrkPg
-	uglPut video, 2, 46, s.bg
 
+	uglPut video, 2, 46, s.bg
 	setVisPage wrkPg: swapPgs wrkPg, visPg
 
 	'----- Car animation
@@ -124,28 +124,24 @@ SUB intro.hill ()
 	uglGet video, 0, 0, s.house
 
 	setVisPage wrkPg: swapPgs wrkPg, visPg
+	
 	setWrkPage wrkPg
+	uglPut video, 0, 0, s.house
 
-	uglPut video, 0, 0, s.hill2
-
-	setVisPage wrkPg: swapPgs wrkPg, visPg
-	setWrkPage wrkPg
-
-	'setVisPage wrkPg: swapPgs wrkPg, visPg
 
 	SLEEP
 
 	FOR i = 0 TO 67
-		
+		uglPut video, 0, 0, s.house
 		setVisPage visPg
 
-		IF RND <= .4 THEN
+		IF RND <= .8 THEN
 			uglPut video, 0, 0, s.hill2
 		END IF
 
 		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
 		SWAP wrkPg, visPg
-		uglPut video, 0, 0, s.house
+ 
 	NEXT i
 	
 
