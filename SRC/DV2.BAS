@@ -1,3 +1,6 @@
+DECLARE SUB intro.logo ()
+DECLARE SUB initUgl ()
+DECLARE SUB intro.loadImages (task AS INTEGER)
 DECLARE SUB intro.hill ()
 DECLARE SUB intro.hill ()
 DECLARE SUB intro.car ()
@@ -8,58 +11,67 @@ DEFINT A-Z
 '$INCLUDE: 'ugl.bi'
 '$INCLUDE: 'tmr.bi'
 
-CONST xRes = 640
-CONST yRes = 480
-CONST cFMT = UGL.8BIT
 CONST ems = UGL.EMS
 
-DIM t1 AS TMR
 DIM SHARED video AS LONG
-DIM SHARED s.bg AS LONG
+DIM SHARED s.logo AS LONG
+DIM SHARED s.carBg AS LONG
+DIM SHARED s.car AS LONG
+DIM SHARED s.car2 AS LONG
+DIM SHARED s.hill AS LONG
+DIM SHARED s.hill2 AS LONG
 
-'' initialize
-IF (NOT uglInit) THEN GOTO exitError
-video = uglSetVideoDC(cFMT, xRes, yRes, 2)
-IF (video = 0) THEN GOTO exitError
 
-'intro.car
+initUgl
+
+intro.loadImages 0
+'intro.logo
+intro.car
 intro.hill
 
-'uglPutScl video, 0, 0, 1.5, 1.5, bg2
-'SLEEP
 
+tmrEnd
+uglRestore
+uglEnd
+
+END
+
+SUB initUgl ()
+	'' initialize
+	IF (NOT uglInit) THEN GOTO exitError
+	video = uglSetVideoDC(UGL.8BIT, 640, 480, 2)
+	IF (video = 0) THEN GOTO exitError
+
+	EXIT SUB
 
 exitError:
+	SCREEN 1
+	CLS
 	PRINT "exit"
 	tmrEnd
 	uglRestore
 	uglEnd
-END
+	END
+END SUB
 
 SUB intro.car ()
-	DIM s.car AS LONG
-	DIM s.car2 AS LONG
 	DIM s.road AS LONG
-
 	visPg = 0
 	wrkPg = 1
 
-	s.bg = uglNewBMP(ems, cFMT, "carr2x.bmp")
-	s.car = uglNewBMPEx(ems, cFMT, "car.bmp", BMPOPT.MASK)
-	s.car2 = uglNewBMPEx(ems, cFMT, "car2.bmp", BMPOPT.MASK)
 	s.road = uglNew(ems, cFMT, 624, 155)
 
 	'----- SETUP screen
 	setWrkPage wrkPg
 
-	uglPut video, 2, 46, s.bg
+	uglPut video, 2, 46, s.carBg
 	uglGet video, 16, 212, s.road
 
 	setVisPage wrkPg: swapPgs wrkPg, visPg
 
 	setWrkPage wrkPg
 
-	uglPut video, 2, 46, s.bg
+	uglPut video, 2, 46, s.carBg
 	setVisPage wrkPg: swapPgs wrkPg, visPg
 
 	'----- Car animation
@@ -86,7 +98,7 @@ SUB intro.car ()
 		GOSUB intro.CarSound
 		SWAP wrkPg, visPg
 	NEXT i
-
+	intro.loadImages 1
 	EXIT SUB
 	
 	'+------------------+
@@ -96,25 +108,24 @@ intro.CarSound:
 		GOTO intro.carCheckSound
 
 intro.CarIncSound:
-		SOUND motor, .06
-		SOUND 80, .06
+		'SOUND motor, .06
+		'SOUND 80, .06
 		motor = motor + 18
 
 intro.carCheckSound:
 		IF motor <= 200 THEN GOTO intro.CarIncSound
 	RETURN
+
 END SUB
 
 SUB intro.hill ()
-	DIM s.hill AS LONG
 	DIM s.house AS LONG
-	DIM s.hill2 AS LONG
+	DIM t1 AS TMR
+	tmrInit
 	
 	visPg = 0
 	wrkPg = 1
 
-	s.hill = uglNewBMP(ems, cFMT, "hill22x.bmp")
-	s.hill2 = uglNewBMP(ems, cFMT, "hill2f2x.bmp")
 	s.house = uglNew(ems, cFMT, 640, 246)
 	
 	'----- SETUP screen
@@ -126,29 +137,60 @@ SUB intro.hill ()
 	setVisPage wrkPg: swapPgs wrkPg, visPg
 	
 	setWrkPage wrkPg
-	uglPut video, 0, 0, s.house
+	uglPut video, 0, 0, s.hill
 
-
-	SLEEP
-
-	FOR i = 0 TO 67
-		uglPut video, 0, 0, s.house
-		setVisPage visPg
-
-		IF RND <= .8 THEN
+	tmrNew t1, TMR.ONESHOT, tmrMs2Freq(2000)
+	DO
+		IF RND <= .1 THEN
 			uglPut video, 0, 0, s.hill2
+		ELSE
+			uglPut video, 0, 0, s.house
 		END IF
 
+		swapPgs wrkPg, visPg
+
+		setVisPage visPg
+		setWrkPage wrkPg
+
 		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
-		SWAP wrkPg, visPg
- 
-	NEXT i
+		'SOUND 32676, .05
+	LOOP WHILE (t1.state) AND (LEN(INKEY$) = 0)
 	
+	'SLEEP
 
-	SLEEP
-
+	tmrEnd
+	intro.loadImages 2
 	EXIT SUB
 	
+END SUB
+
+SUB intro.loadImages (task AS INTEGER)
+	DIM palLogo(256) AS tRGB
+	loadImgs = 0: delCarImgs = 1: delHillImgs = 2
+	SELECT CASE task
+		CASE IS = loadImgs
+			s.logo = uglNewBMPEx(ems, UGL.8BIT, "10PLGO2x.bmp", BMPOPT.NO332)
+			s.carBg = uglNewBMP(ems, UGL.8BIT, "carr2x.bmp")
+			'uglPalGetBuff 0, 256, pala(0)
+			s.car = uglNewBMPEx(ems, UGL.8BIT, "car.bmp", BMPOPT.MASK)
+			s.car2 = uglNewBMPEx(ems, UGL.8BIT, "car2.bmp", BMPOPT.MASK)
+			s.hill = uglNewBMP(ems, UGL.8BIT, "hill22x.bmp")
+			s.hill2 = uglNewBMP(ems, UGL.8BIT, "hill2f2x.bmp")
+		CASE IS = delCarImgs
+			uglDel s.carBg
+			uglDel s.car
+			uglDel s.car2
+		CASE IS = delHillImgs
+			uglDel s.hill
+			uglDel s.hill2
+	END SELECT
+
+END SUB
+
+SUB intro.logo ()
+	s.logo = uglPutBMPEx(video, 2, 46, "10pl01", BMPOPT.NO332)
+	SLEEP
+	uglClear video, 0
 END SUB
 
 SUB setVisPage (page AS INTEGER)
