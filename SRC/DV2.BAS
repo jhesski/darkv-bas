@@ -1,3 +1,4 @@
+DECLARE SUB intro.hall ()
 DECLARE SUB intro.logo ()
 DECLARE SUB initUgl ()
 DECLARE SUB intro.loadImages (task AS INTEGER)
@@ -20,14 +21,18 @@ DIM SHARED s.car AS LONG
 DIM SHARED s.car2 AS LONG
 DIM SHARED s.hill AS LONG
 DIM SHARED s.hill2 AS LONG
+DIM SHARED s.hall AS LONG
+DIM SHARED s.joe AS LONG
 
 
 initUgl
 
 intro.loadImages 0
+
 'intro.logo
-intro.car
-intro.hill
+'intro.car
+'intro.hill
+intro.hall
 
 
 tmrEnd
@@ -95,7 +100,7 @@ SUB intro.car ()
 		ELSE
 			uglPutMsk video, i, carY, s.car
 		END IF
-		GOSUB intro.CarSound
+		'GOSUB intro.CarSound
 		SWAP wrkPg, visPg
 	NEXT i
 	intro.loadImages 1
@@ -118,10 +123,47 @@ intro.carCheckSound:
 
 END SUB
 
+SUB intro.hall ()
+	DIM s.joeWalk AS LONG
+	DIM s.joeWalk2 AS LONG
+	visPg = 0
+	wrkPg = 1
+
+	s.joeWalk = uglNew(ems, cFMT, 32, 60)
+	s.joeWalk2 = uglNew(ems, cFMT, 32, 60)
+	uglPutMsk s.joeWalk, 0, 0, s.joe
+	uglPutMsk s.joeWalk2, 0, 0, s.joe
+
+	'----- SETUP screen
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	setWrkPage wrkPg
+
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	setVisPage wrkPg: swapPgs wrkPg, visPg
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+
+	setWrkPage wrkPg
+
+	uglPut video, 108, 212, s.hall
+	uglPutMsk video, 296, 290, s.joeWalk
+	setVisPage wrkPg: swapPgs wrkPg, visPg
+	setWrkPage visPg
+	FOR i = 0 TO 100
+		IF (i MOD 2) = 0 THEN
+			uglPutMsk video, 296, 290, s.joeWalk
+		ELSE
+			uglPutMsk video, 296, 290, s.joeWalk2
+		END IF
+		wait &h3da, 8
+	NEXT i
+
+	SLEEP
+
+END SUB
+
 SUB intro.hill ()
 	DIM s.house AS LONG
 	DIM t1 AS TMR
-	tmrInit
 	
 	visPg = 0
 	wrkPg = 1
@@ -139,9 +181,11 @@ SUB intro.hill ()
 	setWrkPage wrkPg
 	uglPut video, 0, 0, s.hill
 
-	tmrNew t1, TMR.ONESHOT, tmrMs2Freq(2000)
+	tmrInit
+
+	tmrNew t1, TMR.ONETIME, tmrMs2Freq(2500)
 	DO
-		IF RND <= .1 THEN
+		IF RND <= .02 THEN
 			uglPut video, 0, 0, s.hill2
 		ELSE
 			uglPut video, 0, 0, s.house
@@ -155,8 +199,6 @@ SUB intro.hill ()
 		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
 		'SOUND 32676, .05
 	LOOP WHILE (t1.state) AND (LEN(INKEY$) = 0)
-	
-	'SLEEP
 
 	tmrEnd
 	intro.loadImages 2
@@ -165,17 +207,25 @@ SUB intro.hill ()
 END SUB
 
 SUB intro.loadImages (task AS INTEGER)
-	DIM palLogo(256) AS tRGB
+	'DIM palLogo(256) AS tRGB
 	loadImgs = 0: delCarImgs = 1: delHillImgs = 2
+	delHallImgs = 3
+	PRINT task
 	SELECT CASE task
 		CASE IS = loadImgs
-			s.logo = uglNewBMPEx(ems, UGL.8BIT, "10PLGO2x.bmp", BMPOPT.NO332)
+			's.logo = uglNewBMPEx(ems, UGL.8BIT, "10PLGO2x.bmp", BMPOPT.NO332)
+			'------Into Car
 			s.carBg = uglNewBMP(ems, UGL.8BIT, "carr2x.bmp")
-			'uglPalGetBuff 0, 256, pala(0)
 			s.car = uglNewBMPEx(ems, UGL.8BIT, "car.bmp", BMPOPT.MASK)
 			s.car2 = uglNewBMPEx(ems, UGL.8BIT, "car2.bmp", BMPOPT.MASK)
+			
+			'------Into Hill
 			s.hill = uglNewBMP(ems, UGL.8BIT, "hill22x.bmp")
 			s.hill2 = uglNewBMP(ems, UGL.8BIT, "hill2f2x.bmp")
+			
+			'------Intro Hall
+			s.hall = uglNewBMP(ems, UGL.8BIT, "INTROH~1.bmp")
+			s.joe = uglNewBMPEx(ems, UGL.8BIT, "joe.bmp", BMPOPT.MASK)
 		CASE IS = delCarImgs
 			uglDel s.carBg
 			uglDel s.car
@@ -183,13 +233,15 @@ SUB intro.loadImages (task AS INTEGER)
 		CASE IS = delHillImgs
 			uglDel s.hill
 			uglDel s.hill2
+		CASE IS = delHallImgs
+			uglDel s.hall
 	END SELECT
 
 END SUB
 
 SUB intro.logo ()
-	s.logo = uglPutBMPEx(video, 2, 46, "10pl01", BMPOPT.NO332)
-	SLEEP
+	s.logo = uglPutBMPEx(video, 2, 46, "10PLOGO", BMPOPT.NO332)
+	'SLEEP
 	uglClear video, 0
 END SUB
 
