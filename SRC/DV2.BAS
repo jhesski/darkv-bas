@@ -22,6 +22,7 @@ DIM SHARED s.car2 AS LONG
 DIM SHARED s.hill AS LONG
 DIM SHARED s.hill2 AS LONG
 DIM SHARED s.hall AS LONG
+DIM SHARED s.hall2 AS LONG
 DIM SHARED s.joe AS LONG
 
 
@@ -126,13 +127,21 @@ END SUB
 SUB intro.hall ()
 	DIM s.joeWalk AS LONG
 	DIM s.joeWalk2 AS LONG
+	DIM s.joeBlank AS LONG
+	DIM s.joeFrame AS LONG
+	DIM s.joeLocation AS LONG
+
+	delay = 0
 	visPg = 0
 	wrkPg = 1
+	joeLocation = 300
+	joeIndex = 0
 
 	s.joeWalk = uglNew(ems, cFMT, 32, 60)
 	s.joeWalk2 = uglNew(ems, cFMT, 32, 60)
-	uglPutMsk s.joeWalk, 0, 0, s.joe
-	uglPutMsk s.joeWalk2, 0, 0, s.joe
+	s.joeBlank = uglNew(ems, cFMT, 52, 500)
+	uglPut s.joeWalk, 0, 0, s.joe
+	uglPut s.joeWalk2, 0, -61, s.joe
 
 	'----- SETUP screen
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
@@ -145,19 +154,37 @@ SUB intro.hall ()
 	setWrkPage wrkPg
 
 	uglPut video, 108, 212, s.hall
+	uglGet video, 287, 0, s.joeBlank
 	uglPutMsk video, 296, 290, s.joeWalk
 	setVisPage wrkPg: swapPgs wrkPg, visPg
 	setWrkPage visPg
-	FOR i = 0 TO 100
-		IF (i MOD 2) = 0 THEN
-			uglPutMsk video, 296, 290, s.joeWalk
+
+	FOR i = 0 TO 135
+		IF joeIndex < 4 THEN
+			s.joeFrame = s.joeWalk
+			joeLocation = joeLocation - .75
+			joeIndex = joeIndex + 1
 		ELSE
-			uglPutMsk video, 296, 290, s.joeWalk2
+			s.joeFrame = s.joeWalk2
+			IF joeIndex <= 8 THEN
+				joeIndex = joeIndex + 1
+				joeLocation = joeLocation - .75
+			ELSE
+				joeIndex = 0
+			END IF
 		END IF
-		wait &h3da, 8
+		uglPut video, 289, 0, s.joeBlank
+		uglPutMsk video, 296, joeLocation, s.joeFrame
+		WAIT &H3DA, 8
 	NEXT i
 
-	SLEEP
+	SLEEP 1
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglPut video, 63, 26, s.hall2
+
+	SLEEP 4
+
+
 
 END SUB
 
@@ -225,7 +252,8 @@ SUB intro.loadImages (task AS INTEGER)
 			
 			'------Intro Hall
 			s.hall = uglNewBMP(ems, UGL.8BIT, "INTROH~1.bmp")
-			s.joe = uglNewBMPEx(ems, UGL.8BIT, "joe.bmp", BMPOPT.MASK)
+			s.hall2 = uglNewBMP(ems, UGL.8BIT, "hall2.bmp")
+			s.joe = uglNewBMP(ems, UGL.8BIT, "joe.bmp")
 		CASE IS = delCarImgs
 			uglDel s.carBg
 			uglDel s.car
@@ -235,6 +263,7 @@ SUB intro.loadImages (task AS INTEGER)
 			uglDel s.hill2
 		CASE IS = delHallImgs
 			uglDel s.hall
+			uglDel s.hall2
 	END SELECT
 
 END SUB
