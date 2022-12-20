@@ -28,11 +28,13 @@ DIM SHARED s.joe AS LONG
 
 initUgl
 
+PRINT "loading..."
+
 intro.loadImages 0
 
 'intro.logo
-'intro.car
-'intro.hill
+intro.car
+intro.hill
 intro.hall
 
 
@@ -130,12 +132,14 @@ SUB intro.hall ()
 	DIM s.joeBlank AS LONG
 	DIM s.joeFrame AS LONG
 	DIM s.joeLocation AS LONG
+	DIM t1 AS TMR
 
 	delay = 0
 	visPg = 0
 	wrkPg = 1
 	joeLocation = 300
 	joeIndex = 0
+	delHallImgs = 3
 
 	s.joeWalk = uglNew(ems, cFMT, 32, 60)
 	s.joeWalk2 = uglNew(ems, cFMT, 32, 60)
@@ -159,7 +163,43 @@ SUB intro.hall ()
 	setVisPage wrkPg: swapPgs wrkPg, visPg
 	setWrkPage visPg
 
-	FOR i = 0 TO 135
+	'----Joe walks in
+	FOR i = 0 TO 55
+		IF joeIndex < 4 THEN
+			s.joeFrame = s.joeWalk
+			joeLocation = joeLocation - .75
+			joeIndex = joeIndex + 1
+		ELSE
+			s.joeFrame = s.joeWalk2
+			IF joeIndex <= 8 THEN
+				joeIndex = joeIndex + 1
+				joeLocation = joeLocation - .75
+			ELSE
+				joeIndex = 0
+			END IF
+		END IF
+		IF i < 40 THEN
+			uglPut video, 289, 0, s.joeBlank
+			uglPutMsk video, 296, joeLocation, s.joeFrame
+		END IF
+		WAIT &H3DA, 8
+	NEXT i
+
+	
+	'----Talking
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglPut video, 63, 26, s.hall2
+
+	tmrInit
+
+	tmrNew t1, TMR.ONETIME, tmrMs2Freq(14500)
+	DO
+	LOOP WHILE (t1.state) AND (LEN(INKEY$) = 0)
+
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglPut video, 108, 212, s.hall
+
+	FOR i = 0 TO 20
 		IF joeIndex < 4 THEN
 			s.joeFrame = s.joeWalk
 			joeLocation = joeLocation - .75
@@ -178,14 +218,9 @@ SUB intro.hall ()
 		WAIT &H3DA, 8
 	NEXT i
 
-	SLEEP 1
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
-	uglPut video, 63, 26, s.hall2
-
-	SLEEP 4
-
-
-
+	intro.loadImages delHallImgs
+	tmrEnd
 END SUB
 
 SUB intro.hill ()
@@ -226,7 +261,7 @@ SUB intro.hill ()
 		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
 		'SOUND 32676, .05
 	LOOP WHILE (t1.state) AND (LEN(INKEY$) = 0)
-
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	tmrEnd
 	intro.loadImages 2
 	EXIT SUB
@@ -264,13 +299,14 @@ SUB intro.loadImages (task AS INTEGER)
 		CASE IS = delHallImgs
 			uglDel s.hall
 			uglDel s.hall2
+			uglDel s.joe
 	END SELECT
 
 END SUB
 
 SUB intro.logo ()
 	s.logo = uglPutBMPEx(video, 2, 46, "10PLOGO", BMPOPT.NO332)
-	'SLEEP
+	SLEEP
 	uglClear video, 0
 END SUB
 
