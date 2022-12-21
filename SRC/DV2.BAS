@@ -28,8 +28,6 @@ DIM SHARED s.joe AS LONG
 
 initUgl
 
-PRINT "loading..."
-
 intro.loadImages 0
 
 'intro.logo
@@ -106,24 +104,9 @@ SUB intro.car ()
 		'GOSUB intro.CarSound
 		SWAP wrkPg, visPg
 	NEXT i
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	intro.loadImages 1
 	EXIT SUB
-	
-	'+------------------+
-	'|    Sound loop    |
-	'+------------------+
-intro.CarSound:
-		GOTO intro.carCheckSound
-
-intro.CarIncSound:
-		'SOUND motor, .06
-		'SOUND 80, .06
-		motor = motor + 18
-
-intro.carCheckSound:
-		IF motor <= 200 THEN GOTO intro.CarIncSound
-	RETURN
-
 END SUB
 
 SUB intro.hall ()
@@ -221,6 +204,7 @@ SUB intro.hall ()
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	intro.loadImages delHallImgs
 	tmrEnd
+	EXIT SUB
 END SUB
 
 SUB intro.hill ()
@@ -264,7 +248,7 @@ SUB intro.hill ()
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	tmrEnd
 	intro.loadImages 2
-	EXIT SUB
+	'EXIT SUB
 	
 END SUB
 
@@ -305,9 +289,9 @@ SUB intro.loadImages (task AS INTEGER)
 END SUB
 
 SUB intro.logo ()
-	s.logo = uglPutBMPEx(video, 2, 46, "10PLOGO", BMPOPT.NO332)
+	s.logo = uglPutBMPEx(video, 2, 46, "10PLGO2X", BMPOPT.NO332)
 	SLEEP
-	uglClear video, 0
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 END SUB
 
 SUB setVisPage (page AS INTEGER)
