@@ -31,7 +31,7 @@ initUgl
 intro.loadImages 0
 
 'intro.logo
-intro.car
+'intro.car
 intro.hill
 intro.hall
 
@@ -131,12 +131,16 @@ SUB intro.hall ()
 	uglPut s.joeWalk2, 0, -61, s.joe
 
 	'----- SETUP screen
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	
 	setWrkPage wrkPg
 
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglPut video, 108, 212, s.hall
+
 	setVisPage wrkPg: swapPgs wrkPg, visPg
+
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglPut video, 108, 212, s.hall
 
 	setWrkPage wrkPg
 
@@ -144,10 +148,10 @@ SUB intro.hall ()
 	uglGet video, 287, 0, s.joeBlank
 	uglPutMsk video, 296, 290, s.joeWalk
 	setVisPage wrkPg: swapPgs wrkPg, visPg
-	setWrkPage visPg
 
 	'----Joe walks in
 	FOR i = 0 TO 55
+
 		IF joeIndex < 4 THEN
 			s.joeFrame = s.joeWalk
 			joeLocation = joeLocation - .75
@@ -161,18 +165,26 @@ SUB intro.hall ()
 				joeIndex = 0
 			END IF
 		END IF
+
+		setWrkPage wrkPg
+
 		IF i < 40 THEN
-			uglPut video, 289, 0, s.joeBlank
+			uglPut video, 287, 0, s.joeBlank
 			uglPutMsk video, 296, joeLocation, s.joeFrame
 		END IF
+		setVisPage wrkPg
 		WAIT &H3DA, 8
+		SWAP wrkPg, visPg
 	NEXT i
-
 	
 	'----Talking
+	setWrkPage wrkPg
+
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	uglPut video, 63, 26, s.hall2
 
+	setVisPage wrkPg
+	SWAP wrkPg, visPg
 	tmrInit
 
 	tmrNew t1, TMR.ONETIME, tmrMs2Freq(14500)
@@ -196,7 +208,7 @@ SUB intro.hall ()
 				joeIndex = 0
 			END IF
 		END IF
-		uglPut video, 289, 0, s.joeBlank
+		uglPut video, 287, 0, s.joeBlank
 		uglPutMsk video, 296, joeLocation, s.joeFrame
 		WAIT &H3DA, 8
 	NEXT i
