@@ -30,8 +30,8 @@ initUgl
 
 intro.loadImages 0
 
-'intro.logo
-'intro.car
+intro.logo
+intro.car
 intro.hill
 intro.hall
 
@@ -137,17 +137,18 @@ SUB intro.hall ()
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	uglPut video, 108, 212, s.hall
 
-	setVisPage wrkPg: swapPgs wrkPg, visPg
+	swapPgs wrkPg, visPg
+	setWrkPage wrkPg
 
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	uglPut video, 108, 212, s.hall
 
+
+	uglGet video, 287, 0, s.joeBlank
+	uglPutMsk video, 296, joeLocation, s.joeWalk
+	setVisPage wrkPg: swapPgs wrkPg, visPg
 	setWrkPage wrkPg
 
-	uglPut video, 108, 212, s.hall
-	uglGet video, 287, 0, s.joeBlank
-	uglPutMsk video, 296, 290, s.joeWalk
-	setVisPage wrkPg: swapPgs wrkPg, visPg
 
 	'----Joe walks in
 	FOR i = 0 TO 55
@@ -174,9 +175,11 @@ SUB intro.hall ()
 		END IF
 		setVisPage wrkPg
 		WAIT &H3DA, 8
-		SWAP wrkPg, visPg
+		swapPgs wrkPg, visPg
 	NEXT i
 	
+	uglGet video, 108, 212, s.hall 'gets hall with joe.
+
 	'----Talking
 	setWrkPage wrkPg
 
@@ -184,15 +187,23 @@ SUB intro.hall ()
 	uglPut video, 63, 26, s.hall2
 
 	setVisPage wrkPg
-	SWAP wrkPg, visPg
+	swapPgs wrkPg, visPg
 	tmrInit
 
 	tmrNew t1, TMR.ONETIME, tmrMs2Freq(14500)
 	DO
 	LOOP WHILE (t1.state) AND (LEN(INKEY$) = 0)
 
+
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
 	uglPut video, 108, 212, s.hall
+
+	setWrkPage wrkPg
+	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglPut video, 108, 212, s.hall
+	setVisPage wrkPg
+	swapPgs wrkPg, visPg
+
 
 	FOR i = 0 TO 20
 		IF joeIndex < 4 THEN
@@ -208,9 +219,15 @@ SUB intro.hall ()
 				joeIndex = 0
 			END IF
 		END IF
+
+		setWrkPage wrkPg
 		uglPut video, 287, 0, s.joeBlank
 		uglPutMsk video, 296, joeLocation, s.joeFrame
+
+		setVisPage wrkPg
 		WAIT &H3DA, 8
+		swapPgs wrkPg, visPg
+		
 	NEXT i
 
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
@@ -271,7 +288,7 @@ SUB intro.loadImages (task AS INTEGER)
 	PRINT task
 	SELECT CASE task
 		CASE IS = loadImgs
-			's.logo = uglNewBMPEx(ems, UGL.8BIT, "10PLGO2x.bmp", BMPOPT.NO332)
+			s.logo = uglNewBMPEx(ems, UGL.8BIT, "10PLGO2x.bmp", BMPOPT.NO332)
 			'------Into Car
 			s.carBg = uglNewBMP(ems, UGL.8BIT, "carr2x.bmp")
 			s.car = uglNewBMPEx(ems, UGL.8BIT, "car.bmp", BMPOPT.MASK)
@@ -301,9 +318,21 @@ SUB intro.loadImages (task AS INTEGER)
 END SUB
 
 SUB intro.logo ()
-	s.logo = uglPutBMPEx(video, 2, 46, "10PLGO2X", BMPOPT.NO332)
-	SLEEP
+	DIM pal(256) AS LONG
+	visPg = 0
+	wrkPg = 1
+	setVisPage visPg
+	setWrkPage wrkPg
+
+	uglPut video, 0, 0, s.logo
+
+	setVisPage wrkPg
+	WAIT &H3DA, 8           f
+	swapPgs wrkPg, visPg
+
+	SLEEP 2
 	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	
 END SUB
 
 SUB setVisPage (page AS INTEGER)
