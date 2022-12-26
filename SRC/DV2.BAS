@@ -1,3 +1,4 @@
+DECLARE SUB intro.dvlogo ()
 DECLARE SUB intro.hall ()
 DECLARE SUB intro.logo ()
 DECLARE SUB initUgl ()
@@ -16,6 +17,7 @@ CONST ems = UGL.EMS
 
 DIM SHARED video AS LONG
 DIM SHARED s.logo AS LONG
+DIM SHARED s.dvlogo AS LONG
 DIM SHARED s.carBg AS LONG
 DIM SHARED s.car AS LONG
 DIM SHARED s.car2 AS LONG
@@ -34,7 +36,7 @@ intro.logo
 intro.car
 intro.hill
 intro.hall
-
+intro.dvlogo
 
 tmrEnd
 uglRestore
@@ -45,7 +47,7 @@ END
 SUB initUgl ()
 	'' initialize
 	IF (NOT uglInit) THEN GOTO exitError
-	video = uglSetVideoDC(UGL.8BIT, 640, 480, 2)
+	video = uglSetVideoDC(UGL.8bit, 640, 480, 2)
 	IF (video = 0) THEN GOTO exitError
 
 	EXIT SUB
@@ -104,9 +106,26 @@ SUB intro.car ()
 		'GOSUB intro.CarSound
 		SWAP wrkPg, visPg
 	NEXT i
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	intro.loadImages 1
 	EXIT SUB
+END SUB
+
+SUB intro.dvlogo ()
+	visPg = 0
+	wrkPg = 1
+	setVisPage visPg
+	setWrkPage wrkPg
+
+	uglPut video, 32, 32, s.dvlogo
+
+	setVisPage wrkPg
+	WAIT &H3DA, 8
+	swapPgs wrkPg, visPg
+
+	SLEEP 5
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
+
 END SUB
 
 SUB intro.hall ()
@@ -134,13 +153,13 @@ SUB intro.hall ()
 	
 	setWrkPage wrkPg
 
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	uglPut video, 108, 212, s.hall
 
 	swapPgs wrkPg, visPg
 	setWrkPage wrkPg
 
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	uglPut video, 108, 212, s.hall
 
 
@@ -183,7 +202,7 @@ SUB intro.hall ()
 	'----Talking
 	setWrkPage wrkPg
 
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	uglPut video, 63, 26, s.hall2
 
 	setVisPage wrkPg
@@ -195,11 +214,11 @@ SUB intro.hall ()
 	LOOP WHILE (t1.state) AND (LEN(INKEY$) = 0)
 
 
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	uglPut video, 108, 212, s.hall
 
 	setWrkPage wrkPg
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	uglPut video, 108, 212, s.hall
 	setVisPage wrkPg
 	swapPgs wrkPg, visPg
@@ -230,7 +249,7 @@ SUB intro.hall ()
 		
 	NEXT i
 
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	intro.loadImages delHallImgs
 	tmrEnd
 	EXIT SUB
@@ -274,7 +293,7 @@ SUB intro.hill ()
 		DO: LOOP UNTIL (INP(&H3DA) AND &H8)
 		'SOUND 32676, .05
 	LOOP WHILE (t1.state) AND (LEN(INKEY$) = 0)
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	tmrEnd
 	intro.loadImages 2
 	'EXIT SUB
@@ -288,20 +307,22 @@ SUB intro.loadImages (task AS INTEGER)
 	PRINT task
 	SELECT CASE task
 		CASE IS = loadImgs
-			s.logo = uglNewBMPEx(ems, UGL.8BIT, "10PLGO2x.bmp", BMPOPT.NO332)
+			s.logo = uglNewBMPEx(ems, UGL.8bit, "10PLGO2x.bmp", BMPOPT.NO332)
 			'------Into Car
-			s.carBg = uglNewBMP(ems, UGL.8BIT, "carr2x.bmp")
-			s.car = uglNewBMPEx(ems, UGL.8BIT, "car.bmp", BMPOPT.MASK)
-			s.car2 = uglNewBMPEx(ems, UGL.8BIT, "car2.bmp", BMPOPT.MASK)
+			s.carBg = uglNewBMP(ems, UGL.8bit, "carr2x.bmp")
+			s.car = uglNewBMPEx(ems, UGL.8bit, "car.bmp", BMPOPT.MASK)
+			s.car2 = uglNewBMPEx(ems, UGL.8bit, "car2.bmp", BMPOPT.MASK)
 			
 			'------Into Hill
-			s.hill = uglNewBMP(ems, UGL.8BIT, "hill22x.bmp")
-			s.hill2 = uglNewBMP(ems, UGL.8BIT, "hill2f2x.bmp")
+			s.hill = uglNewBMP(ems, UGL.8bit, "hill22x.bmp")
+			s.hill2 = uglNewBMP(ems, UGL.8bit, "hill2f2x.bmp")
 			
 			'------Intro Hall
-			s.hall = uglNewBMP(ems, UGL.8BIT, "INTROH~1.bmp")
-			s.hall2 = uglNewBMP(ems, UGL.8BIT, "hall2.bmp")
-			s.joe = uglNewBMP(ems, UGL.8BIT, "joe.bmp")
+			s.hall = uglNewBMP(ems, UGL.8bit, "INTROH~1.bmp")
+			s.hall2 = uglNewBMP(ems, UGL.8bit, "hall2.bmp")
+			s.joe = uglNewBMP(ems, UGL.8bit, "joe.bmp")
+			'------Intro logo
+			s.dvlogo = uglNewBMP(ems, UGL.8bit, "Logo.bmp")
 		CASE IS = delCarImgs
 			uglDel s.carBg
 			uglDel s.car
@@ -324,14 +345,14 @@ SUB intro.logo ()
 	setVisPage visPg
 	setWrkPage wrkPg
 
-	uglPut video, 0, 0, s.logo
+	uglPut video, 100, 43, s.logo
 
 	setVisPage wrkPg
-	WAIT &H3DA, 8           f
+	WAIT &H3DA, 8
 	swapPgs wrkPg, visPg
 
 	SLEEP 2
-	uglClear video, uglColor(UGL.8BIT, 0, 0, 0)
+	uglClear video, uglColor(UGL.8bit, 0, 0, 0)
 	
 END SUB
 
