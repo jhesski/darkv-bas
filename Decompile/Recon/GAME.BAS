@@ -85,10 +85,25 @@ L95 = 100
 L113 = 200
 L134 = 1000
 L281 = 700
-L143 = 60
-L144 = 60
+' PASS2-RECON: TIME variables (Spring lost their DATA init). Game clock = L144*L143 minutes past 8:00.
+' L144 = time counter (starts 0 = 8:00, +8 per action, overwritten by save load). L143 = minutes-per-unit multiplier.
+' L145/L149/L150 = hour thresholds (8->9 at 59, 9->10 at 119, 10->11 at 179). These defaulted to 0, forcing every readout to "11".
+' (Earlier these were wrongly guessed as sound vars: L143=60, L144=60.)
+L144 = 0
+L143 = .01
 L145 = 59
+L149 = 119
+L150 = 179
+' PASS2-RECON: timed-event time thresholds (minutes). Lost by Spring -> defaulted to 0, which
+' made room death-windows like (L468,L95)=(0,100) fire the instant the clock left 0 (premature deaths).
+' They form the event-boundary sequence ...47, 59, 65, 74, 88, 100.
+L466 = 65
+L467 = 74
+L468 = 88
 L191 = 71
+' PASS2-RECON: XYZ was an undefined Spring placeholder (=0) used as a TIMER timeout threshold
+' (7110/9990/12810/12900/14600). At 0 those timeouts are instant. Set to a few seconds.
+XYZ = 2
 
 110 REM COM() statements in this programme
 120 CALL S16760
@@ -332,18 +347,18 @@ REM error 17 (2 )
 2460 IF ((I140 = 1) AND (I139 = 1)) = 0 THEN GOTO 2480
 2470 I141 = 1
 2480 L142$ = ""
-2490 IF (L144 * L143) <= L145 THEN GOTO 2530
+2490 IF (INT(L144 * L143)) <= L145 THEN GOTO 2530
 2500 L146 = 9
-2510 L147 = (L144 * L143) + -60
+2510 L147 = INT(L144 * L143) - 60 'PASS2-RECON: INT so minutes display as whole numbers (was fractional like .38)
 2520 GOTO 2550
-2530 L147 = L144 * L143
+2530 L147 = INT(L144 * L143) 'PASS2-RECON: INT for whole-minute display
 2540 L146 = 8
-2550 IF (L144 * L143) <= L149 THEN GOTO 2580
+2550 IF (INT(L144 * L143)) <= L149 THEN GOTO 2580
 2560 L146 = 10
-2570 L147 = (L144 * L143) + -120
-2580 IF (L144 * L143) <= L150 THEN GOTO 2610
+2570 L147 = INT(L144 * L143) - 120 'PASS2-RECON: INT for whole-minute display
+2580 IF (INT(L144 * L143)) <= L150 THEN GOTO 2610
 2590 L146 = 11
-2600 L147 = (L144 * L143) + -180
+2600 L147 = INT(L144 * L143) - 180 'PASS2-RECON: INT for whole-minute display
 2610 LOCATE 3, 1
 2620 PRINT "The time is "; L146; ":"; L147;
 2630 GOSUB 14130
@@ -610,12 +625,12 @@ REM error 17 (2 )
 5240 SOUND L280, 1
 5250 SOUND L88, .1
 5260 SOUND L281, .5
-5270
+5270 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 5270 and next line 5280 is a GOSUB'd subroutine, so 5270 is a routine-end RETURN.
 5280 FOR L282 = 1 TO 5
 5290   SOUND L95, .2
 5300   SOUND 32676, 3
 5310 NEXT
-5320
+5320 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 5320 and next line 5330 is a GOSUB'd subroutine, so 5320 is a routine-end RETURN.
 5330 SOUND L279, .1
 5340 SOUND L95, .5
 5350 FOR L284 = 100 TO 600 STEP 100
@@ -623,7 +638,7 @@ REM error 17 (2 )
 5370 NEXT
 5380 SOUND L281, .5
 5390 SOUND L134, .5
-5400
+5400 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 5400 and next line 5410 is a GOSUB'd subroutine, so 5400 is a routine-end RETURN.
 5410 FOR I286 = 50 TO 100 STEP 5
 5420   SOUND I286, .5
 5430   SOUND L287, .1
@@ -634,7 +649,7 @@ REM error 17 (2 )
 5480 NEXT
 5490 SOUND 32676, .5
 5500 SOUND L87, .5
-5510
+5510 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 5510 and next line 5520 is a GOSUB'd subroutine, so 5510 is a routine-end RETURN.
 5520 FOR I286 = 50 TO 80
 5530   SOUND L95, .1
 5540   SOUND I286, .1
@@ -647,7 +662,7 @@ REM error 17 (2 )
 5610 SOUND 32676, 2
 5620 SOUND L95, .2
 5630 SOUND 32676, 2
-5640
+5640 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 5640 and next line 5650 is a GOSUB'd subroutine, so 5640 is a routine-end RETURN.
 5650 LOCATE 1, 8
 5660 PRINT "Load game 1,2,3 or 4?"
 5670 CLOSE
@@ -665,7 +680,7 @@ REM error 17 (2 )
 5790 NEXT
 5800 LOCATE 2, 1
 5810 PRINT "Load is complete!              "
-5820
+5820 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 5820 and next line 5830 is a GOSUB'd subroutine, so 5820 is a routine-end RETURN.
 5830 LOCATE 1, 8
 5840 PRINT "Save under 1,2,3, or 4?"
 5850 CLOSE
@@ -679,7 +694,7 @@ REM error 17 (2 )
 5930 NEXT
 5940 LOCATE 2, 1
 5950 PRINT "Save is complete!              "
-5960
+5960 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 5960 and next line 5970 is a GOSUB'd subroutine, so 5960 is a routine-end RETURN.
 5970 LOCATE 1, 1
 5980 PRINT "Do you really want to quit?"
 5990 L22$ = INKEY$
@@ -688,7 +703,7 @@ REM error 17 (2 )
 6020 IR12 = (L22$ = "y")
 6030 IF ((L22$ = "y") OR (L22$ = "y")) = 0 THEN GOTO 6050
 6040 SYSTEM
-6050
+6050 RETURN 'PASS2-RECON: end of quit routine (5970, GOSUB'd from 581). Line 6030 GOTOs here to return instead of SYSTEM when you answer "no".
 6060 GOSUB 12460
 6070 LOCATE 1, 1
 6080 PRINT "                                                                               "
@@ -699,7 +714,7 @@ REM error 17 (2 )
 6130   IF L311(I14) <> 0# THEN GOTO 6150
 6140   I14 = 110
 6150 NEXT
-6160
+6160 RETURN 'PASS2-RECON: no actionable object under the cursor (FOR loop completed without a coord match, I14=111). Exit the action routine. Reached only on no-match; line 6120 GOTOs 6170 directly when an object IS found. Without this it loops forever.
 6170 I313 = I14
 6180 I14 = CINT(L314(I14))
 6190 IF L315$(I14) <> L22$ THEN GOTO 6210
@@ -762,7 +777,7 @@ REM error 17 (2 )
 6760 IF L319(I14) <> 19 THEN GOTO 6780
 6770 GOSUB 5520
 6780 IF L339$(I14) <> "" THEN GOTO 6800
-6790
+6790 RETURN 'PASS2-RECON: object processed (look/get/use) but it has no room-transition (L339$ empty), so exit the action routine here. Without this, flow falls into the transition code and tries to load room "".
 6800 FOR I340 = 1 TO 500
 6810 NEXT
 6820 GOSUB 5280
@@ -791,7 +806,7 @@ REM error 17 (2 )
 7050 PUT (I24, I25), L33, XOR
 7060 L299 = (TIMER - L0) + L299
 7070 L0 = TIMER
-7080 IF (L144 * L143) <= 35 THEN GOTO 7100
+7080 IF (INT(L144 * L143)) <= 35 THEN GOTO 7100
 7090 GOSUB 10510
 7100 IF I272 <> 1 THEN GOTO 7180
 7110 IF (TIMER - L137) <= XYZ THEN GOTO 7180
@@ -868,19 +883,16 @@ REM error 17 (2 )
 7820 KEY OFF 'PASS2-RECON: was KEY ON which displays F-key labels at row 25
 7830 DEF SEG 'PASS2-RECON: was Print 0 - likely DEF SEG reset after video-memory BLOAD
 7840 L36$ = "hallez"
-7850
+7850 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 7850 and next line 7860 is a GOSUB'd subroutine, so 7850 is a routine-end RETURN.
 7860 CLOSE
 7870 OPEN L36$ + ".pac" FOR INPUT AS #1
 7880 INPUT #1, L370, I375, I376, I377
 7890 FOR I14 = 1 TO 100
-7900   IR12 = (I14 * 4)
-7910   INPUT #1, L312(I14), L311(IR12), L314(IR12)
+7910   INPUT #1, L312(I14), L311(I14), L314(I14) 'PASS2-RECON: removed Spring's stride (was L311(I14*4),L314(I14*4)). ALL readers use index I14, so the object x/y/obj must load at I14 too, or hit-detection never matches.
 7920 NEXT
 7930 FOR I14 = 1 TO 25
-7940   IR12 = (I14 * 4)
-7950   INPUT #1, L339$(I14), L322$(IR12), L315$(IR12)
-7960   IR14 = (I14 * 2)
-7970   INPUT #1, I316(I14), I318(IR14), L319(IR12), L323$(IR12) 'PASS2-RECON: was READ - Spring lost DATA, file has these fields
+7950   INPUT #1, L339$(I14), L322$(I14), L315$(I14) 'PASS2-RECON: removed stride (was *4)
+7970   INPUT #1, I316(I14), I318(I14), L319(I14), L323$(I14) 'PASS2-RECON: removed stride (was I318(I14*2), L319(I14*4), L323$(I14*4)); was READ (Spring lost DATA - file has these fields)
 7980 NEXT
 7990 CLS
 8000 COLOR L370
@@ -1010,7 +1022,7 @@ REM error 17 (2 )
 9190 PUT (I14, 130), L403, XOR
 9200 I14 = I14 + -3
 9210 IF I14 >= 90 THEN GOTO 9070
-9220
+9220 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 9220 and next line 9230 is a GOSUB'd subroutine, so 9220 is a routine-end RETURN.
 9230 IF L275$ <> "4" THEN GOTO 9250
 9240 PUT (140, 130), L415, XOR
 9250 IF L275$ <> "2" THEN GOTO 9270
@@ -1170,88 +1182,88 @@ REM error 17 (2 )
 10740 PLAY "<<f6p20d7p20g-7p20e-7p20a5>>"
 10750 I451 = 1
 10760 L348$ = "d"
-10770
+10770 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 10770 and next line 10780 is a GOSUB'd subroutine, so 10770 is a routine-end RETURN.
 10780 IF I186 <= 22 THEN GOTO 10810
 10790 I188 = 21
 10800 I186 = 6
-10810 END
+10810 RETURN 'PASS2-RECON: was END (would terminate the program). This is the inventory column-wrap routine, GOSUB'd from the item display - it must RETURN, not END.
 10820 IF I272 <> 1 THEN GOTO 10840
 10830
 10840 IR12 = (L36$ = "room7")
-10850 IR14 = (((L144 * L143) > 0) AND IR12)
-10860 IF (((L144 * L143) < 8) AND IR14) = 0 THEN GOTO 10880
+10850 IR14 = (((INT(L144 * L143)) > 0) AND IR12)
+10860 IF (((INT(L144 * L143)) < 8) AND IR14) = 0 THEN GOTO 10880
 10870 GOSUB 9910
 10880 IR12 = (L36$ = "room6")
-10890 IR14 = (((L144 * L143) > 8) AND IR12)
-10900 IF (((L144 * L143) < 20) AND IR14) = 0 THEN GOTO 10920
+10890 IR14 = (((INT(L144 * L143)) > 8) AND IR12)
+10900 IF (((INT(L144 * L143)) < 20) AND IR14) = 0 THEN GOTO 10920
 10910 GOSUB 9910
 10920 IR12 = (L36$ = "room8")
-10930 IR14 = (((L144 * L143) > 20) AND IR12)
-10940 IF (((L144 * L143) < 35) AND IR14) = 0 THEN GOTO 10960
+10930 IR14 = (((INT(L144 * L143)) > 20) AND IR12)
+10940 IF (((INT(L144 * L143)) < 35) AND IR14) = 0 THEN GOTO 10960
 10950 GOSUB 9910
 10960 IR12 = (L36$ = "room9")
-10970 IR14 = (((L144 * L143) > 35) AND IR12)
-10980 IF (((L144 * L143) < 47) AND IR14) = 0 THEN GOTO 11000
+10970 IR14 = (((INT(L144 * L143)) > 35) AND IR12)
+10980 IF (((INT(L144 * L143)) < 47) AND IR14) = 0 THEN GOTO 11000
 10990 GOSUB 9910
 11000 IR12 = (L36$ = "room7")
-11010 IR14 = (((L144 * L143) > 47) AND IR12)
-11020 IF (((L144 * L143) < L145) AND IR14) = 0 THEN GOTO 11040
+11010 IR14 = (((INT(L144 * L143)) > 47) AND IR12)
+11020 IF (((INT(L144 * L143)) < L145) AND IR14) = 0 THEN GOTO 11040
 11030 GOSUB 9910
 11040 IR12 = (L36$ = "room11")
-11050 IR14 = (((L144 * L143) > L145) AND IR12)
-11060 IF (((L144 * L143) < L466) AND IR14) = 0 THEN GOTO 11080
+11050 IR14 = (((INT(L144 * L143)) > L145) AND IR12)
+11060 IF (((INT(L144 * L143)) < L466) AND IR14) = 0 THEN GOTO 11080
 11070 GOSUB 9910
 11080 IR12 = (L36$ = "room4")
-11090 IR14 = (((L144 * L143) > L466) AND IR12)
-11100 IF (((L144 * L143) < L467) AND IR14) = 0 THEN GOTO 11120
+11090 IR14 = (((INT(L144 * L143)) > L466) AND IR12)
+11100 IF (((INT(L144 * L143)) < L467) AND IR14) = 0 THEN GOTO 11120
 11110 GOSUB 9910
 11120 IR12 = (L36$ = "room10")
-11130 IR14 = (((L144 * L143) > L467) AND IR12)
-11140 IF (((L144 * L143) < L468) AND IR14) = 0 THEN GOTO 11160
+11130 IR14 = (((INT(L144 * L143)) > L467) AND IR12)
+11140 IF (((INT(L144 * L143)) < L468) AND IR14) = 0 THEN GOTO 11160
 11150 GOSUB 9910
 11160 IR12 = (L36$ = "room11")
-11170 IR14 = (((L144 * L143) > L468) AND IR12)
-11180 IF (((L144 * L143) < L95) AND IR14) = 0 THEN GOTO 11200
+11170 IR14 = (((INT(L144 * L143)) > L468) AND IR12)
+11180 IF (((INT(L144 * L143)) < L95) AND IR14) = 0 THEN GOTO 11200
 11190 GOSUB 9910
 11200 IR12 = (L36$ = "room2")
-11210 IR14 = (((L144 * L143) > 0) AND IR12)
-11220 IF (((L144 * L143) < 8) AND IR14) = 0 THEN GOTO 11240
+11210 IR14 = (((INT(L144 * L143)) > 0) AND IR12)
+11220 IF (((INT(L144 * L143)) < 8) AND IR14) = 0 THEN GOTO 11240
 11230 GOSUB 10140
 11240 IR12 = (L36$ = "room1")
-11250 IR14 = (((L144 * L143) > 8) AND IR12)
-11260 IF (((L144 * L143) < 20) AND IR14) = 0 THEN GOTO 11280
+11250 IR14 = (((INT(L144 * L143)) > 8) AND IR12)
+11260 IF (((INT(L144 * L143)) < 20) AND IR14) = 0 THEN GOTO 11280
 11270 GOSUB 10140
 11280 IR12 = (L36$ = "room5")
-11290 IR14 = (((L144 * L143) > 20) AND IR12)
-11300 IF (((L144 * L143) < 35) AND IR14) = 0 THEN GOTO 11320
+11290 IR14 = (((INT(L144 * L143)) > 20) AND IR12)
+11300 IF (((INT(L144 * L143)) < 35) AND IR14) = 0 THEN GOTO 11320
 11310 GOSUB 10140
 11320 IR12 = (L36$ = "room5")
-11330 IR14 = (((L144 * L143) > 35) AND IR12)
-11340 IF (((L144 * L143) < 47) AND IR14) = 0 THEN GOTO 11360
+11330 IR14 = (((INT(L144 * L143)) > 35) AND IR12)
+11340 IF (((INT(L144 * L143)) < 47) AND IR14) = 0 THEN GOTO 11360
 11350 GOSUB 10140
 11360 IR12 = (L36$ = "room4")
-11370 IR14 = (((L144 * L143) > 47) AND IR12)
-11380 IF (((L144 * L143) < L145) AND IR14) = 0 THEN GOTO 11400
+11370 IR14 = (((INT(L144 * L143)) > 47) AND IR12)
+11380 IF (((INT(L144 * L143)) < L145) AND IR14) = 0 THEN GOTO 11400
 11390 GOSUB 10140
 11400 IR12 = (L36$ = "room1")
-11410 IR14 = (((L144 * L143) > L145) AND IR12)
-11420 IF (((L144 * L143) < L466) AND IR14) = 0 THEN GOTO 11440
+11410 IR14 = (((INT(L144 * L143)) > L145) AND IR12)
+11420 IF (((INT(L144 * L143)) < L466) AND IR14) = 0 THEN GOTO 11440
 11430 GOSUB 10140
 11440 IR12 = (L36$ = "room9")
-11450 IR14 = (((L144 * L143) > L466) AND IR12)
-11460 IF (((L144 * L143) < L467) AND IR14) = 0 THEN GOTO 11480
+11450 IR14 = (((INT(L144 * L143)) > L466) AND IR12)
+11460 IF (((INT(L144 * L143)) < L467) AND IR14) = 0 THEN GOTO 11480
 11470 GOSUB 10140
 11480 IR12 = (L36$ = "room1")
-11490 IR14 = (((L144 * L143) > L467) AND IR12)
-11500 IF (((L144 * L143) < L468) AND IR14) = 0 THEN GOTO 11520
+11490 IR14 = (((INT(L144 * L143)) > L467) AND IR12)
+11500 IF (((INT(L144 * L143)) < L468) AND IR14) = 0 THEN GOTO 11520
 11510 GOSUB 10140
 11520 IR12 = (L36$ = "room4")
-11530 IR14 = (((L144 * L143) > L468) AND IR12)
-11540 IF (((L144 * L143) < L95) AND IR14) = 0 THEN GOTO 11560
+11530 IR14 = (((INT(L144 * L143)) > L468) AND IR12)
+11540 IF (((INT(L144 * L143)) < L95) AND IR14) = 0 THEN GOTO 11560
 11550 GOSUB 10140
-11560 IF (L144 * L143) <= 30 THEN GOTO 11580
+11560 IF (INT(L144 * L143)) <= 30 THEN GOTO 11580
 11570 I471 = 1
-11580
+11580 RETURN 'PASS2-RECON: end of the timed-events routine (10820, GOSUB'd after every verb at 7710). Without this it falls through into the inventory grid routine (11590) with I186/I188 uninitialized -> LOCATE error. Line 11560 GOTOs here as an early exit.
 11590 LOCATE I186, I188 - 1
 11600 PRINT " "
 11610 IF L22$ <> "2" THEN GOTO 11640
@@ -1309,7 +1321,7 @@ REM error 17 (2 )
 12130 IR26 = ((L22$ = "8") OR (IR24))
 12140 IF ((L22$ = "9") OR (IR26)) = 0 THEN GOTO 12160
 12150 L482$ = ""
-12160
+12160 RETURN 'PASS2-RECON: end of input/verb-decode routine (11860, GOSUB'd from main loop 240/573/807). 12140 GOTOs here to skip. Without this it falls into the STRIG-setup routine.
 12170 STRIG(0) ON
 12180 STRIG(2) ON
 12190 STRIG(4) ON
@@ -1320,30 +1332,30 @@ REM error 17 (2 )
 12240 GOTO 12280
 12250 L22$ = "l"
 12260 L482$ = "l"
-12270
+12270 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 12270 and next line 12280 is a GOSUB'd subroutine, so 12270 is a routine-end RETURN.
 12280 IF L482$ <> "a" THEN GOTO 12310
 12290
 12300 GOTO 12340
 12310 L22$ = "a"
 12320 L482$ = "a"
-12330
+12330 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 12330 and next line 12340 is a GOSUB'd subroutine, so 12330 is a routine-end RETURN.
 12340 IF L482$ <> "g" THEN GOTO 12370
 12350
 12360 GOTO 12400
 12370 L22$ = "g"
 12380 L482$ = "g"
-12390
+12390 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 12390 and next line 12400 is a GOSUB'd subroutine, so 12390 is a routine-end RETURN.
 12400 IF L482$ <> "u" THEN GOTO 12430
 12410
 12420 GOTO 12460
 12430 L22$ = "u"
 12440 L482$ = "u"
-12450
+12450 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 12450 and next line 12460 is a GOSUB'd subroutine, so 12450 is a routine-end RETURN.
 12460
 12470 FOR I14 = 0 TO 6 STEP 2
 12480   STRIG(I14) OFF
 12490 NEXT
-12500
+12500 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 12500 and next line 12510 is a GOSUB'd subroutine, so 12500 is a routine-end RETURN.
 12510 CLOSE
 12520 OPEN "object.pac" FOR INPUT AS #1
 12530 'PASS2-RECON: removed On Error handler
@@ -1496,7 +1508,7 @@ REM error 18 ()
 13980 L142$ = "y"
 13990 GOSUB 10140
 14000 GOTO 14020
-14010
+14010 RETURN 'PASS2-RECON: "not won" exit of the win/ending-check routine (13930, GOSUB'd after every verb at 7720). Line 13960 GOTOs here when the win condition (room4 AND I358=1) is false - i.e. normal play. Without this, every look/get/action falls into the % complete + credits ending screen. The win case (14000 GOTO 14020) jumps over this line.
 14020 L137 = TIMER
 14030 I272 = 1
 14040 PRINT XYZ
@@ -1508,7 +1520,7 @@ REM error 18 ()
 14100 IF L22$ <> "" THEN GOTO 14120
 14110 GOTO 14090
 REM error 41 ()
-14120 'PASS2-RECON-HOLE: original instruction unknown
+14120 GOTO 14250 'PASS2-RECON: was an undecodable hole. On the win/death screen (after the keypress at 14100), skip the % complete sub (14130-14240, which is GOSUB'd by the inventory at 2630) and go straight to the credits (14250).
 14130 I566 = 0
 14140 FOR I14 = 1 TO 51
 14150   IF I300(I14) <> 1 THEN GOTO 14170
@@ -1520,7 +1532,7 @@ REM error 41 ()
 14210 I566 = I566 + 2
 14220 I567 = CINT((I566 * 100) / 47)
 14230 PRINT I567; "% complete";
-14240
+14240 RETURN 'PASS2-RECON: end of the "% complete" sub (GOSUB'd by the inventory at 2630). Without this it fell into CALL S15540 (credits = the stray song) and looped, so the inventory never drew the room name/Objects/items. The win flow now jumps to 14250 via 14120, so this RETURN is only reached via the inventory GOSUB.
 14250 CALL S15540
 14260 IF I358 <> 1 THEN GOTO 14290
 14270 GOTO 14250
@@ -1589,7 +1601,7 @@ REM error 41 ()
 14900 NEXT
 14910 I186 = 6
 14920 I188 = 2
-14930
+14930 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 14930 and next line 14940 is a GOSUB'd subroutine, so 14930 is a routine-end RETURN.
 14940 IF I192((I186 + 1) + (L191 * I188)) <> 16 THEN GOTO 14960
 14950 GOTO 15030
 14960 IF ((I192((I186 + 1) + (L191 * I188)) = 3) OR (I192((I186 + 1) + (L191 * I188)) = 21)) = 0 THEN GOTO 14980
