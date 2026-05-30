@@ -12,8 +12,8 @@ COMMON SHARED L282, L284, I286, L287, L294, L299, I300(), L302(), L305, L306, L3
 COMMON SHARED L312(), I313, L314(), L315$(), I316(), I317, I318(), L319(), L320, L321, L322$()
 COMMON SHARED L323$(), L325$, I327, L336, L338, L339$(), I340, L341, L343, L348$, L355
 COMMON SHARED L357$, I358, I359, L364, L367, L370, L371, I375, I376, I377, L384
-COMMON SHARED I386(), L387(), L388(), L389(), L390(), L391(), L392(), L393(), L394(), L395(), I404()
-COMMON SHARED L405(), L406$, L407, I408, L411, I431(), L432(), L433(), L434(), L435(), L436()
+COMMON SHARED I386(), L387(), L388(), L389(), L390(), L391(), L392(), L393(), L394(), L395()
+COMMON SHARED L406$, L407, I408, L411, I431(), L432(), L433(), L434(), L435(), L436()
 COMMON SHARED L437(), L438(), L439, I440, L441, I442, L444, L445, L448$, I449, I451
 COMMON SHARED L452, L453, L466, L467, L468, I471, L476$(), I477, L478, L482$, I566
 COMMON SHARED I567, I574, L579, L586, L587, L612, L613, L614, L615, L616, L617
@@ -66,8 +66,8 @@ DIM L392(50)
 DIM L393(50)
 DIM L394(50)
 DIM L395(50)
-DIM I404(150)
-DIM L405(300)
+DIM SHARED I404(150) AS INTEGER 'PASS2-RECON: moved out of COMMON SHARED (lines 15-16) so it can be typed here. MUST be INTEGER - it's a GET/PUT sprite buffer loaded via INPUT (walk frame A, wilb/golf death). Without AS INTEGER it defaults to SINGLE, so INPUT stores 4-byte floats and PUT misreads the packed-sprite header -> ERR 5 (the in-room walk crash at 8740). The intro's R46/R64 are AS INTEGER for exactly this reason.
+DIM SHARED L405(300) AS INTEGER 'PASS2-RECON: moved out of COMMON SHARED. Integer sprite buffer (walk frame B / death). Same reason as I404.
 DIM I431(150)
 DIM L432(300)
 DIM L433(300)
@@ -924,9 +924,9 @@ REM error 17 (2 )
 8220 NEXT
 8230 SYSTEM
 8240 CLOSE
-8245 IF L36$ <> "title" AND L36$ <> "death" AND L36$ <> "dindead" THEN RETURN 'PASS2-RECON: skip joe-walking animation for normal rooms
-8250 PALETTE 2, 1
-8260 PALETTE 1, 8
+8245 IF L36$ = "title" OR L36$ = "death" OR L36$ = "dindead" THEN RETURN 'PASS2-RECON: run the in-room Joe-walk for normal rooms (Joe walks in on entry); skip it for the title screen and the death cutscenes, which have their own animations. Flipped from the earlier "skip normal rooms" stub now that the walk sprites are reconstructed (joewN.pct -> I404/L405, PUT those).
+8250 REM PASS2-RECON: removed PALETTE 2,1 - the walk now uses the room's own palette (set at 8010-8030), matching the intro walk (18310) which has no palette change yet renders Joe correctly. Keeping it recolored the room and was never restored after the walk.
+8260 REM PASS2-RECON: removed PALETTE 1,8 (see 8250).
 8265 L36$ = "joew2" 'PASS2-RECON: default joe sprite filename
 8270 IF L22$ <> "1" THEN GOTO 8290
 8280 L36$ = "joew1"
@@ -937,12 +937,12 @@ REM error 17 (2 )
 8330 IF L22$ <> "4" THEN GOTO 8350
 8340 L36$ = "joew4"
 8350 OPEN L36$ + ".pct" FOR INPUT AS #1
-8360 GET (1, 8)-(9, 18), L278
-8370 GET (1, 8)-(9, 18), L403
+8360 REM PASS2-RECON: removed bogus GET (1,8)-(9,18),L278 (decompiler artifact - the screen corner is blank; joewN.pct carries its own 62,31 GET-array header). Same fix as the intro walk at 18340.
+8370 REM PASS2-RECON: removed bogus GET (1,8)-(9,18),L403 - the two walk frames load straight into I404/L405 below and are PUT by the animation (8580+).
 8380 FOR I14 = 0 TO 125
 8385   IF EOF(1) THEN GOTO 8420 'PASS2-RECON: joew4 EOF
-8390   IR12 = (I14 * 2)
-8400   INPUT #1, I404(I14), L405(IR12)
+8390   REM PASS2-RECON: IR12=(I14*2) stride no longer used (contiguous load)
+8400   INPUT #1, I404(I14), L405(I14) 'PASS2-RECON: contiguous load - col0=walk frame A -> I404, col1=frame B -> L405 (each a full 31x31 GET-array). Was L405(IR12=I14*2), a Spring stride bug. PUT by the animation at 8580+.
 8410 NEXT
 8420 L406$ = L22$
 8430 L22$ = ""
@@ -960,68 +960,68 @@ REM error 17 (2 )
 8550 IF L22$ <> "4" THEN GOTO 8570
 8560 GOTO 9060
 8570 FOR I14 = 130 TO 150 STEP 2
-8580   PUT (140, I14), L278, XOR
+8580   PUT (140, I14), I404, XOR
 8590   SOUND L95, .1
 8600   FOR I408 = 1 TO 2
 8610     SOUND 32676, 1.2
 8620   NEXT
-8630   PUT (140, I14), L278, XOR
+8630   PUT (140, I14), I404, XOR
 8640   I14 = I14 + 2
-8650   PUT (140, I14), L403, XOR
+8650   PUT (140, I14), L405, XOR
 8660   SOUND L95, .1
 8670   FOR I408 = 1 TO 2
 8680     SOUND 32676, 1.2
 8690   NEXT
-8700   PUT (140, I14), L403, XOR
+8700   PUT (140, I14), L405, XOR
 8710 NEXT
-8720
-8730 GOTO 8880 '????
-8740 PUT (140, I14), L278, XOR
+8720 GOTO 9220 'PASS2-RECON: lost GOTO - after the dir-1 (down) walk loop, jump to the routine end (9220 RETURN). Without it dir-1 falls through into dir-2.
+8730 GOTO 8880 'PASS2-RECON: dir-2 (up) entry -> while-condition at 8880 (loop while I14>=120; I14=126 from the load loop is the start). Was "GOTO 8880 ????" - Spring lost the target; 8880 is the correct while-entry.
+8740 PUT (140, I14), I404, XOR
 8750 SOUND L95, .1
 8760 FOR I408 = 1 TO 2
 8770   SOUND 32676, 1.4
 8780 NEXT
-8790 PUT (140, I14), L278, XOR
+8790 PUT (140, I14), I404, XOR
 8800 I14 = I14 - 3
-8810 PUT (140, I14), L403, XOR
+8810 PUT (140, I14), L405, XOR
 8820 SOUND L95, .1
 8830 FOR I408 = 1 TO 2
 8840   SOUND 32676, 1.4
 8850 NEXT
-8860 PUT (140, I14), L403, XOR
+8860 PUT (140, I14), L405, XOR
 8870 I14 = I14 + -2
 8880 IF I14 >= 120 THEN GOTO 8740
-8890
+8890 GOTO 9220 'PASS2-RECON: lost GOTO - after dir-2 (up), skip to the routine end (else falls into dir-3).
 8900 FOR I14 = 140 TO 195 STEP 3
-8910   PUT (I14, 130), L278, XOR
+8910   PUT (I14, 130), I404, XOR
 8920   SOUND L95, .1
 8930   FOR I408 = 1 TO 2
 8940     SOUND 32676, 1
 8950   NEXT
-8960   PUT (I14, 130), L278, XOR
+8960   PUT (I14, 130), I404, XOR
 8970   I14 = I14 + 3
-8980   PUT (I14, 130), L403, XOR
+8980   PUT (I14, 130), L405, XOR
 8990   SOUND L95, .1
 9000   FOR I408 = 1 TO 2
 9010     SOUND 32676, 1
 9020   NEXT
-9030   PUT (I14, 130), L403, XOR
+9030   PUT (I14, 130), L405, XOR
 9040 NEXT
-9050
-9060 GOTO 9210 '????
-9070 PUT (I14, 130), L278, XOR
+9050 GOTO 9220 'PASS2-RECON: lost GOTO - after dir-3 (right), skip to the routine end (else falls into dir-4).
+9060 GOTO 9210 'PASS2-RECON: dir-4 (left) entry -> while-condition at 9210 (loop while I14>=90). Was "GOTO 9210 ????".
+9070 PUT (I14, 130), I404, XOR
 9080 SOUND L95, .1
 9090 FOR I408 = 1 TO 2
 9100   SOUND 32676, 1
 9110 NEXT
-9120 PUT (I14, 130), L278, XOR
+9120 PUT (I14, 130), I404, XOR
 9130 I14 = I14 - 3
-9140 PUT (I14, 130), L403, XOR
+9140 PUT (I14, 130), L405, XOR
 9150 SOUND L95, .1
 9160 FOR I408 = 1 TO 2
 9170   SOUND 32676, 1
 9180 NEXT
-9190 PUT (I14, 130), L403, XOR
+9190 PUT (I14, 130), L405, XOR
 9200 I14 = I14 + -3
 9210 IF I14 >= 90 THEN GOTO 9070
 9220 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 9220 and next line 9230 is a GOSUB'd subroutine, so 9220 is a routine-end RETURN.
