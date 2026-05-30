@@ -1,21 +1,23 @@
-COMMON SHARED L0,L10,I14,I15(),L16(),L17(),L18(),L22$,I24,I25,L30
-COMMON SHARED L36$,L39,L81,L87,L88,L95,L105,I107,L109,L110,L111
-COMMON SHARED L112,L113,I114,L134,L137,L138,I139,I140,I141,L142$,L143
-COMMON SHARED L144,L145,L146,L147,L149,L150,L154,L156,I186,I188,I189
-COMMON SHARED L191,I192(),I193,I195,I197,I199,I201,I203,I205,I207,I209
-COMMON SHARED I211,I213,I215,I217,I219,I221,I223,I225,I228,I230,I232
-COMMON SHARED I234,I236,I238,I239,I241,I243,I245,I247,I250,I252,I255
-COMMON SHARED L261,L263,L265,L270$,I272,L274$,L275$,L276,L279,L280,L281
-COMMON SHARED L282,L284,I286,L287,L294,L299,I300(),L302(),L305,L306,L311()
-COMMON SHARED L312(),I313,L314(),L315$(),I316(),I317,I318(),L319(),L320,L321,L322$()
-COMMON SHARED L323$(),L325$,I327,L336,L338,L339$(),I340,L341,L343,L348$,L355
-COMMON SHARED L357$,I358,I359,L364,L367,L370,L371,I375,I376,I377,L384
-COMMON SHARED I386(),L387(),L388(),L389(),L390(),L391(),L392(),L393(),L394(),L395(),I404()
-COMMON SHARED L405(),L406$,L407,I408,L411,I431(),L432(),L433(),L434(),L435(),L436()
-COMMON SHARED L437(),L438(),L439,I440,L441,I442,L444,L445,L448$,I449,I451
-COMMON SHARED L452,L453,L466,L467,L468,I471,L476$(),I477,L478,L482$,I566
-COMMON SHARED I567,I574,L579,L586,L587,L612,L613,L614,L615,L616,L617
-COMMON SHARED L623,L628,L629,L630,L631,L632,L633,L634
+DECLARE SUB S16760 ()
+DECLARE SUB S15540 ()
+COMMON SHARED L0, L10, I14, I15(), L16(), L17(), L18(), L22$, I24, I25, L30
+COMMON SHARED L36$, L39, L81, L87, L88, L95, L105, I107, L109, L110, L111
+COMMON SHARED L112, L113, I114, L134, L137, L138, I139, I140, I141, L142$, L143
+COMMON SHARED L144, L145, L146, L147, L149, L150, L154, L156, I186, I188, I189
+COMMON SHARED L191, I192(), I193, I195, I197, I199, I201, I203, I205, I207, I209
+COMMON SHARED I211, I213, I215, I217, I219, I221, I223, I225, I228, I230, I232
+COMMON SHARED I234, I236, I238, I239, I241, I243, I245, I247, I250, I252, I255
+COMMON SHARED L261, L263, L265, L270$, I272, L274$, L275$, L276, L279, L280, L281
+COMMON SHARED L282, L284, I286, L287, L294, L299, I300(), L302(), L305, L306, L311()
+COMMON SHARED L312(), I313, L314(), L315$(), I316(), I317, I318(), L319(), L320, L321, L322$()
+COMMON SHARED L323$(), L325$, I327, L336, L338, L339$(), I340, L341, L343, L348$, L355
+COMMON SHARED L357$, I358, I359, L364, L367, L370, L371, I375, I376, I377, L384
+COMMON SHARED I386(), L387(), L388(), L389(), L390(), L391(), L392(), L393(), L394(), L395(), I404()
+COMMON SHARED L405(), L406$, L407, I408, L411, I431(), L432(), L433(), L434(), L435(), L436()
+COMMON SHARED L437(), L438(), L439, I440, L441, I442, L444, L445, L448$, I449, I451
+COMMON SHARED L452, L453, L466, L467, L468, I471, L476$(), I477, L478, L482$, I566
+COMMON SHARED I567, I574, L579, L586, L587, L612, L613, L614, L615, L616, L617
+COMMON SHARED L623, L628, L629, L630, L631, L632, L633, L634
 
 ' PASS2-RECON: DIM block for arrays. Spring kept COMMON SHARED but dropped DIM.
 ' Sizes generous; the parallel action arrays (I386..L395) match Dream-Giver's 40-entry pattern.
@@ -88,696 +90,696 @@ L144 = 60
 L145 = 59
 L191 = 71
 
-110 Rem COM() statements in this programme
-120 Call S16760
-130 Key OFF
-140 L0 = Timer
-150 On STRIG(2) GOSUB 12280
-160 On STRIG(0) GOSUB 12220
-170 On STRIG(4) GOSUB 12340
-180 On STRIG(6) GOSUB 12400
+110 REM COM() statements in this programme
+120 CALL S16760
+130 KEY OFF
+140 L0 = TIMER
+150 ON STRIG(2) GOSUB 12280
+160 ON STRIG(0) GOSUB 12220
+170 ON STRIG(4) GOSUB 12340
+180 ON STRIG(6) GOSUB 12400
 190 GOSUB 12170
 200 GOSUB 12510
-210 On Error GoTo 2280
-Rem error 17 (2 )
-220 Screen 1
-230 Cls
-240 Close
-250 Open "door.pct " For Input As #1
-260 For I14 = 0 To 125
+210 ON ERROR GOTO 2280
+REM error 17 (2 )
+220 SCREEN 1
+230 CLS
+240 CLOSE
+250 OPEN "door.pct " FOR INPUT AS #1
+260 FOR I14 = 0 TO 125
 270   IR12 = (I14 * 2)
-280   Input #1, I15(I14), L16(IR12), L17(IR12), L18(IR12)
-290 Next
-300 Screen 1
+280   INPUT #1, I15(I14), L16(IR12), L17(IR12), L18(IR12)
+290 NEXT
+300 SCREEN 1
 310 LOCATE 10, 12
-320 Print "A Kreuzer Production"
+320 PRINT "A Kreuzer Production"
 330 L22$ = INKEY$
 340 GOSUB 9570
 350 L22$ = INKEY$
-360 Cls
+360 CLS
 370 I24 = 122
 380 I25 = 82
-390 Print " Do you want instructions Y/N"
+390 PRINT " Do you want instructions Y/N"
 400 L22$ = INKEY$
-410 If L22$ <> "" Then GoTo 430
-420 GoTo 400
+410 IF L22$ <> "" THEN GOTO 430
+420 GOTO 400
 430 IR12 = (L22$ = "y")
-440 If ((L22$ = "Y") Or (L22$ = "y")) = 0 Then GoTo 460
+440 IF ((L22$ = "Y") OR (L22$ = "y")) = 0 THEN GOTO 460
 450 GOSUB 530
 460 DRAW "bm1,1c1r3d3l1u2l1d2l1u2"
-470 GET (1,1)-(4,4),L33
+470 GET (1, 1)-(4, 4), L33
 480 L22$ = "2"
 490 L36$ = "room4"
 500 GOSUB 7860
 510 GOSUB 9230
-520 GoTo 7050
-530 Cls
+520 GOTO 7050
+530 CLS
 540 WIDTH 80
-550 Print " Welcome to the premier point and click game by Kreuzer productions"
-560 Print " The point and click interface is really quite easy. Move the green"
-570 Print " cursor onto the object you want to manipulate and press one of "
-580 Print " these keys. (a) for action . (l) to look at an object. Type (u) to"
-590 Print " use th active object. (g) to get that object.(note) some objects you"
-600 Print " must look at to get or you must look at the drawer to find the object "
-610 Print " inside. Also at any time during the game you may press (i) to display "
-620 Print " the your inventory ,time and place. Plus you may load,save or quit"
-630 Print " or select the active object from this screen. "
-640 Print " if you seem to be stuck it would be wise to backtrack and look to see if"
-650 Print " you anything new has opened up or one of your objects has a use in that"
-660 Print " room. If action does not work on something you might try look or get or"
-670 Print " vice versa, also try clicking the cursor on different parts of the object"
-680 Print " it might reveal different things. "
-690 Print " Hints: Click (a) on and arrow by the door to leave"
-700 Print " Even though it might seem as if two or more objects"
-710 Print " could do the trick, usually only one will work."
-720 Print " Just to get you started move your cursor by the rug of the first"
-730 Print " room. Then press (l) it will say you see a lumpy rug. That didn't help."
-740 Print " Don't worry, save often you never know what may happen"
-750 Print " P.S. Time does matter"
-760 Print " Get ready to journey into the twisting and contorting shadows of"
-770 Print " your uncle's residence"
-780 Print " PRESS ANY KEY TO CONTINUE "
+550 PRINT " Welcome to the premier point and click game by Kreuzer productions"
+560 PRINT " The point and click interface is really quite easy. Move the green"
+570 PRINT " cursor onto the object you want to manipulate and press one of "
+580 PRINT " these keys. (a) for action . (l) to look at an object. Type (u) to"
+590 PRINT " use th active object. (g) to get that object.(note) some objects you"
+600 PRINT " must look at to get or you must look at the drawer to find the object "
+610 PRINT " inside. Also at any time during the game you may press (i) to display "
+620 PRINT " the your inventory ,time and place. Plus you may load,save or quit"
+630 PRINT " or select the active object from this screen. "
+640 PRINT " if you seem to be stuck it would be wise to backtrack and look to see if"
+650 PRINT " you anything new has opened up or one of your objects has a use in that"
+660 PRINT " room. If action does not work on something you might try look or get or"
+670 PRINT " vice versa, also try clicking the cursor on different parts of the object"
+680 PRINT " it might reveal different things. "
+690 PRINT " Hints: Click (a) on and arrow by the door to leave"
+700 PRINT " Even though it might seem as if two or more objects"
+710 PRINT " could do the trick, usually only one will work."
+720 PRINT " Just to get you started move your cursor by the rug of the first"
+730 PRINT " room. Then press (l) it will say you see a lumpy rug. That didn't help."
+740 PRINT " Don't worry, save often you never know what may happen"
+750 PRINT " P.S. Time does matter"
+760 PRINT " Get ready to journey into the twisting and contorting shadows of"
+770 PRINT " your uncle's residence"
+780 PRINT " PRESS ANY KEY TO CONTINUE "
 790 L22$ = INKEY$
-800 If L22$ <> "" Then GoTo 820
-810 GoTo 790
-820 Screen 1
+800 IF L22$ <> "" THEN GOTO 820
+810 GOTO 790
+820 SCREEN 1
 830
-840 Cls
+840 CLS
 850 LOCATE 1, 1
-860 Print "Whats the password?"
+860 PRINT "Whats the password?"
 870 INPUT ""; L22$
 880 IR12 = (L22$ = "Yuri")
-890 IR14 = ((L22$ = "yuri") Or (L22$ = "Yuri"))
-900 If ((L22$ = "YURI") Or (IR14)) = 0 Then GoTo 930
+890 IR14 = ((L22$ = "yuri") OR (L22$ = "Yuri"))
+900 IF ((L22$ = "YURI") OR (IR14)) = 0 THEN GOTO 930
 910
-920 GoTo 940
-930 System
-940 Cls
+920 GOTO 940
+930 SYSTEM
+940 CLS
 950 GOSUB 7750
-960 Cls
+960 CLS
 970 LOCATE 1, 1
-980 Print "  GAME DESIGN"
-990 Print "--ROB KREUZER--"
-1000 Print "--Jon Kreuzer--"
-1010 For I14 = 1 To 1000
-1020 Next
-1030 Print "  STORYLINE"
-1040 Print "--ROB KREUZER--"
-1050 For I14 = 1 To 1600
-1060 Next
-1070 Print "    MUSIC"
-1080 Print "--Rob Kreuzer--"
-1090 For I14 = 1 To 1600
-1100 Next
-1110 Print " SOUND EFFECTS"
-1120 Print "--JON KREUZER--"
-1130 For I14 = 1 To 1600
-1140 Next
-1150 Print "POINT ' CLICK INTERFACE"
-1160 Print "  --JON KREUZER--"
-1170 For I14 = 1 To 1600
-1180 Next
-1190 Print "   GRAPHICS"
-1200 Print "--ROB KREUZER--"
-1210 Print "--Jon Kreuzer--"
-1220 For I14 = 1 To 1600
-1230 Next
-1240 Print "    EDITING"
-1250 Print "--JON KREUZER--"
-1260 GoTo 1440
-1270 For I14 = 900 To 300 Step -10
-1280   SOUND I14, 0.5
-1290 Next
+980 PRINT "  GAME DESIGN"
+990 PRINT "--ROB KREUZER--"
+1000 PRINT "--Jon Kreuzer--"
+1010 FOR I14 = 1 TO 1000
+1020 NEXT
+1030 PRINT "  STORYLINE"
+1040 PRINT "--ROB KREUZER--"
+1050 FOR I14 = 1 TO 1600
+1060 NEXT
+1070 PRINT "    MUSIC"
+1080 PRINT "--Rob Kreuzer--"
+1090 FOR I14 = 1 TO 1600
+1100 NEXT
+1110 PRINT " SOUND EFFECTS"
+1120 PRINT "--JON KREUZER--"
+1130 FOR I14 = 1 TO 1600
+1140 NEXT
+1150 PRINT "POINT ' CLICK INTERFACE"
+1160 PRINT "  --JON KREUZER--"
+1170 FOR I14 = 1 TO 1600
+1180 NEXT
+1190 PRINT "   GRAPHICS"
+1200 PRINT "--ROB KREUZER--"
+1210 PRINT "--Jon Kreuzer--"
+1220 FOR I14 = 1 TO 1600
+1230 NEXT
+1240 PRINT "    EDITING"
+1250 PRINT "--JON KREUZER--"
+1260 GOTO 1440
+1270 FOR I14 = 900 TO 300 STEP -10
+1280   SOUND I14, .5
+1290 NEXT
 1300 SOUND 32676, 3
-1310 For I14 = 50 To 100 Step 10
-1320   SOUND I14, 0.5
-1330   SOUND L88, 0.05
+1310 FOR I14 = 50 TO 100 STEP 10
+1320   SOUND I14, .5
+1330   SOUND L88, .05
 1340   SOUND L87, 1
-1350   SOUND 32676, 0.1
-1360 Next
+1350   SOUND 32676, .1
+1360 NEXT
 1370 SOUND 32676, 1
-1380 SOUND L95, 0.3
-1390 SOUND L87, 0.5
-1400 SOUND L95, 0.3
-1410 SOUND L87, 0.5
+1380 SOUND L95, .3
+1390 SOUND L87, .5
+1400 SOUND L95, .3
+1410 SOUND L87, .5
 1420 I14 = 3
 1430
-1440 For I14 = 1 To 1600
-1450 Next
-1460 Print "    TEXT"
-1470 Print "--ROB KREUZER--"
-1480 Print "--Jon Kreuzer--"
-1490 Print "Hit a key to continue!"
+1440 FOR I14 = 1 TO 1600
+1450 NEXT
+1460 PRINT "    TEXT"
+1470 PRINT "--ROB KREUZER--"
+1480 PRINT "--Jon Kreuzer--"
+1490 PRINT "Hit a key to continue!"
 1500 L22$ = INKEY$
-1510 If L22$ <> "" Then GoTo 1530
-1520 GoTo 1500
-1530 System
+1510 IF L22$ <> "" THEN GOTO 1530
+1520 GOTO 1500
+1530 SYSTEM
 1540 DRAW "bm153,104"
 1550 DRAW "c3bl5nl10br5bd4nd9bu4br5nr10bl5c1bu5nu9bd5"
 1560 L22$ = INKEY$
 1570 GOSUB 11860
-1580 If L22$ <> "" Then GoTo 1600
-1590 GoTo 1560
+1580 IF L22$ <> "" THEN GOTO 1600
+1590 GOTO 1560
 1600 DRAW "c2bl5nl10br5bd4nd9bu4br5nr10bl5bu5nu9bd5"
-1610 If L22$ <> "6" Then GoTo 1650
+1610 IF L22$ <> "6" THEN GOTO 1650
 1620 GOSUB 1760
-1630 DRAW "ta=" + VarPtr$(I107)
-1640 GoTo 1550
-1650 If L22$ <> "4" Then GoTo 1690
+1630 DRAW "ta=" + VARPTR$(I107)
+1640 GOTO 1550
+1650 IF L22$ <> "4" THEN GOTO 1690
 1660 GOSUB 2030
-1670 DRAW "ta=" + VarPtr$(I107)
-1680 GoTo 1550
-1690 If ((L112 = 1) And ((L111 = 1) And (L110 = 1))) = 0 Then GoTo 1720
-1700 SOUND L113, 0.5
+1670 DRAW "ta=" + VARPTR$(I107)
+1680 GOTO 1550
+1690 IF ((L112 = 1) AND ((L111 = 1) AND (L110 = 1))) = 0 THEN GOTO 1720
+1700 SOUND L113, .5
 1710 I114 = 1
 1720 IR12 = (L22$ = "x")
-1730 If ((L22$ = "g") Or (L22$ = "x")) = 0 Then GoTo 1750
+1730 IF ((L22$ = "g") OR (L22$ = "x")) = 0 THEN GOTO 1750
 1740
-1750 GoTo 1560
+1750 GOTO 1560
 1760 I107 = I107 - 10
-1770 If I107 <> -10 Then GoTo 1790
+1770 IF I107 <> -10 THEN GOTO 1790
 1780 I107 = 350
-1790 If (I107 / 10) <> 5 Then GoTo 1820
-1800 SOUND L95, 0.1
+1790 IF (I107 / 10) <> 5 THEN GOTO 1820
+1800 SOUND L95, .1
 1810 L110 = 0#
-1820 If (I107 / 10) <> 9 Then GoTo 1860
-1830 SOUND L95, 0.1
-1840 If L111 <> 1 Then GoTo 1860
+1820 IF (I107 / 10) <> 9 THEN GOTO 1860
+1830 SOUND L95, .1
+1840 IF L111 <> 1 THEN GOTO 1860
 1850 L110 = 1
-1860 If (I107 / 10) <> 14 Then GoTo 1910
-1870 SOUND L95, 0.1
+1860 IF (I107 / 10) <> 14 THEN GOTO 1910
+1870 SOUND L95, .1
 1880 L110 = 0#
-1890 If L111 <> 0# Then GoTo 1910
+1890 IF L111 <> 0# THEN GOTO 1910
 1900 L112 = 0#
-1910 If (I107 / 10) <> 18 Then GoTo 1940
-1920 SOUND L95, 0.1
+1910 IF (I107 / 10) <> 18 THEN GOTO 1940
+1920 SOUND L95, .1
 1930 L112 = 1
-1940 If (I107 / 10) <> 23 Then GoTo 1960
-1950 SOUND L95, 0.1
-1960 If (I107 / 10) <> 27 Then GoTo 1980
-1970 SOUND L95, 0.1
-1980 If (I107 / 10) <> 32 Then GoTo 2000
-1990 SOUND L95, 0.1
-2000 If (I107 / 10) <> 0# Then GoTo 2020
-2010 SOUND L95, 0.1
+1940 IF (I107 / 10) <> 23 THEN GOTO 1960
+1950 SOUND L95, .1
+1960 IF (I107 / 10) <> 27 THEN GOTO 1980
+1970 SOUND L95, .1
+1980 IF (I107 / 10) <> 32 THEN GOTO 2000
+1990 SOUND L95, .1
+2000 IF (I107 / 10) <> 0# THEN GOTO 2020
+2010 SOUND L95, .1
 2020
 2030 I107 = I107 + 10
-2040 If I107 <> 360 Then GoTo 2060
+2040 IF I107 <> 360 THEN GOTO 2060
 2050 I107 = 0
-2060 If (I107 / 10) <> 5 Then GoTo 2110
-2070 SOUND L95, 0.1
+2060 IF (I107 / 10) <> 5 THEN GOTO 2110
+2070 SOUND L95, .1
 2080 L110 = 0#
-2090 If L112 <> 1 Then GoTo 2110
+2090 IF L112 <> 1 THEN GOTO 2110
 2100 L111 = 1
-2110 If (I107 / 10) <> 9 Then GoTo 2140
-2120 SOUND L95, 0.1
+2110 IF (I107 / 10) <> 9 THEN GOTO 2140
+2120 SOUND L95, .1
 2130 L111 = 0#
-2140 If (I107 / 10) <> 14 Then GoTo 2170
-2150 SOUND L95, 0.1
+2140 IF (I107 / 10) <> 14 THEN GOTO 2170
+2150 SOUND L95, .1
 2160 L110 = 0#
-2170 If (I107 / 10) <> 18 Then GoTo 2190
-2180 SOUND L95, 0.1
-2190 If (I107 / 10) <> 23 Then GoTo 2210
-2200 SOUND L95, 0.1
-2210 If (I107 / 10) <> 27 Then GoTo 2230
-2220 SOUND L95, 0.1
-2230 If (I107 / 10) <> 32 Then GoTo 2250
-2240 SOUND L95, 0.1
-2250 If (I107 / 10) <> 0# Then GoTo 2270
-2260 SOUND L95, 0.1
+2170 IF (I107 / 10) <> 18 THEN GOTO 2190
+2180 SOUND L95, .1
+2190 IF (I107 / 10) <> 23 THEN GOTO 2210
+2200 SOUND L95, .1
+2210 IF (I107 / 10) <> 27 THEN GOTO 2230
+2220 SOUND L95, .1
+2230 IF (I107 / 10) <> 32 THEN GOTO 2250
+2240 SOUND L95, .1
+2250 IF (I107 / 10) <> 0# THEN GOTO 2270
+2260 SOUND L95, .1
 2270
 2280 BEEP
-2290 SCREEN 0: WIDTH 80: Cls
-2300 LOCATE 5, 5: Print "PASS2-RECON DIAGNOSTIC -- error handler triggered"
-2310 LOCATE 7, 5: Print "ERR  (code) ="; ERR
-2320 LOCATE 8, 5: Print "ERL  (line) ="; ERL
-2330 LOCATE 10, 5: Print "Common QB4.5 codes: 5=IllFnCall 6=Overflow 9=SubscriptOOR"
-2335 LOCATE 11, 5: Print "  11=DivByZero 13=TypeMismatch 53=FileNotFound 54=BadMode"
-2336 LOCATE 12, 5: Print "  55=FileOpen 57=DevIOErr 62=InputPastEOF 68=DeviceUnavail"
-2340 LOCATE 14, 5: Print "Press any key to exit..."
+2290 SCREEN 0: WIDTH 80: CLS
+2300 LOCATE 5, 5: PRINT "PASS2-RECON DIAGNOSTIC -- error handler triggered"
+2310 LOCATE 7, 5: PRINT "ERR  (code) ="; ERR
+2320 LOCATE 8, 5: PRINT "ERL  (line) ="; ERL
+2330 LOCATE 10, 5: PRINT "Common QB4.5 codes: 5=IllFnCall 6=Overflow 9=SubscriptOOR"
+2335 LOCATE 11, 5: PRINT "  11=DivByZero 13=TypeMismatch 53=FileNotFound 54=BadMode"
+2336 LOCATE 12, 5: PRINT "  55=FileOpen 57=DevIOErr 62=InputPastEOF 68=DeviceUnavail"
+2340 LOCATE 14, 5: PRINT "Press any key to exit..."
 2345 L22$ = INPUT$(1)
-2350 Print "Program terminated!"
+2350 PRINT "Program terminated!"
 2360 SOUND 32676, 20
-2370 SOUND L95, 0.1
-2380 For I14 = 1000 To 50 Step -15
-2390   SOUND I14, 0.2
-2400   SOUND L113, 0.1
-2410   SOUND I14 * 2, 0.05
-2420 Next
-2430 System
-2440 Cls
-2450 L138 = Timer - L137
-2460 If ((I140 = 1) And (I139 = 1)) = 0 Then GoTo 2480
+2370 SOUND L95, .1
+2380 FOR I14 = 1000 TO 50 STEP -15
+2390   SOUND I14, .2
+2400   SOUND L113, .1
+2410   SOUND I14 * 2, .05
+2420 NEXT
+2430 SYSTEM
+2440 CLS
+2450 L138 = TIMER - L137
+2460 IF ((I140 = 1) AND (I139 = 1)) = 0 THEN GOTO 2480
 2470 I141 = 1
 2480 L142$ = ""
-2490 If (L144 * L143) <= L145 Then GoTo 2530
+2490 IF (L144 * L143) <= L145 THEN GOTO 2530
 2500 L146 = 9
 2510 L147 = (L144 * L143) + -60
-2520 GoTo 2550
+2520 GOTO 2550
 2530 L147 = L144 * L143
 2540 L146 = 8
-2550 If (L144 * L143) <= L149 Then GoTo 2580
+2550 IF (L144 * L143) <= L149 THEN GOTO 2580
 2560 L146 = 10
 2570 L147 = (L144 * L143) + -120
-2580 If (L144 * L143) <= L150 Then GoTo 2610
+2580 IF (L144 * L143) <= L150 THEN GOTO 2610
 2590 L146 = 11
 2600 L147 = (L144 * L143) + -180
 2610 LOCATE 3, 1
-2620 Print "The time is "; L146; ":"; L147;
+2620 PRINT "The time is "; L146; ":"; L147;
 2630 GOSUB 14130
-2640 Print "You are in the ";
+2640 PRINT "You are in the ";
 2650 IR12 = (L36$ = "room4")
-2660 If ((L36$ = "openclos") Or (L36$ = "room4")) = 0 Then GoTo 2680
-2670 Print "guest room."
-2680 If L36$ <> "room6" Then GoTo 2700
-2690 Print "library."
+2660 IF ((L36$ = "openclos") OR (L36$ = "room4")) = 0 THEN GOTO 2680
+2670 PRINT "guest room."
+2680 IF L36$ <> "room6" THEN GOTO 2700
+2690 PRINT "library."
 2700 IR12 = (L36$ = "room7")
-2710 If ((L36$ = "desk") Or (L36$ = "room7")) = 0 Then GoTo 2730
-2720 Print "master bedroom."
-2730 If L36$ <> "room8" Then GoTo 2750
-2740 Print "servant's quarters."
-2750 If L36$ <> "room9" Then GoTo 2770
-2760 Print "cell block."
-2770 If L36$ <> "room10" Then GoTo 2790
-2780 Print "cell."
-2790 If L36$ <> "room1" Then GoTo 2810
-2800 Print "entrance hall."
-2810 If L36$ <> "room2" Then GoTo 2830
-2820 Print "upstairs hall."
+2710 IF ((L36$ = "desk") OR (L36$ = "room7")) = 0 THEN GOTO 2730
+2720 PRINT "master bedroom."
+2730 IF L36$ <> "room8" THEN GOTO 2750
+2740 PRINT "servant's quarters."
+2750 IF L36$ <> "room9" THEN GOTO 2770
+2760 PRINT "cell block."
+2770 IF L36$ <> "room10" THEN GOTO 2790
+2780 PRINT "cell."
+2790 IF L36$ <> "room1" THEN GOTO 2810
+2800 PRINT "entrance hall."
+2810 IF L36$ <> "room2" THEN GOTO 2830
+2820 PRINT "upstairs hall."
 2830 IR12 = (L36$ = "room3")
-2840 IR14 = ((L36$ = "window") Or (L36$ = "room3"))
-2850 If ((L36$ = "safe") Or (IR14)) = 0 Then GoTo 2870
-2860 Print "storage hall."
+2840 IR14 = ((L36$ = "window") OR (L36$ = "room3"))
+2850 IF ((L36$ = "safe") OR (IR14)) = 0 THEN GOTO 2870
+2860 PRINT "storage hall."
 2870 IR12 = (L36$ = "room11")
-2880 If ((L36$ = "table") Or (L36$ = "room11")) = 0 Then GoTo 2900
-2890 Print "attic."
+2880 IF ((L36$ = "table") OR (L36$ = "room11")) = 0 THEN GOTO 2900
+2890 PRINT "attic."
 2900 IR12 = (L36$ = "room5")
-2910 If ((L36$ = "rack") Or (L36$ = "room5")) = 0 Then GoTo 2930
-2920 Print "kitchen"
+2910 IF ((L36$ = "rack") OR (L36$ = "room5")) = 0 THEN GOTO 2930
+2920 PRINT "kitchen"
 2930 I186 = 6
 2940 LOCATE 5, 1
-2950 Print "      Objects: "
+2950 PRINT "      Objects: "
 2960 I188 = 2
-2970 If I189 <> 1 Then GoTo 3020
+2970 IF I189 <> 1 THEN GOTO 3020
 2980 LOCATE I186, 2
-2990 Print "Matches"
+2990 PRINT "Matches"
 3000 I186 = I186 + 1
 3010 I192((L191 * I188) + I186) = 1
-3020 If I193 <> 1 Then GoTo 3070
+3020 IF I193 <> 1 THEN GOTO 3070
 3030 LOCATE I186, 2
-3040 Print "Poker"
+3040 PRINT "Poker"
 3050 I186 = I186 + 1
 3060 I192((L191 * I188) + I186) = 2
-3070 If I195 <> 1 Then GoTo 3120
+3070 IF I195 <> 1 THEN GOTO 3120
 3080 LOCATE I186, 2
-3090 Print "Journal Page"
+3090 PRINT "Journal Page"
 3100 I186 = I186 + 1
 3110 I192((L191 * I188) + I186) = 3
-3120 If I197 <> 1 Then GoTo 3170
+3120 IF I197 <> 1 THEN GOTO 3170
 3130 LOCATE I186, 2
-3140 Print "Pipe Wrench"
+3140 PRINT "Pipe Wrench"
 3150 I186 = I186 + 1
 3160 I192((L191 * I188) + I186) = 4
-3170 If I199 <> 1 Then GoTo 3220
+3170 IF I199 <> 1 THEN GOTO 3220
 3180 LOCATE I186, 2
-3190 Print "Small Key "
+3190 PRINT "Small Key "
 3200 I186 = I186 + 1
 3210 I192((L191 * I188) + I186) = 5
-3220 If I201 <> 1 Then GoTo 3270
+3220 IF I201 <> 1 THEN GOTO 3270
 3230 LOCATE I186, 2
-3240 Print "Bar"
+3240 PRINT "Bar"
 3250 I186 = I186 + 1
 3260 I192((L191 * I188) + I186) = 6
-3270 If I203 <> 1 Then GoTo 3320
+3270 IF I203 <> 1 THEN GOTO 3320
 3280 LOCATE I186, 2
-3290 Print "Baking Soda"
+3290 PRINT "Baking Soda"
 3300 I186 = I186 + 1
 3310 I192((L191 * I188) + I186) = 7
-3320 If I205 <> 1 Then GoTo 3370
+3320 IF I205 <> 1 THEN GOTO 3370
 3330 LOCATE I186, I188
-3340 Print "White Key"
+3340 PRINT "White Key"
 3350 I186 = I186 + 1
 3360 I192((L191 * I188) + I186) = 8
-3370 If I207 <> 1 Then GoTo 3420
+3370 IF I207 <> 1 THEN GOTO 3420
 3380 LOCATE I186, I188
-3390 Print "Patient book"
+3390 PRINT "Patient book"
 3400 I186 = I186 + 1
 3410 I192((L191 * I188) + I186) = 9
-3420 If I209 <> 1 Then GoTo 3470
+3420 IF I209 <> 1 THEN GOTO 3470
 3430 LOCATE I186, I188
-3440 Print "Experiment book"
+3440 PRINT "Experiment book"
 3450 I186 = I186 + 1
 3460 I192((L191 * I188) + I186) = 10
-3470 If I211 <> 1 Then GoTo 3520
+3470 IF I211 <> 1 THEN GOTO 3520
 3480 LOCATE I186, I188
-3490 Print "Partial formula"
+3490 PRINT "Partial formula"
 3500 I186 = I186 + 1
 3510 I192((L191 * I188) + I186) = 11
-3520 If I213 <> 1 Then GoTo 3570
+3520 IF I213 <> 1 THEN GOTO 3570
 3530 LOCATE I186, I188
-3540 Print "Penny"
+3540 PRINT "Penny"
 3550 I186 = I186 + 1
 3560 I192((L191 * I188) + I186) = 12
-3570 If I215 <> 1 Then GoTo 3620
+3570 IF I215 <> 1 THEN GOTO 3620
 3580 LOCATE I186, I188
-3590 Print "Uncle's key"
+3590 PRINT "Uncle's key"
 3600 I186 = I186 + 1
 3610 I192((L191 * I188) + I186) = 13
-3620 If I217 <> 1 Then GoTo 3670
+3620 IF I217 <> 1 THEN GOTO 3670
 3630 LOCATE I186, I188
-3640 Print "Rope"
+3640 PRINT "Rope"
 3650 I186 = I186 + 1
 3660 I192((L191 * I188) + I186) = 14
-3670 If I219 <> 1 Then GoTo 3720
+3670 IF I219 <> 1 THEN GOTO 3720
 3680 LOCATE I186, I188
-3690 Print "Polished rock"
+3690 PRINT "Polished rock"
 3700 I186 = I186 + 1
 3710 I192((L191 * I188) + I186) = 15
-3720 If I221 <> 1 Then GoTo 3770
+3720 IF I221 <> 1 THEN GOTO 3770
 3730 LOCATE I186, I188
-3740 Print "Map page"
+3740 PRINT "Map page"
 3750 I186 = I186 + 1
 3760 I192((L191 * I188) + I186) = 16
-3770 If I223 <> 1 Then GoTo 3820
+3770 IF I223 <> 1 THEN GOTO 3820
 3780 LOCATE I186, I188
-3790 Print "Spoon"
+3790 PRINT "Spoon"
 3800 I186 = I186 + 1
 3810 I192((L191 * I188) + I186) = 17
-3820 If I225 <> 1 Then GoTo 3870
+3820 IF I225 <> 1 THEN GOTO 3870
 3830 LOCATE I186, I188
-3840 Print "Small knife"
+3840 PRINT "Small knife"
 3850 I186 = I186 + 1
 3860 I192((L191 * I188) + I186) = 18
 3870 GOSUB 10780
-3880 If I228 <> 1 Then GoTo 3930
+3880 IF I228 <> 1 THEN GOTO 3930
 3890 LOCATE I186, I188
-3900 Print "Uncle's journal"
+3900 PRINT "Uncle's journal"
 3910 I186 = I186 + 1
 3920 I192((L191 * I188) + I186) = 19
 3930 GOSUB 10780
-3940 If I230 <> 1 Then GoTo 3990
+3940 IF I230 <> 1 THEN GOTO 3990
 3950 LOCATE I186, I188
-3960 Print "Carpenters saw"
+3960 PRINT "Carpenters saw"
 3970 I186 = I186 + 1
 3980 I192((L191 * I188) + I186) = 20
 3990 GOSUB 10780
-4000 If I232 <> 1 Then GoTo 4050
+4000 IF I232 <> 1 THEN GOTO 4050
 4010 LOCATE I186, I188
-4020 Print "Syrem book"
+4020 PRINT "Syrem book"
 4030 I186 = I186 + 1
 4040 I192((L191 * I188) + I186) = 21
 4050 GOSUB 10780
-4060 If I234 <> 1 Then GoTo 4110
+4060 IF I234 <> 1 THEN GOTO 4110
 4070 LOCATE I186, I188
-4080 Print "Apple key"
+4080 PRINT "Apple key"
 4090 I186 = I186 + 1
 4100 I192((L191 * I188) + I186) = 22
 4110 GOSUB 10780
-4120 If I236 <> 1 Then GoTo 4170
+4120 IF I236 <> 1 THEN GOTO 4170
 4130 LOCATE I186, I188
-4140 Print "Clock hand"
+4140 PRINT "Clock hand"
 4150 I186 = I186 + 1
 4160 I192((L191 * I188) + I186) = 23
 4170 GOSUB 10780
-4180 If I238 <> 1 Then GoTo 4230
+4180 IF I238 <> 1 THEN GOTO 4230
 4190 LOCATE I186, I188
-4200 Print "Partial formula"
+4200 PRINT "Partial formula"
 4210 I186 = I186 + 1
 4220 I192((L191 * I188) + I186) = 24
 4230 GOSUB 10780
-4240 If I239 <> 1 Then GoTo 4290
+4240 IF I239 <> 1 THEN GOTO 4290
 4250 LOCATE I186, I188
-4260 Print "Deciphering book"
+4260 PRINT "Deciphering book"
 4270 I186 = I186 + 1
 4280 I192((L191 * I188) + I186) = 25
 4290 GOSUB 10780
-4300 If I241 <> 1 Then GoTo 4350
+4300 IF I241 <> 1 THEN GOTO 4350
 4310 LOCATE I186, I188
-4320 Print "Numbered paper"
+4320 PRINT "Numbered paper"
 4330 I186 = I186 + 1
 4340 I192((L191 * I188) + I186) = 26
 4350 GOSUB 10780
-4360 If I243 <> 1 Then GoTo 4410
+4360 IF I243 <> 1 THEN GOTO 4410
 4370 LOCATE I186, I188
-4380 Print "Paper clip"
+4380 PRINT "Paper clip"
 4390 I186 = I186 + 1
 4400 I192((L191 * I188) + I186) = 27
 4410 GOSUB 10780
-4420 If I245 <> 1 Then GoTo 4470
+4420 IF I245 <> 1 THEN GOTO 4470
 4430 LOCATE I186, I188
-4440 Print "Red Apple"
+4440 PRINT "Red Apple"
 4450 I186 = I186 + 1
 4460 I192((L191 * I188) + I186) = 28
 4470 GOSUB 10780
-4480 If I247 <> 1 Then GoTo 4530
+4480 IF I247 <> 1 THEN GOTO 4530
 4490 LOCATE I186, I188
-4500 Print "Syringe"
+4500 PRINT "Syringe"
 4510 I186 = I186 + 1
 4520 I192((L191 * I188) + I186) = 29
 4530 GOSUB 10780
-4540 If I228 <> 1 Then GoTo 4590
+4540 IF I228 <> 1 THEN GOTO 4590
 4550 LOCATE I186, I188
-4560 Print "Valuable jewel"
+4560 PRINT "Valuable jewel"
 4570 I186 = I186 + 1
 4580 I192((L191 * I188) + I186) = 19
 4590 GOSUB 10780
-4600 If I250 <> 1 Then GoTo 4650
+4600 IF I250 <> 1 THEN GOTO 4650
 4610 LOCATE I186, I188
-4620 Print "Stash of bills"
+4620 PRINT "Stash of bills"
 4630 I186 = I186 + 1
 4640 I192((L191 * I188) + I186) = 49
 4650 GOSUB 10780
-4660 If I252 <> 1 Then GoTo 4710
+4660 IF I252 <> 1 THEN GOTO 4710
 4670 LOCATE I186, I188
-4680 Print "Loaded syringe"
+4680 PRINT "Loaded syringe"
 4690 I186 = I186 + 1
 4700 I192((L191 * I188) + I186) = 35
 4710 GOSUB 10780
-4720 If I139 <> 1 Then GoTo 4770
+4720 IF I139 <> 1 THEN GOTO 4770
 4730 LOCATE I186, I188
-4740 Print "Complete formula"
+4740 PRINT "Complete formula"
 4750 I186 = I186 + 1
 4760 I192((L191 * I188) + I186) = 36
 4770 GOSUB 10780
-4780 If I255 <> 1 Then GoTo 4830
+4780 IF I255 <> 1 THEN GOTO 4830
 4790 LOCATE I186, I188
-4800 Print "Drug"
+4800 PRINT "Drug"
 4810 I186 = I186 + 1
 4820 I192((L191 * I188) + I186) = 34
 4830 GOSUB 14720
 4840 LOCATE 25, 1
-4850 Print "r=restore,s=save,q=quit,x=exit inventory";
+4850 PRINT "r=restore,s=save,q=quit,x=exit inventory";
 4860 L22$ = INKEY$
 4870 GOSUB 11860
-4880 If L22$ <> "" Then GoTo 4900
-4890 GoTo 4860
-4900 If L22$ <> "r" Then GoTo 4940
+4880 IF L22$ <> "" THEN GOTO 4900
+4890 GOTO 4860
+4900 IF L22$ <> "r" THEN GOTO 4940
 4910 GOSUB 5650
 4920 L22$ = "x"
-4930 GoTo 4960
-4940 If L22$ <> "q" Then GoTo 4960
+4930 GOTO 4960
+4940 IF L22$ <> "q" THEN GOTO 4960
 4950 GOSUB 5970
-4960 If L22$ <> "s" Then GoTo 4990
+4960 IF L22$ <> "s" THEN GOTO 4990
 4970 GOSUB 5830
 4980 L22$ = "x"
-4990 If L22$ <> "u" Then GoTo 5010
+4990 IF L22$ <> "u" THEN GOTO 5010
 5000 GOSUB 12600
-5010 If L22$ <> "a" Then GoTo 5030
+5010 IF L22$ <> "a" THEN GOTO 5030
 5020 GOSUB 14940
-5030 If L270$ <> "y" Then GoTo 5060
+5030 IF L270$ <> "y" THEN GOTO 5060
 5040 L270$ = ""
-5050 GoTo 2440
+5050 GOTO 2440
 5060 GOSUB 11590
 5070 IR12 = (L22$ <> "x")
-5080 If ((L22$ <> "g") And IR12) = 0 Then GoTo 5100
-5090 GoTo 4860
-5100 If I272 <> 1 Then GoTo 5120
-5110 L137 = Timer - L138
-5120 If L36$ <> "smart" Then GoTo 5140
-5130 GoTo 14570
+5080 IF ((L22$ <> "g") AND IR12) = 0 THEN GOTO 5100
+5090 GOTO 4860
+5100 IF I272 <> 1 THEN GOTO 5120
+5110 L137 = TIMER - L138
+5120 IF L36$ <> "smart" THEN GOTO 5140
+5130 GOTO 14570
 5140 GOSUB 7860
-5150 If L274$ = "y" Then GoTo 5190
+5150 IF L274$ = "y" THEN GOTO 5190
 5160 L22$ = L275$
 5170 L275$ = ""
 5180 GOSUB 9230
-5190 If I272 <> 1 Then GoTo 5210
-5200 PUT (135,135),L278,XOR
+5190 IF I272 <> 1 THEN GOTO 5210
+5200 PUT (135, 135), L278, XOR
 5210
 5220 SOUND L279, 1
-5230 SOUND L95, 0.5
+5230 SOUND L95, .5
 5240 SOUND L280, 1
-5250 SOUND L88, 0.1
-5260 SOUND L281, 0.5
+5250 SOUND L88, .1
+5260 SOUND L281, .5
 5270
-5280 For L282 = 1 To 5
-5290   SOUND L95, 0.2
+5280 FOR L282 = 1 TO 5
+5290   SOUND L95, .2
 5300   SOUND 32676, 3
-5310 Next
+5310 NEXT
 5320
-5330 SOUND L279, 0.1
-5340 SOUND L95, 0.5
-5350 For L284 = 100 To 600 Step 100
-5360   SOUND L284, 0.1
-5370 Next
-5380 SOUND L281, 0.5
-5390 SOUND L134, 0.5
+5330 SOUND L279, .1
+5340 SOUND L95, .5
+5350 FOR L284 = 100 TO 600 STEP 100
+5360   SOUND L284, .1
+5370 NEXT
+5380 SOUND L281, .5
+5390 SOUND L134, .5
 5400
-5410 For I286 = 50 To 100 Step 5
-5420   SOUND I286, 0.5
-5430   SOUND L287, 0.1
-5440 Next
-5450 For I286 = 100 To 50 Step -5
-5460   SOUND I286, 0.5
-5470   SOUND L287, 0.1
-5480 Next
-5490 SOUND 32676, 0.5
-5500 SOUND L87, 0.5
+5410 FOR I286 = 50 TO 100 STEP 5
+5420   SOUND I286, .5
+5430   SOUND L287, .1
+5440 NEXT
+5450 FOR I286 = 100 TO 50 STEP -5
+5460   SOUND I286, .5
+5470   SOUND L287, .1
+5480 NEXT
+5490 SOUND 32676, .5
+5500 SOUND L87, .5
 5510
-5520 For I286 = 50 To 80
-5530   SOUND L95, 0.1
-5540   SOUND I286, 0.1
-5550 Next
+5520 FOR I286 = 50 TO 80
+5530   SOUND L95, .1
+5540   SOUND I286, .1
+5550 NEXT
 5560 PLAY "p10"
-5570 For I286 = 1 To 300 Step 20
-5580   SOUND (Rnd * 300) + 50, 0.1
-5590 Next
-5600 SOUND L95, 0.2
+5570 FOR I286 = 1 TO 300 STEP 20
+5580   SOUND (RND * 300) + 50, .1
+5590 NEXT
+5600 SOUND L95, .2
 5610 SOUND 32676, 2
-5620 SOUND L95, 0.2
+5620 SOUND L95, .2
 5630 SOUND 32676, 2
 5640
 5650 LOCATE 1, 8
-5660 Print "Load game 1,2,3 or 4?"
-5670 Close
+5660 PRINT "Load game 1,2,3 or 4?"
+5670 CLOSE
 5680 INPUT ""; L294
-5690 If ((L294 > 4) Or (L294 < 0#)) = 0 Then GoTo 5710
-5700 GoTo 5650
-5710 Open "saver" + Chr$(L294 + 97) + ".pac" For Input As #1
-5720 Input #1, L36$, L144, L299, L270$, L274$, L22$, L275$
-5730 For I14 = 1 To 65
-5740   Input #1, I300(I14)
-5750 Next
-5760 Erase L301
-5770 For I14 = 1 To 40
+5690 IF ((L294 > 4) OR (L294 < 0#)) = 0 THEN GOTO 5710
+5700 GOTO 5650
+5710 OPEN "saver" + CHR$(L294 + 97) + ".pac" FOR INPUT AS #1
+5720 INPUT #1, L36$, L144, L299, L270$, L274$, L22$, L275$
+5730 FOR I14 = 1 TO 65
+5740   INPUT #1, I300(I14)
+5750 NEXT
+5760 ERASE L301
+5770 FOR I14 = 1 TO 40
 5780   L302(I14) = 0#
-5790 Next
+5790 NEXT
 5800 LOCATE 2, 1
-5810 Print "Load is complete!              "
+5810 PRINT "Load is complete!              "
 5820
 5830 LOCATE 1, 8
-5840 Print "Save under 1,2,3, or 4?"
-5850 Close
+5840 PRINT "Save under 1,2,3, or 4?"
+5850 CLOSE
 5860 INPUT ""; L294
-5870 If ((L294 > 4) Or (L294 < 0#)) = 0 Then GoTo 5890
-5880 GoTo 5830
-5890 Open "saver" + Chr$(L294 + 97) + ".pac" For Output As #1
-5900 Write #1, L36$, L144, L299, L270$, L274$, L22$, L275$
-5910 For I14 = 1 To 65
-5920   Write #1, I300(I14)
-5930 Next
+5870 IF ((L294 > 4) OR (L294 < 0#)) = 0 THEN GOTO 5890
+5880 GOTO 5830
+5890 OPEN "saver" + CHR$(L294 + 97) + ".pac" FOR OUTPUT AS #1
+5900 WRITE #1, L36$, L144, L299, L270$, L274$, L22$, L275$
+5910 FOR I14 = 1 TO 65
+5920   WRITE #1, I300(I14)
+5930 NEXT
 5940 LOCATE 2, 1
-5950 Print "Save is complete!              "
+5950 PRINT "Save is complete!              "
 5960
 5970 LOCATE 1, 1
-5980 Print "Do you really want to quit?"
+5980 PRINT "Do you really want to quit?"
 5990 L22$ = INKEY$
-6000 If L22$ <> "" Then GoTo 6020
-6010 GoTo 5990
+6000 IF L22$ <> "" THEN GOTO 6020
+6010 GOTO 5990
 6020 IR12 = (L22$ = "y")
-6030 If ((L22$ = "y") Or (L22$ = "y")) = 0 Then GoTo 6050
-6040 System
+6030 IF ((L22$ = "y") OR (L22$ = "y")) = 0 THEN GOTO 6050
+6040 SYSTEM
 6050
 6060 GOSUB 12460
 6070 LOCATE 1, 1
-6080 Print "                                                                               "
+6080 PRINT "                                                                               "
 6090 L144 = L144 + 8
-6100 For I14 = 1 To 110
-6110   If ((I24 = L312(I14)) And (I25 = L311(I14))) = 0 Then GoTo 6130
-6120   GoTo 6170
-6130   If L311(I14) <> 0# Then GoTo 6150
+6100 FOR I14 = 1 TO 110
+6110   IF ((I24 = L312(I14)) AND (I25 = L311(I14))) = 0 THEN GOTO 6130
+6120   GOTO 6170
+6130   IF L311(I14) <> 0# THEN GOTO 6150
 6140   I14 = 110
-6150 Next
+6150 NEXT
 6160
 6170 I313 = I14
 6180 I14 = CINT(L314(I14))
-6190 If L315$(I14) <> L22$ Then GoTo 6210
-6200 GoTo 6230
+6190 IF L315$(I14) <> L22$ THEN GOTO 6210
+6200 GOTO 6230
 6210 I14 = I313
-6220 GoTo 6130
-6230 If L315$(I14) <> "u" Then GoTo 6260
-6240 If I316(I14) = I317 Then GoTo 6260
-6250 GoTo 6280
-6260 If ((I316(I14) = 0) Or (I300(I316(I14)) = 1)) = 0 Then GoTo 6280
-6270 GoTo 6300
+6220 GOTO 6130
+6230 IF L315$(I14) <> "u" THEN GOTO 6260
+6240 IF I316(I14) = I317 THEN GOTO 6260
+6250 GOTO 6280
+6260 IF ((I316(I14) = 0) OR (I300(I316(I14)) = 1)) = 0 THEN GOTO 6280
+6270 GOTO 6300
 6280 I14 = I313
-6290 GoTo 6130
-6300 If ((I318(I14) = 0) Or (I300(I318(I14)) = 0)) = 0 Then GoTo 6320
-6310 GoTo 6340
+6290 GOTO 6130
+6300 IF ((I318(I14) = 0) OR (I300(I318(I14)) = 0)) = 0 THEN GOTO 6320
+6310 GOTO 6340
 6320 I14 = I313
-6330 GoTo 6130
+6330 GOTO 6130
 6340 I300(CINT(L319(I14))) = 1
 6350 IR12 = (L319(I14) <> 0#)
-6360 If ((L22$ = "g") And IR12) = 0 Then GoTo 6380
+6360 IF ((L22$ = "g") AND IR12) = 0 THEN GOTO 6380
 6370 GOSUB 5220
-6380 If L22$ <> "u" Then GoTo 6400
+6380 IF L22$ <> "u" THEN GOTO 6400
 6390 GOSUB 5330
 6400 LOCATE 1, 1
-6410 Print "                                                                               "
+6410 PRINT "                                                                               "
 6420 LOCATE 1, 1
-6430 Print L322$(I14)
-6440 If L323$(I14) <> "" Then GoTo 6460
-6450 GoTo 6740
-6460 If Mid$(L323$(I14), 2, 1) <> "c" Then GoTo 6490
+6430 PRINT L322$(I14)
+6440 IF L323$(I14) <> "" THEN GOTO 6460
+6450 GOTO 6740
+6460 IF MID$(L323$(I14), 2, 1) <> "c" THEN GOTO 6490
 6470 L325$ = "s"
 6480 L274$ = "y"
-6490 If Left$(L323$(I14), 1) = "w" Then GoTo 6510
-6500 GoTo 6710
-6510 If Right$(L323$(I14), 1) <> "s" Then GoTo 6560
+6490 IF LEFT$(L323$(I14), 1) = "w" THEN GOTO 6510
+6500 GOTO 6710
+6510 IF RIGHT$(L323$(I14), 1) <> "s" THEN GOTO 6560
 6520 I327 = I14
 6530 L22$ = "1"
 6540 GOSUB 8130
 6550 I14 = I327
-6560 If Right$(L323$(I14), 1) <> "n" Then GoTo 6610
+6560 IF RIGHT$(L323$(I14), 1) <> "n" THEN GOTO 6610
 6570 I327 = I14
 6580 L22$ = "2"
 6590 GOSUB 8130
 6600 I14 = I327
-6610 If Right$(L323$(I14), 1) <> "e" Then GoTo 6660
+6610 IF RIGHT$(L323$(I14), 1) <> "e" THEN GOTO 6660
 6620 I327 = I14
 6630 L22$ = "3"
 6640 GOSUB 8130
 6650 I14 = I327
-6660 If Right$(L323$(I14), 1) <> "w" Then GoTo 6710
+6660 IF RIGHT$(L323$(I14), 1) <> "w" THEN GOTO 6710
 6670 I327 = I14
 6680 L22$ = "4"
 6690 GOSUB 8130
 6700 I14 = I327
-6710 If Left$(L323$(I14), 1) <> "f" Then GoTo 6740
-6720 L22$ = Right$(L323$(I14), 1)
+6710 IF LEFT$(L323$(I14), 1) <> "f" THEN GOTO 6740
+6720 L22$ = RIGHT$(L323$(I14), 1)
 6730 GOSUB 9230
-6740 If ((L319(I14) = 47) Or (L319(I14) = 41)) = 0 Then GoTo 6760
+6740 IF ((L319(I14) = 47) OR (L319(I14) = 41)) = 0 THEN GOTO 6760
 6750 GOSUB 5410
-6760 If L319(I14) <> 19 Then GoTo 6780
+6760 IF L319(I14) <> 19 THEN GOTO 6780
 6770 GOSUB 5520
-6780 If L339$(I14) <> "" Then GoTo 6800
+6780 IF L339$(I14) <> "" THEN GOTO 6800
 6790
-6800 For I340 = 1 To 500
-6810 Next
+6800 FOR I340 = 1 TO 500
+6810 NEXT
 6820 GOSUB 5280
-6830 If L339$(I14) <> "dial" Then GoTo 6860
+6830 IF L339$(I14) <> "dial" THEN GOTO 6860
 6840 GOSUB 1540
 6850
-6860 If L339$(I14) <> "end" Then GoTo 6880
-6870 GoTo 14260
+6860 IF L339$(I14) <> "end" THEN GOTO 6880
+6870 GOTO 14260
 6880 L36$ = L339$(I14)
 6890 GOSUB 7860
 6900 IR12 = (L36$ = "death")
-6910 IR14 = ((L36$ = "dindead") Or (L36$ = "death"))
-6920 If ((L36$ = "lightn") Or (IR14)) = 0 Then GoTo 6940
-6930 GoTo 14580
+6910 IR14 = ((L36$ = "dindead") OR (L36$ = "death"))
+6920 IF ((L36$ = "lightn") OR (IR14)) = 0 THEN GOTO 6940
+6930 GOTO 14580
 6940 L348$ = ""
 6950 IR12 = (L325$ = "z")
-6960 If ((L274$ = "y") And IR12) = 0 Then GoTo 7010
+6960 IF ((L274$ = "y") AND IR12) = 0 THEN GOTO 7010
 6970 L22$ = L275$
 6980 L275$ = ""
 6990 GOSUB 9230
@@ -786,15 +788,15 @@ Rem error 17 (2 )
 7020 L144 = L144 + 30
 7030 GOSUB 9230
 7040
-7050 PUT (I24,I25),L33,XOR
-7060 L299 = (Timer - L0) + L299
-7070 L0 = Timer
-7080 If (L144 * L143) <= 35 Then GoTo 7100
+7050 PUT (I24, I25), L33, XOR
+7060 L299 = (TIMER - L0) + L299
+7070 L0 = TIMER
+7080 IF (L144 * L143) <= 35 THEN GOTO 7100
 7090 GOSUB 10510
-7100 If I272 <> 1 Then GoTo 7180
-7110 If (Timer - L137) <= XYZ Then GoTo 7180
+7100 IF I272 <> 1 THEN GOTO 7180
+7110 IF (TIMER - L137) <= XYZ THEN GOTO 7180
 7120 LOCATE 1, 1
-7130 Print "You should have been ready"
+7130 PRINT "You should have been ready"
 7140 I272 = 0
 7150 I14 = 0
 7160 L339$(I14) = "death"
@@ -803,331 +805,331 @@ Rem error 17 (2 )
 7190 POKE L355, 32
 7200 L22$ = INKEY$
 7210 GOSUB 11860
-7220 If ((I358 = 1) And (L357$ = "")) = 0 Then GoTo 7250
+7220 IF ((I358 = 1) AND (L357$ = "")) = 0 THEN GOTO 7250
 7230 I359 = CINT(L144)
 7240 L357$ = "y"
 7250 IR12 = ((I359 + 120) < L144)
-7260 If ((L357$ = "y") And IR12) = 0 Then GoTo 7280
-7270 GoTo 15130
-7280 If L22$ <> "" Then GoTo 7300
-7290 GoTo 7180
-7300 PUT (I24,I25),L33,XOR
-7310 If L22$ <> "8" Then GoTo 7330
+7260 IF ((L357$ = "y") AND IR12) = 0 THEN GOTO 7280
+7270 GOTO 15130
+7280 IF L22$ <> "" THEN GOTO 7300
+7290 GOTO 7180
+7300 PUT (I24, I25), L33, XOR
+7310 IF L22$ <> "8" THEN GOTO 7330
 7320 I25 = I25 - 4
-7330 If L22$ <> "2" Then GoTo 7350
+7330 IF L22$ <> "2" THEN GOTO 7350
 7340 I25 = I25 + 4
-7350 If L22$ <> "6" Then GoTo 7370
+7350 IF L22$ <> "6" THEN GOTO 7370
 7360 I24 = I24 + 4
-7370 If L22$ <> "4" Then GoTo 7390
+7370 IF L22$ <> "4" THEN GOTO 7390
 7380 I24 = I24 - 4
-7390 If L22$ <> "7" Then GoTo 7420
+7390 IF L22$ <> "7" THEN GOTO 7420
 7400 I24 = I24 - 4
 7410 I25 = I25 - 4
-7420 If L22$ <> "1" Then GoTo 7450
+7420 IF L22$ <> "1" THEN GOTO 7450
 7430 I24 = I24 - 4
 7440 I25 = I25 + 4
-7450 If L22$ <> "3" Then GoTo 7480
+7450 IF L22$ <> "3" THEN GOTO 7480
 7460 I24 = I24 + 4
 7470 I25 = I25 + 4
-7480 If L22$ <> "9" Then GoTo 7510
+7480 IF L22$ <> "9" THEN GOTO 7510
 7490 I24 = I24 + 4
 7500 I25 = I25 - 4
-7510 If I24 >= 0 Then GoTo 7540
+7510 IF I24 >= 0 THEN GOTO 7540
 7520 I24 = I24 + 4
-7530 GoTo 7560
-7540 If I24 <= 300 Then GoTo 7560
+7530 GOTO 7560
+7540 IF I24 <= 300 THEN GOTO 7560
 7550 I24 = I24 - 4
-7560 If I25 >= 10 Then GoTo 7590
+7560 IF I25 >= 10 THEN GOTO 7590
 7570 I25 = I25 + 4
-7580 GoTo 7610
-7590 If I25 <= 195 Then GoTo 7610
+7580 GOTO 7610
+7590 IF I25 <= 195 THEN GOTO 7610
 7600 I25 = I25 - 4
-7610 If L22$ <> "i" Then GoTo 7630
+7610 IF L22$ <> "i" THEN GOTO 7630
 7620 GOSUB 2440
-7630 If I272 <> 1 Then GoTo 7660
+7630 IF I272 <> 1 THEN GOTO 7660
 7640 GOSUB 14330
-7650 GoTo 7050
+7650 GOTO 7050
 7660 IR12 = (L22$ = "l")
-7670 IR14 = ((L22$ = "g") Or (L22$ = "l"))
-7680 IR16 = ((L22$ = "u") Or (IR14))
-7690 If ((L22$ = "a") Or (IR16)) = 0 Then GoTo 7730
+7670 IR14 = ((L22$ = "g") OR (L22$ = "l"))
+7680 IR16 = ((L22$ = "u") OR (IR14))
+7690 IF ((L22$ = "a") OR (IR16)) = 0 THEN GOTO 7730
 7700 GOSUB 6060
 7710 GOSUB 10820
 7720 GOSUB 13930
-7730 GoTo 7050
-7740 System
-7750 Close
-7760 Open L36$ + ".pac" For Input As #1
-7770 Input #1, L370, L371
-7780 Close
-7790 Cls
-7800 Color L370, L371
+7730 GOTO 7050
+7740 SYSTEM
+7750 CLOSE
+7760 OPEN L36$ + ".pac" FOR INPUT AS #1
+7770 INPUT #1, L370, L371
+7780 CLOSE
+7790 CLS
+7800 COLOR L370, L371
 7810 DEF SEG = -18432
 7820 KEY OFF 'PASS2-RECON: was KEY ON which displays F-key labels at row 25
 7830 DEF SEG 'PASS2-RECON: was Print 0 - likely DEF SEG reset after video-memory BLOAD
 7840 L36$ = "hallez"
 7850
-7860 Close
-7870 Open L36$ + ".pac" For Input As #1
-7880 Input #1, L370, I375, I376, I377
-7890 For I14 = 1 To 100
+7860 CLOSE
+7870 OPEN L36$ + ".pac" FOR INPUT AS #1
+7880 INPUT #1, L370, I375, I376, I377
+7890 FOR I14 = 1 TO 100
 7900   IR12 = (I14 * 4)
-7910   Input #1, L312(I14), L311(IR12), L314(IR12)
-7920 Next
-7930 For I14 = 1 To 25
+7910   INPUT #1, L312(I14), L311(IR12), L314(IR12)
+7920 NEXT
+7930 FOR I14 = 1 TO 25
 7940   IR12 = (I14 * 4)
-7950   Input #1, L339$(I14), L322$(IR12), L315$(IR12)
+7950   INPUT #1, L339$(I14), L322$(IR12), L315$(IR12)
 7960   IR14 = (I14 * 2)
-7970   Input #1, I316(I14), I318(IR14), L319(IR12), L323$(IR12) 'PASS2-RECON: was READ - Spring lost DATA, file has these fields
-7980 Next
-7990 Cls
-8000 Color L370
-8010 Palette 1, I375 'PASS2-RECON: 12104 = I375 address
-8020 Palette 2, I376 'PASS2-RECON
-8030 Palette 3, I377 'PASS2-RECON
+7970   INPUT #1, I316(I14), I318(IR14), L319(IR12), L323$(IR12) 'PASS2-RECON: was READ - Spring lost DATA, file has these fields
+7980 NEXT
+7990 CLS
+8000 COLOR L370
+8010 PALETTE 1, I375 'PASS2-RECON: 12104 = I375 address
+8020 PALETTE 2, I376 'PASS2-RECON
+8030 PALETTE 3, I377 'PASS2-RECON
 8040 DEF SEG = -18432
 8045 BLOAD L36$ + ".pic", 0 'PASS2-RECON: Spring lost ALL BLOAD statements - load room image into video memory at &HB800
 8050 KEY OFF 'PASS2-RECON: was KEY ON which displays F-key labels at row 25
 8060 DEF SEG 'PASS2-RECON: was Print 0 - likely DEF SEG reset after video-memory BLOAD
-8061 IF L36$ <> "title" THEN GoTo 8130 'PASS2-RECON: gate music to title scene only (Spring dropped conditional)
+8061 IF L36$ <> "title" THEN GOTO 8130 'PASS2-RECON: gate music to title scene only (Spring dropped conditional)
 8070 PLAY "<d5f5g+5A+5d5f5G+5A+5e5g5a+5b5a5>c+5d5c+5"
 8080 PLAY "<a>c+dc+<gaa+>d<gaa+.>d<g5g+5g 5g+5g5G+5"
 8090 PLAY "g05d04b-08g02g08f04g08a-08b-08c03a-04"
 8100 PLAY "<g05d04b-08g02g08f04g08a-08b-08c03a-04"
 8110 PLAY ">g05d04b-08g02g08f04g08a-08b-08c03a-04"
 8120 PLAY "e-04d08c04d08e-04g03d02<<g08b-08g08g"
-8130 GoTo 8240
-8140 System
-8150 GET (100,100)-(130,130),L33
-8160 Close
+8130 GOTO 8240
+8140 SYSTEM
+8150 GET (100, 100)-(130, 130), L33
+8160 CLOSE
 8170 LOCATE 1, 1
 8180 INPUT ""; L22$
-8190 Open L22$ + ".pct" For Output As #1
-8200 For I14 = 0 To 125 Step 10
-8210   Write #1, I386(I14), L387(I14), L388(I14), L389(I14), L390(I14), L391(I14), L392(I14), L393(I14), L394(I14), L395(I14)
-8220 Next
-8230 System
-8240 Close
+8190 OPEN L22$ + ".pct" FOR OUTPUT AS #1
+8200 FOR I14 = 0 TO 125 STEP 10
+8210   WRITE #1, I386(I14), L387(I14), L388(I14), L389(I14), L390(I14), L391(I14), L392(I14), L393(I14), L394(I14), L395(I14)
+8220 NEXT
+8230 SYSTEM
+8240 CLOSE
 8245 IF L36$ <> "title" AND L36$ <> "death" AND L36$ <> "dindead" THEN RETURN 'PASS2-RECON: skip joe-walking animation for normal rooms
-8250 Palette 2, 1
-8260 Palette 1, 8
+8250 PALETTE 2, 1
+8260 PALETTE 1, 8
 8265 L36$ = "joew2" 'PASS2-RECON: default joe sprite filename
-8270 If L22$ <> "1" Then GoTo 8290
+8270 IF L22$ <> "1" THEN GOTO 8290
 8280 L36$ = "joew1"
-8290 If L22$ <> "2" Then GoTo 8310
+8290 IF L22$ <> "2" THEN GOTO 8310
 8300 L36$ = "joew2"
-8310 If L22$ <> "3" Then GoTo 8330
+8310 IF L22$ <> "3" THEN GOTO 8330
 8320 L36$ = "joew3"
-8330 If L22$ <> "4" Then GoTo 8350
+8330 IF L22$ <> "4" THEN GOTO 8350
 8340 L36$ = "joew4"
-8350 Open L36$ + ".pct" For Input As #1
-8360 GET (1,8)-(9,18),L278
-8370 GET (1,8)-(9,18),L403
-8380 For I14 = 0 To 125
-8385   IF EOF(1) THEN GoTo 8420 'PASS2-RECON: joew4 EOF
+8350 OPEN L36$ + ".pct" FOR INPUT AS #1
+8360 GET (1, 8)-(9, 18), L278
+8370 GET (1, 8)-(9, 18), L403
+8380 FOR I14 = 0 TO 125
+8385   IF EOF(1) THEN GOTO 8420 'PASS2-RECON: joew4 EOF
 8390   IR12 = (I14 * 2)
-8400   Input #1, I404(I14), L405(IR12)
-8410 Next
+8400   INPUT #1, I404(I14), L405(IR12)
+8410 NEXT
 8420 L406$ = L22$
 8430 L22$ = ""
 8440 GOSUB 9230
 8450 L22$ = L406$
-8460 If L22$ <> "1" Then GoTo 8490
-8470 GoTo 8570
-8480 GoTo 8570
-8490 If L22$ <> "2" Then GoTo 8520
-8500 GoTo 8730
-8510 GoTo 8570
-8520 If L22$ <> "3" Then GoTo 8550
-8530 GoTo 8900
-8540 GoTo 8570
-8550 If L22$ <> "4" Then GoTo 8570
-8560 GoTo 9060
-8570 For I14 = 130 To 150 Step 2
-8580   PUT (140,I14),L278,XOR
-8590   SOUND L95, 0.1
-8600   For I408 = 1 To 2
+8460 IF L22$ <> "1" THEN GOTO 8490
+8470 GOTO 8570
+8480 GOTO 8570
+8490 IF L22$ <> "2" THEN GOTO 8520
+8500 GOTO 8730
+8510 GOTO 8570
+8520 IF L22$ <> "3" THEN GOTO 8550
+8530 GOTO 8900
+8540 GOTO 8570
+8550 IF L22$ <> "4" THEN GOTO 8570
+8560 GOTO 9060
+8570 FOR I14 = 130 TO 150 STEP 2
+8580   PUT (140, I14), L278, XOR
+8590   SOUND L95, .1
+8600   FOR I408 = 1 TO 2
 8610     SOUND 32676, 1.2
-8620   Next
-8630   PUT (140,I14),L278,XOR
+8620   NEXT
+8630   PUT (140, I14), L278, XOR
 8640   I14 = I14 + 2
-8650   PUT (140,I14),L403,XOR
-8660   SOUND L95, 0.1
-8670   For I408 = 1 To 2
+8650   PUT (140, I14), L403, XOR
+8660   SOUND L95, .1
+8670   FOR I408 = 1 TO 2
 8680     SOUND 32676, 1.2
-8690   Next
-8700   PUT (140,I14),L403,XOR
-8710 Next
+8690   NEXT
+8700   PUT (140, I14), L403, XOR
+8710 NEXT
 8720
-8730 GoTo 8880 '????
-8740 PUT (140,I14),L278,XOR
-8750 SOUND L95, 0.1
-8760 For I408 = 1 To 2
+8730 GOTO 8880 '????
+8740 PUT (140, I14), L278, XOR
+8750 SOUND L95, .1
+8760 FOR I408 = 1 TO 2
 8770   SOUND 32676, 1.4
-8780 Next
-8790 PUT (140,I14),L278,XOR
+8780 NEXT
+8790 PUT (140, I14), L278, XOR
 8800 I14 = I14 - 3
-8810 PUT (140,I14),L403,XOR
-8820 SOUND L95, 0.1
-8830 For I408 = 1 To 2
+8810 PUT (140, I14), L403, XOR
+8820 SOUND L95, .1
+8830 FOR I408 = 1 TO 2
 8840   SOUND 32676, 1.4
-8850 Next
-8860 PUT (140,I14),L403,XOR
+8850 NEXT
+8860 PUT (140, I14), L403, XOR
 8870 I14 = I14 + -2
-8880 If I14 >= 120 Then GoTo 8740
+8880 IF I14 >= 120 THEN GOTO 8740
 8890
-8900 For I14 = 140 To 195 Step 3
-8910   PUT (I14,130),L278,XOR
-8920   SOUND L95, 0.1
-8930   For I408 = 1 To 2
+8900 FOR I14 = 140 TO 195 STEP 3
+8910   PUT (I14, 130), L278, XOR
+8920   SOUND L95, .1
+8930   FOR I408 = 1 TO 2
 8940     SOUND 32676, 1
-8950   Next
-8960   PUT (I14,130),L278,XOR
+8950   NEXT
+8960   PUT (I14, 130), L278, XOR
 8970   I14 = I14 + 3
-8980   PUT (I14,130),L403,XOR
-8990   SOUND L95, 0.1
-9000   For I408 = 1 To 2
+8980   PUT (I14, 130), L403, XOR
+8990   SOUND L95, .1
+9000   FOR I408 = 1 TO 2
 9010     SOUND 32676, 1
-9020   Next
-9030   PUT (I14,130),L403,XOR
-9040 Next
+9020   NEXT
+9030   PUT (I14, 130), L403, XOR
+9040 NEXT
 9050
-9060 GoTo 9210 '????
-9070 PUT (I14,130),L278,XOR
-9080 SOUND L95, 0.1
-9090 For I408 = 1 To 2
+9060 GOTO 9210 '????
+9070 PUT (I14, 130), L278, XOR
+9080 SOUND L95, .1
+9090 FOR I408 = 1 TO 2
 9100   SOUND 32676, 1
-9110 Next
-9120 PUT (I14,130),L278,XOR
+9110 NEXT
+9120 PUT (I14, 130), L278, XOR
 9130 I14 = I14 - 3
-9140 PUT (I14,130),L403,XOR
-9150 SOUND L95, 0.1
-9160 For I408 = 1 To 2
+9140 PUT (I14, 130), L403, XOR
+9150 SOUND L95, .1
+9160 FOR I408 = 1 TO 2
 9170   SOUND 32676, 1
-9180 Next
-9190 PUT (I14,130),L403,XOR
+9180 NEXT
+9190 PUT (I14, 130), L403, XOR
 9200 I14 = I14 + -3
-9210 If I14 >= 90 Then GoTo 9070
+9210 IF I14 >= 90 THEN GOTO 9070
 9220
-9230 If L275$ <> "4" Then GoTo 9250
-9240 PUT (140,130),L415,XOR
-9250 If L275$ <> "2" Then GoTo 9270
-9260 PUT (140,130),L417,XOR
-9270 If L275$ <> "6" Then GoTo 9290
-9280 PUT (140,130),L419,XOR
-9290 If L275$ <> "8" Then GoTo 9310
-9300 PUT (140,130),L421,XOR
-9310 If L275$ <> "1" Then GoTo 9330
-9320 PUT (140,130),L423,XOR
-9330 If L275$ <> "7" Then GoTo 9350
-9340 PUT (140,130),L425,XOR
-9350 If L275$ <> "9" Then GoTo 9370
-9360 PUT (140,130),L427,XOR
-9370 If L275$ <> "3" Then GoTo 9390
-9380 PUT (140,130),L429,XOR
-9390 If L22$ <> "4" Then GoTo 9410
-9400 PUT (140,130),L415,XOR
-9410 If L22$ <> "2" Then GoTo 9430
-9420 PUT (140,130),L417,XOR
-9430 If L22$ <> "6" Then GoTo 9450
-9440 PUT (140,130),L419,XOR
-9450 If L22$ <> "8" Then GoTo 9470
-9460 PUT (140,130),L421,XOR
-9470 If L22$ <> "1" Then GoTo 9490
-9480 PUT (140,130),L423,XOR
-9490 If L22$ <> "7" Then GoTo 9510
-9500 PUT (140,130),L425,XOR
-9510 If L22$ <> "9" Then GoTo 9530
-9520 PUT (140,130),L427,XOR
-9530 If L22$ <> "3" Then GoTo 9550
-9540 PUT (140,130),L429,XOR
+9230 IF L275$ <> "4" THEN GOTO 9250
+9240 PUT (140, 130), L415, XOR
+9250 IF L275$ <> "2" THEN GOTO 9270
+9260 PUT (140, 130), L417, XOR
+9270 IF L275$ <> "6" THEN GOTO 9290
+9280 PUT (140, 130), L419, XOR
+9290 IF L275$ <> "8" THEN GOTO 9310
+9300 PUT (140, 130), L421, XOR
+9310 IF L275$ <> "1" THEN GOTO 9330
+9320 PUT (140, 130), L423, XOR
+9330 IF L275$ <> "7" THEN GOTO 9350
+9340 PUT (140, 130), L425, XOR
+9350 IF L275$ <> "9" THEN GOTO 9370
+9360 PUT (140, 130), L427, XOR
+9370 IF L275$ <> "3" THEN GOTO 9390
+9380 PUT (140, 130), L429, XOR
+9390 IF L22$ <> "4" THEN GOTO 9410
+9400 PUT (140, 130), L415, XOR
+9410 IF L22$ <> "2" THEN GOTO 9430
+9420 PUT (140, 130), L417, XOR
+9430 IF L22$ <> "6" THEN GOTO 9450
+9440 PUT (140, 130), L419, XOR
+9450 IF L22$ <> "8" THEN GOTO 9470
+9460 PUT (140, 130), L421, XOR
+9470 IF L22$ <> "1" THEN GOTO 9490
+9480 PUT (140, 130), L423, XOR
+9490 IF L22$ <> "7" THEN GOTO 9510
+9500 PUT (140, 130), L425, XOR
+9510 IF L22$ <> "9" THEN GOTO 9530
+9520 PUT (140, 130), L427, XOR
+9530 IF L22$ <> "3" THEN GOTO 9550
+9540 PUT (140, 130), L429, XOR
 9550 L275$ = L22$
 9560 RETURN 'PASS2-RECON: end of cursor display routine (GOSUB 9230 from many callers). Without RETURN, execution falls through into the 9570 intro routine which eventually GoTo 6880 = infinite song loop.
-9570 GET (1,1)-(3,18),L421
-9580 GET (1,1)-(3,18),L423
-9590 GET (1,1)-(3,18),L417
-9600 GET (1,1)-(3,18),L429
-9610 GET (1,1)-(3,18),L419
-9620 GET (1,1)-(3,18),L425
-9630 GET (1,1)-(3,18),L415
-9640 GET (1,1)-(3,18),L427
-9650 Close
-9660 Open "joed.pct" For Input As #1
-9670 For I14 = 0 To 125
-9675   IF EOF(1) THEN GoTo 9710 'PASS2-RECON: joed EOF
+9570 GET (1, 1)-(3, 18), L421
+9580 GET (1, 1)-(3, 18), L423
+9590 GET (1, 1)-(3, 18), L417
+9600 GET (1, 1)-(3, 18), L429
+9610 GET (1, 1)-(3, 18), L419
+9620 GET (1, 1)-(3, 18), L425
+9630 GET (1, 1)-(3, 18), L415
+9640 GET (1, 1)-(3, 18), L427
+9650 CLOSE
+9660 OPEN "joed.pct" FOR INPUT AS #1
+9670 FOR I14 = 0 TO 125
+9675   IF EOF(1) THEN GOTO 9710 'PASS2-RECON: joed EOF
 9680   IR12 = (I14 * 2)
-9690   Input #1, I431(I14), L432(IR12), L433(IR12), L434(IR12), L435(IR12), L436(IR12), L437(IR12), L438(IR12)
-9700 Next
+9690   INPUT #1, I431(I14), L432(IR12), L433(IR12), L434(IR12), L435(IR12), L436(IR12), L437(IR12), L438(IR12)
+9700 NEXT
 9710
 9720 I440 = L439 - I24
 9730 I442 = L441 - I25
-9740 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9760
+9740 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9760
 9750 L22$ = "1"
-9760 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9780
+9760 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9780
 9770 L22$ = "2"
-9780 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9800
+9780 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9800
 9790 L22$ = "3"
-9800 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9820
+9800 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9820
 9810 L22$ = "6"
-9820 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9840
+9820 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9840
 9830 L22$ = "9"
-9840 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9860
+9840 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9860
 9850 L22$ = "8"
-9860 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9880
+9860 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9880
 9870 L22$ = "7"
-9880 If ((I442 > I440) And ((I442 < I440) And (I442 > 0))) = 0 Then GoTo 9900
+9880 IF ((I442 > I440) AND ((I442 < I440) AND (I442 > 0))) = 0 THEN GOTO 9900
 9890 L22$ = "4"
 9900
-9910 Close
-9920 Open "wilb.pct" For Input As #1
-9930 For I14 = 0 To 125
-9935   IF EOF(1) THEN GoTo 9960 'PASS2-RECON: wilb EOF
-9940   Input #1, I404(I14)
-9950 Next
+9910 CLOSE
+9920 OPEN "wilb.pct" FOR INPUT AS #1
+9930 FOR I14 = 0 TO 125
+9935   IF EOF(1) THEN GOTO 9960 'PASS2-RECON: wilb EOF
+9940   INPUT #1, I404(I14)
+9950 NEXT
 9955 GET (0, 0)-(7, 7), L278 'PASS2-RECON: placeholder sprite header
-9960 PUT (110,128),L278,XOR
-9970 L137 = Timer
-9980 For I14 = 1 To 4
-9990   If (Timer - L137) <= XYZ Then GoTo 10020
+9960 PUT (110, 128), L278, XOR
+9970 L137 = TIMER
+9980 FOR I14 = 1 TO 4
+9990   IF (TIMER - L137) <= XYZ THEN GOTO 10020
 10000   I14 = 4
-10010   GoTo 10030
+10010   GOTO 10030
 10020   I14 = 1
-10030 Next
-10040 SOUND L95, 0.3
-10050 SOUND L87, 0.5
+10030 NEXT
+10040 SOUND L95, .3
+10050 SOUND L87, .5
 10060 PLAY "p10"
-10070 SOUND L95, 0.3
-10080 SOUND L87, 0.5
+10070 SOUND L95, .3
+10080 SOUND L87, .5
 10090 L325$ = "a"
 10100 L274$ = "y"
 10110 I14 = 0
 10120 L339$(I14) = "death"
 10130 RETURN 'PASS2-RECON: was GoTo 6880 (forced death cutscene). Original was likely RETURN so main flow continues to capture L33 cursor sprite and reach the main game loop at 7050.
-10140 Close
-10150 Open "golf.pct" For Input As #1
-10160 For I14 = 0 To 125
-10165   IF EOF(1) THEN GoTo 10200 'PASS2-RECON: golf EOF
+10140 CLOSE
+10150 OPEN "golf.pct" FOR INPUT AS #1
+10160 FOR I14 = 0 TO 125
+10165   IF EOF(1) THEN GOTO 10200 'PASS2-RECON: golf EOF
 10170   IR12 = (I14 * 2)
-10180   Input #1, I404(I14), L405(IR12)
-10190 Next
-10200 GoTo 10340 '????
-10210 PUT (135,I14),L278,XOR
-10220 SOUND L95, 0.1
-10230 For I408 = 1 To 2
+10180   INPUT #1, I404(I14), L405(IR12)
+10190 NEXT
+10200 GOTO 10340 '????
+10210 PUT (135, I14), L278, XOR
+10220 SOUND L95, .1
+10230 FOR I408 = 1 TO 2
 10240   SOUND 32676, 1.2
-10250 Next
-10260 PUT (135,I14),L278,XOR
+10250 NEXT
+10260 PUT (135, I14), L278, XOR
 10270 I14 = I14 - 2
-10280 PUT (135,I14),L403,XOR
-10290 SOUND L95, 0.1
-10300 For I408 = 1 To 2
+10280 PUT (135, I14), L403, XOR
+10290 SOUND L95, .1
+10300 FOR I408 = 1 TO 2
 10310   SOUND 32676, 1.2
-10320 Next
-10330 PUT (135,I14),L403,XOR
+10320 NEXT
+10330 PUT (135, I14), L403, XOR
 10340 I14 = I14 + -2
-10350 If I14 >= 135 Then GoTo 10210
-10360 PUT (135,135),L278,XOR
-10370 If L448$ <> "y" Then GoTo 10400
+10350 IF I14 >= 135 THEN GOTO 10210
+10360 PUT (135, 135), L278, XOR
+10370 IF L448$ <> "y" THEN GOTO 10400
 10380 L448$ = ""
 10390
 10400 I14 = 0
@@ -1135,177 +1137,177 @@ Rem error 17 (2 )
 10420 L274$ = "y"
 10430 PLAY "p10"
 10440 L325$ = "s"
-10450 SOUND L95, 0.2
-10460 SOUND L87, 0.5
+10450 SOUND L95, .2
+10460 SOUND L87, .5
 10470 PLAY "p10"
-10480 SOUND L95, 0.2
-10490 SOUND L87, 0.5
-10500 GoTo 6880
+10480 SOUND L95, .2
+10490 SOUND L87, .5
+10500 GOTO 6880
 10510 RETURN 'PASS2-RECON: routine animates L455/457/459/461 sprites but they're never GET'd anywhere (Spring lost the init). Bypassing entirely until Phase 3 recovers proper sprite data.
 10515 IR12 = (I449 = 0)
-10520 IR14 = ((L36$ <> "room3") Or (I449 = 0))
-10530 If ((L348$ = "d") Or (IR14)) = 0 Then GoTo 10550
+10520 IR14 = ((L36$ <> "room3") OR (I449 = 0))
+10530 IF ((L348$ = "d") OR (IR14)) = 0 THEN GOTO 10550
 10540
-10550 If I451 <> 1 Then GoTo 10570
-10560 GoTo 10720
-10570 For I408 = 1 To 2
+10550 IF I451 <> 1 THEN GOTO 10570
+10560 GOTO 10720
+10570 FOR I408 = 1 TO 2
 10580   SOUND 32676, 1
-10590 Next
-10600 PUT (175,109),L455,PSET
-10610 For I408 = 1 To 2
+10590 NEXT
+10600 PUT (175, 109), L455, PSET
+10610 FOR I408 = 1 TO 2
 10620   SOUND 32676, 1
-10630 Next
-10640 PUT (175,109),L457,PSET
-10650 For I408 = 1 To 2
+10630 NEXT
+10640 PUT (175, 109), L457, PSET
+10650 FOR I408 = 1 TO 2
 10660   SOUND 32676, 1
-10670 Next
-10680 PUT (175,109),L459,PSET
-10690 For I408 = 1 To 2
+10670 NEXT
+10680 PUT (175, 109), L459, PSET
+10690 FOR I408 = 1 TO 2
 10700   SOUND 32676, 1
-10710 Next
-10720 PUT (175,109),L461,PSET
-10730 If I451 = 1 Then GoTo 10750
+10710 NEXT
+10720 PUT (175, 109), L461, PSET
+10730 IF I451 = 1 THEN GOTO 10750
 10740 PLAY "<<f6p20d7p20g-7p20e-7p20a5>>"
 10750 I451 = 1
 10760 L348$ = "d"
 10770
-10780 If I186 <= 22 Then GoTo 10810
+10780 IF I186 <= 22 THEN GOTO 10810
 10790 I188 = 21
 10800 I186 = 6
-10810 End
-10820 If I272 <> 1 Then GoTo 10840
+10810 END
+10820 IF I272 <> 1 THEN GOTO 10840
 10830
 10840 IR12 = (L36$ = "room7")
-10850 IR14 = (((L144 * L143) > 0) And IR12)
-10860 If (((L144 * L143) < 8) And IR14) = 0 Then GoTo 10880
+10850 IR14 = (((L144 * L143) > 0) AND IR12)
+10860 IF (((L144 * L143) < 8) AND IR14) = 0 THEN GOTO 10880
 10870 GOSUB 9910
 10880 IR12 = (L36$ = "room6")
-10890 IR14 = (((L144 * L143) > 8) And IR12)
-10900 If (((L144 * L143) < 20) And IR14) = 0 Then GoTo 10920
+10890 IR14 = (((L144 * L143) > 8) AND IR12)
+10900 IF (((L144 * L143) < 20) AND IR14) = 0 THEN GOTO 10920
 10910 GOSUB 9910
 10920 IR12 = (L36$ = "room8")
-10930 IR14 = (((L144 * L143) > 20) And IR12)
-10940 If (((L144 * L143) < 35) And IR14) = 0 Then GoTo 10960
+10930 IR14 = (((L144 * L143) > 20) AND IR12)
+10940 IF (((L144 * L143) < 35) AND IR14) = 0 THEN GOTO 10960
 10950 GOSUB 9910
 10960 IR12 = (L36$ = "room9")
-10970 IR14 = (((L144 * L143) > 35) And IR12)
-10980 If (((L144 * L143) < 47) And IR14) = 0 Then GoTo 11000
+10970 IR14 = (((L144 * L143) > 35) AND IR12)
+10980 IF (((L144 * L143) < 47) AND IR14) = 0 THEN GOTO 11000
 10990 GOSUB 9910
 11000 IR12 = (L36$ = "room7")
-11010 IR14 = (((L144 * L143) > 47) And IR12)
-11020 If (((L144 * L143) < L145) And IR14) = 0 Then GoTo 11040
+11010 IR14 = (((L144 * L143) > 47) AND IR12)
+11020 IF (((L144 * L143) < L145) AND IR14) = 0 THEN GOTO 11040
 11030 GOSUB 9910
 11040 IR12 = (L36$ = "room11")
-11050 IR14 = (((L144 * L143) > L145) And IR12)
-11060 If (((L144 * L143) < L466) And IR14) = 0 Then GoTo 11080
+11050 IR14 = (((L144 * L143) > L145) AND IR12)
+11060 IF (((L144 * L143) < L466) AND IR14) = 0 THEN GOTO 11080
 11070 GOSUB 9910
 11080 IR12 = (L36$ = "room4")
-11090 IR14 = (((L144 * L143) > L466) And IR12)
-11100 If (((L144 * L143) < L467) And IR14) = 0 Then GoTo 11120
+11090 IR14 = (((L144 * L143) > L466) AND IR12)
+11100 IF (((L144 * L143) < L467) AND IR14) = 0 THEN GOTO 11120
 11110 GOSUB 9910
 11120 IR12 = (L36$ = "room10")
-11130 IR14 = (((L144 * L143) > L467) And IR12)
-11140 If (((L144 * L143) < L468) And IR14) = 0 Then GoTo 11160
+11130 IR14 = (((L144 * L143) > L467) AND IR12)
+11140 IF (((L144 * L143) < L468) AND IR14) = 0 THEN GOTO 11160
 11150 GOSUB 9910
 11160 IR12 = (L36$ = "room11")
-11170 IR14 = (((L144 * L143) > L468) And IR12)
-11180 If (((L144 * L143) < L95) And IR14) = 0 Then GoTo 11200
+11170 IR14 = (((L144 * L143) > L468) AND IR12)
+11180 IF (((L144 * L143) < L95) AND IR14) = 0 THEN GOTO 11200
 11190 GOSUB 9910
 11200 IR12 = (L36$ = "room2")
-11210 IR14 = (((L144 * L143) > 0) And IR12)
-11220 If (((L144 * L143) < 8) And IR14) = 0 Then GoTo 11240
+11210 IR14 = (((L144 * L143) > 0) AND IR12)
+11220 IF (((L144 * L143) < 8) AND IR14) = 0 THEN GOTO 11240
 11230 GOSUB 10140
 11240 IR12 = (L36$ = "room1")
-11250 IR14 = (((L144 * L143) > 8) And IR12)
-11260 If (((L144 * L143) < 20) And IR14) = 0 Then GoTo 11280
+11250 IR14 = (((L144 * L143) > 8) AND IR12)
+11260 IF (((L144 * L143) < 20) AND IR14) = 0 THEN GOTO 11280
 11270 GOSUB 10140
 11280 IR12 = (L36$ = "room5")
-11290 IR14 = (((L144 * L143) > 20) And IR12)
-11300 If (((L144 * L143) < 35) And IR14) = 0 Then GoTo 11320
+11290 IR14 = (((L144 * L143) > 20) AND IR12)
+11300 IF (((L144 * L143) < 35) AND IR14) = 0 THEN GOTO 11320
 11310 GOSUB 10140
 11320 IR12 = (L36$ = "room5")
-11330 IR14 = (((L144 * L143) > 35) And IR12)
-11340 If (((L144 * L143) < 47) And IR14) = 0 Then GoTo 11360
+11330 IR14 = (((L144 * L143) > 35) AND IR12)
+11340 IF (((L144 * L143) < 47) AND IR14) = 0 THEN GOTO 11360
 11350 GOSUB 10140
 11360 IR12 = (L36$ = "room4")
-11370 IR14 = (((L144 * L143) > 47) And IR12)
-11380 If (((L144 * L143) < L145) And IR14) = 0 Then GoTo 11400
+11370 IR14 = (((L144 * L143) > 47) AND IR12)
+11380 IF (((L144 * L143) < L145) AND IR14) = 0 THEN GOTO 11400
 11390 GOSUB 10140
 11400 IR12 = (L36$ = "room1")
-11410 IR14 = (((L144 * L143) > L145) And IR12)
-11420 If (((L144 * L143) < L466) And IR14) = 0 Then GoTo 11440
+11410 IR14 = (((L144 * L143) > L145) AND IR12)
+11420 IF (((L144 * L143) < L466) AND IR14) = 0 THEN GOTO 11440
 11430 GOSUB 10140
 11440 IR12 = (L36$ = "room9")
-11450 IR14 = (((L144 * L143) > L466) And IR12)
-11460 If (((L144 * L143) < L467) And IR14) = 0 Then GoTo 11480
+11450 IR14 = (((L144 * L143) > L466) AND IR12)
+11460 IF (((L144 * L143) < L467) AND IR14) = 0 THEN GOTO 11480
 11470 GOSUB 10140
 11480 IR12 = (L36$ = "room1")
-11490 IR14 = (((L144 * L143) > L467) And IR12)
-11500 If (((L144 * L143) < L468) And IR14) = 0 Then GoTo 11520
+11490 IR14 = (((L144 * L143) > L467) AND IR12)
+11500 IF (((L144 * L143) < L468) AND IR14) = 0 THEN GOTO 11520
 11510 GOSUB 10140
 11520 IR12 = (L36$ = "room4")
-11530 IR14 = (((L144 * L143) > L468) And IR12)
-11540 If (((L144 * L143) < L95) And IR14) = 0 Then GoTo 11560
+11530 IR14 = (((L144 * L143) > L468) AND IR12)
+11540 IF (((L144 * L143) < L95) AND IR14) = 0 THEN GOTO 11560
 11550 GOSUB 10140
-11560 If (L144 * L143) <= 30 Then GoTo 11580
+11560 IF (L144 * L143) <= 30 THEN GOTO 11580
 11570 I471 = 1
 11580
 11590 LOCATE I186, I188 - 1
-11600 Print " "
-11610 If L22$ <> "2" Then GoTo 11640
+11600 PRINT " "
+11610 IF L22$ <> "2" THEN GOTO 11640
 11620 I186 = I186 + 1
-11630 GoTo 11650
-11640 GoTo 11670
-11650 If I192((I186 + 1) + (L191 * I188)) <> 0 Then GoTo 11670
+11630 GOTO 11650
+11640 GOTO 11670
+11650 IF I192((I186 + 1) + (L191 * I188)) <> 0 THEN GOTO 11670
 11660 I186 = I186 - 1
-11670 If L22$ <> "8" Then GoTo 11750
+11670 IF L22$ <> "8" THEN GOTO 11750
 11680 I186 = I186 - 1
-11690 If I186 >= 6 Then GoTo 11750
+11690 IF I186 >= 6 THEN GOTO 11750
 11700 I186 = 6
-11710 If I188 <> 2 Then GoTo 11740
+11710 IF I188 <> 2 THEN GOTO 11740
 11720 I188 = 21
-11730 GoTo 11750
+11730 GOTO 11750
 11740 I188 = 2
 11750 LOCATE I186, I188 - 1
-11760 Print Chr$(26)
-11770 If ((I192((I186 + 1) + (L191 * I188)) <> I317) And (L22$ = "6")) = 0 Then GoTo 11800
+11760 PRINT CHR$(26)
+11770 IF ((I192((I186 + 1) + (L191 * I188)) <> I317) AND (L22$ = "6")) = 0 THEN GOTO 11800
 11780 I317 = I192((I186 + 1) + (L191 * I188))
 11790 PLAY "a50b50e-30"
-11800 If L22$ <> "l" Then GoTo 11850
+11800 IF L22$ <> "l" THEN GOTO 11850
 11810 LOCATE 1, 1
-11820 Print "                                                                              "
+11820 PRINT "                                                                              "
 11830 LOCATE 1, 1
-11840 Print L476$(I192((I186 + 1) + (L191 * I188)))
+11840 PRINT L476$(I192((I186 + 1) + (L191 * I188)))
 11850
 11860 I477 = STICK(0)
 11870 L478 = STICK(1)
-11880 If ((L478 = 0#) And (I477 = 0)) = 0 Then GoTo 11900
+11880 IF ((L478 = 0#) AND (I477 = 0)) = 0 THEN GOTO 11900
 11890 RETURN 'PASS2-RECON: joystick centered (both=0) - return without overwriting L22$ so INKEY$ value is preserved
-11900 If I477 >= 40 Then GoTo 11920
+11900 IF I477 >= 40 THEN GOTO 11920
 11910 L22$ = "4"
-11920 If I477 <= 120 Then GoTo 11940
+11920 IF I477 <= 120 THEN GOTO 11940
 11930 L22$ = "6"
-11940 If L478 >= 40 Then GoTo 11960
+11940 IF L478 >= 40 THEN GOTO 11960
 11950 L22$ = "8"
-11960 If L478 <= 120 Then GoTo 11980
+11960 IF L478 <= 120 THEN GOTO 11980
 11970 L22$ = "2"
-11980 If ((L478 < 40) And (I477 > 120)) = 0 Then GoTo 12000
+11980 IF ((L478 < 40) AND (I477 > 120)) = 0 THEN GOTO 12000
 11990 L22$ = "9"
-12000 If ((L478 < 40) And (I477 < 40)) = 0 Then GoTo 12020
+12000 IF ((L478 < 40) AND (I477 < 40)) = 0 THEN GOTO 12020
 12010 L22$ = "7"
-12020 If ((I477 > 120) And (L478 > 120)) = 0 Then GoTo 12040
+12020 IF ((I477 > 120) AND (L478 > 120)) = 0 THEN GOTO 12040
 12030 L22$ = "3"
-12040 If ((I477 < 40) And (L478 > 120)) = 0 Then GoTo 12060
+12040 IF ((I477 < 40) AND (L478 > 120)) = 0 THEN GOTO 12060
 12050 L22$ = "1"
 12060 IR12 = (L22$ = "1")
-12070 IR14 = ((L22$ = "2") Or (L22$ = "1"))
-12080 IR16 = ((L22$ = "3") Or (IR14))
-12090 IR18 = ((L22$ = "4") Or (IR16))
-12100 IR20 = ((L22$ = "5") Or (IR18))
-12110 IR22 = ((L22$ = "6") Or (IR20))
-12120 IR24 = ((L22$ = "7") Or (IR22))
-12130 IR26 = ((L22$ = "8") Or (IR24))
-12140 If ((L22$ = "9") Or (IR26)) = 0 Then GoTo 12160
+12070 IR14 = ((L22$ = "2") OR (L22$ = "1"))
+12080 IR16 = ((L22$ = "3") OR (IR14))
+12090 IR18 = ((L22$ = "4") OR (IR16))
+12100 IR20 = ((L22$ = "5") OR (IR18))
+12110 IR22 = ((L22$ = "6") OR (IR20))
+12120 IR24 = ((L22$ = "7") OR (IR22))
+12130 IR26 = ((L22$ = "8") OR (IR24))
+12140 IF ((L22$ = "9") OR (IR26)) = 0 THEN GOTO 12160
 12150 L482$ = ""
 12160
 12170 STRIG(0) ON
@@ -1313,332 +1315,332 @@ Rem error 17 (2 )
 12190 STRIG(4) ON
 12200 STRIG(6) ON
 12210 RETURN 'PASS2-RECON: STRIG setup end
-12220 If L482$ <> "l" Then GoTo 12250
+12220 IF L482$ <> "l" THEN GOTO 12250
 12230
-12240 GoTo 12280
+12240 GOTO 12280
 12250 L22$ = "l"
 12260 L482$ = "l"
 12270
-12280 If L482$ <> "a" Then GoTo 12310
+12280 IF L482$ <> "a" THEN GOTO 12310
 12290
-12300 GoTo 12340
+12300 GOTO 12340
 12310 L22$ = "a"
 12320 L482$ = "a"
 12330
-12340 If L482$ <> "g" Then GoTo 12370
+12340 IF L482$ <> "g" THEN GOTO 12370
 12350
-12360 GoTo 12400
+12360 GOTO 12400
 12370 L22$ = "g"
 12380 L482$ = "g"
 12390
-12400 If L482$ <> "u" Then GoTo 12430
+12400 IF L482$ <> "u" THEN GOTO 12430
 12410
-12420 GoTo 12460
+12420 GOTO 12460
 12430 L22$ = "u"
 12440 L482$ = "u"
 12450
 12460
-12470 For I14 = 0 To 6 Step 2
+12470 FOR I14 = 0 TO 6 STEP 2
 12480   STRIG(I14) OFF
-12490 Next
+12490 NEXT
 12500
-12510 Close
-12520 Open "object.pac" For Input As #1
+12510 CLOSE
+12520 OPEN "object.pac" FOR INPUT AS #1
 12530 'PASS2-RECON: removed On Error handler
-12540 For I14 = 1 To 50
-12545   IF EOF(1) THEN GoTo 12580 'PASS2-RECON: EOF check
-12550   Input #1, I24, L476$(I24)
-12560 Next
+12540 FOR I14 = 1 TO 50
+12545   IF EOF(1) THEN GOTO 12580 'PASS2-RECON: EOF check
+12550   INPUT #1, I24, L476$(I24)
+12560 NEXT
 12570 'PASS2-RECON
-12580 Close
-Rem error 18 ()
+12580 CLOSE
+REM error 18 ()
 12590 RETURN 'PASS2-RECON: end of "load OBJECT.PAC" subroutine (GOSUB'd from main line 200)
-12600 If ((I192((I186 + 1) + (L191 * I188)) = 28) And (I317 = 18)) = 0 Then GoTo 12650
+12600 IF ((I192((I186 + 1) + (L191 * I188)) = 28) AND (I317 = 18)) = 0 THEN GOTO 12650
 12610 LOCATE 1, 1
-12620 Print "You find a key hidden inside the fruit."
+12620 PRINT "You find a key hidden inside the fruit."
 12630 I234 = 1
 12640 L270$ = "y"
-12650 If ((I211 = 1) And ((I238 = 1) And (I317 = 25))) = 0 Then GoTo 12720
+12650 IF ((I211 = 1) AND ((I238 = 1) AND (I317 = 25))) = 0 THEN GOTO 12720
 12660 LOCATE 1, 1
-12670 Print "You decode and combine the formula"
+12670 PRINT "You decode and combine the formula"
 12680 I238 = 0
 12690 I213 = 0
 12700 I139 = 1
 12710 L270$ = "y"
-12720 If ((I192((I186 + 1) + (L191 * I188)) = 29) And (I317 = 34)) = 0 Then GoTo 12790
+12720 IF ((I192((I186 + 1) + (L191 * I188)) = 29) AND (I317 = 34)) = 0 THEN GOTO 12790
 12730 LOCATE 1, 1
-12740 Print "You insert the chemicals into the syringe."
+12740 PRINT "You insert the chemicals into the syringe."
 12750 I252 = 1
 12760 I247 = 0
 12770 I255 = 0
 12780 L270$ = "y"
-12790 L137 = Timer
-12800 If L270$ = "" Then GoTo 12830
-12810 If (Timer - L137) >= XYZ Then GoTo 12830
-12820 GoTo 12800
+12790 L137 = TIMER
+12800 IF L270$ = "" THEN GOTO 12830
+12810 IF (TIMER - L137) >= XYZ THEN GOTO 12830
+12820 GOTO 12800
 12830
-12840 Key OFF
-12850 Palette 1, 7
-12860 Palette 2, 2
-12870 Palette 3, 15
-12880 L137 = Timer
+12840 KEY OFF
+12850 PALETTE 1, 7
+12860 PALETTE 2, 2
+12870 PALETTE 3, 15
+12880 L137 = TIMER
 12890 L144 = L144 + 40
-12900 If (Timer - L137) >= XYZ Then GoTo 12920
-12910 GoTo 12900
+12900 IF (TIMER - L137) >= XYZ THEN GOTO 12920
+12910 GOTO 12900
 12920 L270$ = "y"
-12930 Cls
+12930 CLS
 12940 LOCATE 1, 1
-12950 Palette 3, 6
-12960 If I192((I186 + 1) + (L191 * I188)) <> 21 Then GoTo 12980
-12970 GoTo 13070
-12980 If I192((I186 + 1) + (L191 * I188)) <> 3 Then GoTo 13000
-12990 GoTo 13280
-13000 If I192((I186 + 1) + (L191 * I188)) <> 10 Then GoTo 13020
-13010 GoTo 13400
-13020 If I192((I186 + 1) + (L191 * I188)) <> 9 Then GoTo 13040
-13030 GoTo 13490
-13040 If I192((I186 + 1) + (L191 * I188)) <> 19 Then GoTo 13060
-13050 GoTo 13710
+12950 PALETTE 3, 6
+12960 IF I192((I186 + 1) + (L191 * I188)) <> 21 THEN GOTO 12980
+12970 GOTO 13070
+12980 IF I192((I186 + 1) + (L191 * I188)) <> 3 THEN GOTO 13000
+12990 GOTO 13280
+13000 IF I192((I186 + 1) + (L191 * I188)) <> 10 THEN GOTO 13020
+13010 GOTO 13400
+13020 IF I192((I186 + 1) + (L191 * I188)) <> 9 THEN GOTO 13040
+13030 GOTO 13490
+13040 IF I192((I186 + 1) + (L191 * I188)) <> 19 THEN GOTO 13060
+13050 GOTO 13710
 13060
-13070 Print "   The Zombie Syrem        "
-13080 Print "MPTP this formula harbors  "
-13090 Print "the most dangerous compound"
-13100 Print "that will render a victim  "
-13110 Print "paralyzed up to days at a  "
-13120 Print "time. The conclusive test  "
-13130 Print "on human subjects has yielded"
-13140 Print "promising results.     "
-13150 Print "    The subjects though are"
-13160 Print "heightened in strength and "
-13170 Print "reflexes making them harder"
-13180 Print "to control. We have started"
-13190 Print "the use of torture to stop "
-13200 Print "this problem. It is almost "
-13210 Print "safer to leave them on it  "
-13220 Print "permantly so they do not   "
-13230 Print "overthrow the doctors.     "
+13070 PRINT "   The Zombie Syrem        "
+13080 PRINT "MPTP this formula harbors  "
+13090 PRINT "the most dangerous compound"
+13100 PRINT "that will render a victim  "
+13110 PRINT "paralyzed up to days at a  "
+13120 PRINT "time. The conclusive test  "
+13130 PRINT "on human subjects has yielded"
+13140 PRINT "promising results.     "
+13150 PRINT "    The subjects though are"
+13160 PRINT "heightened in strength and "
+13170 PRINT "reflexes making them harder"
+13180 PRINT "to control. We have started"
+13190 PRINT "the use of torture to stop "
+13200 PRINT "this problem. It is almost "
+13210 PRINT "safer to leave them on it  "
+13220 PRINT "permantly so they do not   "
+13230 PRINT "overthrow the doctors.     "
 13240 L22$ = INKEY$
-13250 If L22$ <> "" Then GoTo 13270
-13260 GoTo 13240
+13250 IF L22$ <> "" THEN GOTO 13270
+13260 GOTO 13240
 13270
-13280 Print "The other doctors have become weary"
-13290 Print "as the research money is drying up. "
-13300 Print "I have taken the liberty to hide the"
-13310 Print "rest so they do not get gready and  "
-13320 Print "steal it. The money is now boarded up"
-13330 Print "in the headboard of my bed not even  "
-13340 Print "the servants know about it.Time is the"
-13350 Print "barrier to the place of the damned."
+13280 PRINT "The other doctors have become weary"
+13290 PRINT "as the research money is drying up. "
+13300 PRINT "I have taken the liberty to hide the"
+13310 PRINT "rest so they do not get gready and  "
+13320 PRINT "steal it. The money is now boarded up"
+13330 PRINT "in the headboard of my bed not even  "
+13340 PRINT "the servants know about it.Time is the"
+13350 PRINT "barrier to the place of the damned."
 13360 L22$ = INKEY$
-13370 If L22$ <> "" Then GoTo 13390
-13380 GoTo 13360
+13370 IF L22$ <> "" THEN GOTO 13390
+13380 GOTO 13360
 13390
-13400 Print "I have concluded another successful"
-13410 Print "expirement. This time though the other"
-13420 Print "doctors have become gready and want "
-13430 Print "possession of the notes. I have given"
-13440 Print "them to servants and coded the notes"
-13450 Print "the code book is now hidden so the "
-13460 Print "other doctors cannot steal my break"
-13470 Print "though."
-13480 GoTo 13360
-13490 Print "Patient: Naton McDaniel     "
-13500 Print "Disorder: Paranoid Schitsofrension"
-13510 Print "Notes: Naton is very nervous and "
-13520 Print "complains of voices, often talks in"
-13530 Print "gibberish."
-13540 Print "ID:12443"
-13550 Print ""
-13560 Print "Patient: Havos Lobos     "
-13570 Print "Disorder: Severe Delusions"
-13580 Print "Notes: Havos not only see's and"
-13590 Print "hears things but they become his"
-13600 Print "reality. He is very dangerous"
-13610 Print "ID:385938"
-13620 Print ""
-13630 Print "Patient: Gary Coleman     "
-13640 Print "Disorder: Phyocosis dementia"
-13650 Print "Notes: Gary has become a leader"
-13660 Print "of the other patients. He has"
-13670 Print "a fixation with knives and human"
-13680 Print "blood and sacrifice. Extremely disturbed"
-13690 Print "ID:485970"
-13700 GoTo 13360
-13710 Print "3/15"
-13720 Print "The patients have become unruly"
-13730 Print "I'm afraid they will overpower us"
-13740 Print "but the research must go on."
-13750 Print "3/17"
-13760 Print "The other doctors to have become"
-13770 Print "concerned. We all are tired from"
-13780 Print "working long hours and are making"
-13790 Print "many judmental mistakes"
-13800 Print "3/23"
-13810 Print "There must be something in the air"
-13820 Print "down there it clouds my head. I have"
-13830 Print "moved my practice to the attic and to"
-13840 Print "conceal have placed a pit of ash in "
-13850 Print "front of the passage only openable by "
-13860 Print "an electric circuit. I have put the"
-13870 Print "MPTP vials in the upper left."
-13880 Print "3/29"
-13890 Print "Doctor Edwards has been following me"
-13900 Print "I'm afraid he is becoming suspicous."
-13910 Print "(The rest of the page has been torn out)"
-13920 GoTo 13360
-13930 If ((I272 = 2) Or (I272 = 1)) = 0 Then GoTo 13950
+13400 PRINT "I have concluded another successful"
+13410 PRINT "expirement. This time though the other"
+13420 PRINT "doctors have become gready and want "
+13430 PRINT "possession of the notes. I have given"
+13440 PRINT "them to servants and coded the notes"
+13450 PRINT "the code book is now hidden so the "
+13460 PRINT "other doctors cannot steal my break"
+13470 PRINT "though."
+13480 GOTO 13360
+13490 PRINT "Patient: Naton McDaniel     "
+13500 PRINT "Disorder: Paranoid Schitsofrension"
+13510 PRINT "Notes: Naton is very nervous and "
+13520 PRINT "complains of voices, often talks in"
+13530 PRINT "gibberish."
+13540 PRINT "ID:12443"
+13550 PRINT ""
+13560 PRINT "Patient: Havos Lobos     "
+13570 PRINT "Disorder: Severe Delusions"
+13580 PRINT "Notes: Havos not only see's and"
+13590 PRINT "hears things but they become his"
+13600 PRINT "reality. He is very dangerous"
+13610 PRINT "ID:385938"
+13620 PRINT ""
+13630 PRINT "Patient: Gary Coleman     "
+13640 PRINT "Disorder: Phyocosis dementia"
+13650 PRINT "Notes: Gary has become a leader"
+13660 PRINT "of the other patients. He has"
+13670 PRINT "a fixation with knives and human"
+13680 PRINT "blood and sacrifice. Extremely disturbed"
+13690 PRINT "ID:485970"
+13700 GOTO 13360
+13710 PRINT "3/15"
+13720 PRINT "The patients have become unruly"
+13730 PRINT "I'm afraid they will overpower us"
+13740 PRINT "but the research must go on."
+13750 PRINT "3/17"
+13760 PRINT "The other doctors to have become"
+13770 PRINT "concerned. We all are tired from"
+13780 PRINT "working long hours and are making"
+13790 PRINT "many judmental mistakes"
+13800 PRINT "3/23"
+13810 PRINT "There must be something in the air"
+13820 PRINT "down there it clouds my head. I have"
+13830 PRINT "moved my practice to the attic and to"
+13840 PRINT "conceal have placed a pit of ash in "
+13850 PRINT "front of the passage only openable by "
+13860 PRINT "an electric circuit. I have put the"
+13870 PRINT "MPTP vials in the upper left."
+13880 PRINT "3/29"
+13890 PRINT "Doctor Edwards has been following me"
+13900 PRINT "I'm afraid he is becoming suspicous."
+13910 PRINT "(The rest of the page has been torn out)"
+13920 GOTO 13360
+13930 IF ((I272 = 2) OR (I272 = 1)) = 0 THEN GOTO 13950
 13940
 13950 IR12 = (I358 = 1)
-13960 If ((L36$ = "room4") And IR12) = 0 Then GoTo 14010
+13960 IF ((L36$ = "room4") AND IR12) = 0 THEN GOTO 14010
 13970 L448$ = "y"
 13980 L142$ = "y"
 13990 GOSUB 10140
-14000 GoTo 14020
+14000 GOTO 14020
 14010
-14020 L137 = Timer
+14020 L137 = TIMER
 14030 I272 = 1
-14040 Print XYZ
-14050 Palette 1, 8
-14060 Palette 2, 7
-14070 Palette 3, 11
-14080 Key OFF
+14040 PRINT XYZ
+14050 PALETTE 1, 8
+14060 PALETTE 2, 7
+14070 PALETTE 3, 11
+14080 KEY OFF
 14090 L22$ = INKEY$
-14100 If L22$ <> "" Then GoTo 14120
-14110 GoTo 14090
-Rem error 41 ()
+14100 IF L22$ <> "" THEN GOTO 14120
+14110 GOTO 14090
+REM error 41 ()
 14120 'PASS2-RECON-HOLE: original instruction unknown
 14130 I566 = 0
-14140 For I14 = 1 To 51
-14150   If I300(I14) <> 1 Then GoTo 14170
+14140 FOR I14 = 1 TO 51
+14150   IF I300(I14) <> 1 THEN GOTO 14170
 14160   I566 = I566 + 1
-14170 Next
-14180 If I139 <> 1 Then GoTo 14200
+14170 NEXT
+14180 IF I139 <> 1 THEN GOTO 14200
 14190 I566 = I566 + 2
-14200 If I252 <> 1 Then GoTo 14220
+14200 IF I252 <> 1 THEN GOTO 14220
 14210 I566 = I566 + 2
 14220 I567 = CINT((I566 * 100) / 47)
-14230 Print I567; "% complete";
+14230 PRINT I567; "% complete";
 14240
-14250 Call S15540
-14260 If I358 <> 1 Then GoTo 14290
-14270 GoTo 14250
-14280 GoTo 14300
-14290 GoTo 14050
-14300 System
-14310 Print Erl
-14320 System
+14250 CALL S15540
+14260 IF I358 <> 1 THEN GOTO 14290
+14270 GOTO 14250
+14280 GOTO 14300
+14290 GOTO 14050
+14300 SYSTEM
+14310 PRINT ERL
+14320 SYSTEM
 14330 IR12 = (I317 = 35)
-14340 If ((L22$ = "u") And IR12) = 0 Then GoTo 14360
-14350 GoTo 14460
-14360 If L22$ <> "u" Then GoTo 14390
+14340 IF ((L22$ = "u") AND IR12) = 0 THEN GOTO 14360
+14350 GOTO 14460
+14360 IF L22$ <> "u" THEN GOTO 14390
 14370 LOCATE 1, 1
-14380 Print "He sees what your trying do!                "
-14390 If L22$ <> "a" Then GoTo 14420
+14380 PRINT "He sees what your trying do!                "
+14390 IF L22$ <> "a" THEN GOTO 14420
 14400 LOCATE 1, 1
-14410 Print "Your no match for him in fair combat!       "
-14420 If L22$ <> "l" Then GoTo 14450
+14410 PRINT "Your no match for him in fair combat!       "
+14420 IF L22$ <> "l" THEN GOTO 14450
 14430 LOCATE 1, 1
-14440 Print "The mental patient is preparing to kill you!"
+14440 PRINT "The mental patient is preparing to kill you!"
 14450
-14460 SOUND L95, 0.2
-14470 SOUND L87, 0.5
+14460 SOUND L95, .2
+14470 SOUND L87, .5
 14480 SOUND 32676, 2
-14490 SOUND L95, 0.2
-14500 SOUND L87, 0.5
+14490 SOUND L95, .2
+14500 SOUND L87, .5
 14510 I272 = 2
 14520 LOCATE 1, 1
-14530 Print "You quickly inject him and he crumbles into a distorted heap. "
+14530 PRINT "You quickly inject him and he crumbles into a distorted heap. "
 14540 L22$ = "n"
-14550 PUT (135,135),L278,XOR
+14550 PUT (135, 135), L278, XOR
 14560
-14570 GoTo 2440
-14580 L137 = Timer
+14570 GOTO 2440
+14580 L137 = TIMER
 14590 GOSUB 15320
-14600 If (Timer - L137) <= XYZ Then GoTo 14620
-14610 GoTo 14630
-14620 GoTo 14600
+14600 IF (TIMER - L137) <= XYZ THEN GOTO 14620
+14610 GOTO 14630
+14620 GOTO 14600
 14630 L22$ = INKEY$
-14640 If L22$ <> "" Then GoTo 14660
-14650 GoTo 14630
-14660 If L36$ <> "dindead" Then GoTo 14700
+14640 IF L22$ <> "" THEN GOTO 14660
+14650 GOTO 14630
+14660 IF L36$ <> "dindead" THEN GOTO 14700
 14670 L36$ = "death"
 14680 GOSUB 7860
-14690 GoTo 14600
+14690 GOTO 14600
 14700 L36$ = "smart"
-14710 GoTo 2440
-14720 For I188 = 2 To 21 Step 19
-14730   For I186 = 5 To 23
-14740     For I14 = 1 To 40
-14750       If I192((I186 + 1) + (L191 * I188)) <> L302(I14) Then GoTo 14770
+14710 GOTO 2440
+14720 FOR I188 = 2 TO 21 STEP 19
+14730   FOR I186 = 5 TO 23
+14740     FOR I14 = 1 TO 40
+14750       IF I192((I186 + 1) + (L191 * I188)) <> L302(I14) THEN GOTO 14770
 14760       I574 = 1
-14770     Next
-14780     If I574 = 1 Then GoTo 14810
+14770     NEXT
+14780     IF I574 = 1 THEN GOTO 14810
 14790     LOCATE I186, I188 - 1
-14800     Print "*"
+14800     PRINT "*"
 14810     I574 = 0
-14820   Next
-14830 Next
+14820   NEXT
+14830 NEXT
 14840 I14 = 0
-14850 For I188 = 2 To 21 Step 19
-14860   For I186 = 5 To 23
+14850 FOR I188 = 2 TO 21 STEP 19
+14860   FOR I186 = 5 TO 23
 14870     I14 = I14 + 1
 14880     L302(I14) = I192((I186 + 1) + (L191 * I188))
-14890   Next
-14900 Next
+14890   NEXT
+14900 NEXT
 14910 I186 = 6
 14920 I188 = 2
 14930
-14940 If I192((I186 + 1) + (L191 * I188)) <> 16 Then GoTo 14960
-14950 GoTo 15030
-14960 If ((I192((I186 + 1) + (L191 * I188)) = 3) Or (I192((I186 + 1) + (L191 * I188)) = 21)) = 0 Then GoTo 14980
-14970 GoTo 12840
-14980 If ((I192((I186 + 1) + (L191 * I188)) = 10) Or (I192((I186 + 1) + (L191 * I188)) = 9)) = 0 Then GoTo 15000
-14990 GoTo 12840
-15000 If I192((I186 + 1) + (L191 * I188)) <> 19 Then GoTo 15020
-15010 GoTo 12840
+14940 IF I192((I186 + 1) + (L191 * I188)) <> 16 THEN GOTO 14960
+14950 GOTO 15030
+14960 IF ((I192((I186 + 1) + (L191 * I188)) = 3) OR (I192((I186 + 1) + (L191 * I188)) = 21)) = 0 THEN GOTO 14980
+14970 GOTO 12840
+14980 IF ((I192((I186 + 1) + (L191 * I188)) = 10) OR (I192((I186 + 1) + (L191 * I188)) = 9)) = 0 THEN GOTO 15000
+14990 GOTO 12840
+15000 IF I192((I186 + 1) + (L191 * I188)) <> 19 THEN GOTO 15020
+15010 GOTO 12840
 15020
-15030 Palette 1, 6
-15040 Palette 2, 4
-15050 Palette 3, 8
-15060 Key OFF
+15030 PALETTE 1, 6
+15040 PALETTE 2, 4
+15050 PALETTE 3, 8
+15060 KEY OFF
 15070 L22$ = INKEY$
-15080 If L22$ <> "" Then GoTo 15100
-15090 GoTo 15070
+15080 IF L22$ <> "" THEN GOTO 15100
+15090 GOTO 15070
 15100 L270$ = "y"
-15110 Palette 3, 6
+15110 PALETTE 3, 6
 15120
-15130 Key OFF
-15140 For I14 = 1 To 300
-15150   Palette 1, 14
-15160   Palette 2, 12
-15170   Palette 3, 4
-15180   For I408 = 1 To 10
-15190     SOUND 32676, 0.1
-15200   Next
-15210   Palette 1, 15
-15220   Palette 2, 14
-15230   Palette 3, 12
-15240   For I408 = 1 To 10
-15250     SOUND 32676, 0.1
-15260   Next
+15130 KEY OFF
+15140 FOR I14 = 1 TO 300
+15150   PALETTE 1, 14
+15160   PALETTE 2, 12
+15170   PALETTE 3, 4
+15180   FOR I408 = 1 TO 10
+15190     SOUND 32676, .1
+15200   NEXT
+15210   PALETTE 1, 15
+15220   PALETTE 2, 14
+15230   PALETTE 3, 12
+15240   FOR I408 = 1 TO 10
+15250     SOUND 32676, .1
+15260   NEXT
 15270   L22$ = INKEY$
-15280   If L22$ = "" Then GoTo 15300
-Rem error 41 ()
+15280   IF L22$ = "" THEN GOTO 15300
+REM error 41 ()
 15290   GOTO 15320 'PASS2-RECON: exit outer FOR loop on keypress
 15300   I14 = 1
-15310 Next
-15320 Randomize Timer
-15330 L579 = Int(Rnd * 4)
-15340 If L579 <> 1 Then GoTo 15370
-15350 GoTo 15440
-15360 GoTo 15440
-15370 If L579 <> 2 Then GoTo 15400
-15380 GoTo 15460
-15390 GoTo 15440
-15400 If L579 <> 3 Then GoTo 15430
-15410 GoTo 15490
-15420 GoTo 15440
-15430 GoTo 15510
+15310 NEXT
+15320 RANDOMIZE TIMER
+15330 L579 = INT(RND * 4)
+15340 IF L579 <> 1 THEN GOTO 15370
+15350 GOTO 15440
+15360 GOTO 15440
+15370 IF L579 <> 2 THEN GOTO 15400
+15380 GOTO 15460
+15390 GOTO 15440
+15400 IF L579 <> 3 THEN GOTO 15430
+15410 GOTO 15490
+15420 GOTO 15440
+15430 GOTO 15510
 15440 PLAY "<<<g-2g8a+8f+8e8d-3e4f+5f+5e-5e3>d2>>"
 15450
 15460 PLAY "<<<d+8e-8<a8g8f3b8g8f+8e3"
@@ -1648,359 +1650,9 @@ Rem error 41 ()
 15500
 15510 PLAY "<g8a8b-8b8<c8g8a8b-8a8a8b8a8>>"
 15520
-15530 GoTo 16750
-15540 SUB S15540
-15550 Dim R28(600)
-15560 Screen 1
-15570 Palette 1, 8
-15580 Palette 2, 4
-15590 Palette 3, 14
-15600 Key OFF
-15610 PLAY "e-6d5e-5d5f7p7"
-15620 PLAY "a5>c6<b6a5g6a4"
-Rem error 12 (1  ,0  ,0 )
-15630 GoTo 15650 '????
-15640 SOUND 32761, 1
-15650 R32 = R32 + 1
-15660 If R32 <= 5 Then GoTo 15640
-Rem error 12 (1 )
-15670 GoTo 15870 '????
-Rem error 12 (1 )
-15680 GoTo 15860 '????
-15690 If R36 <> 1 Then GoTo 15720
-15700 R38 = 8
-15710 GoTo 15770
-15720 If R36 <> 2 Then GoTo 15750
-15730 R38 = 7
-15740 GoTo 15770
-15750 If R36 <> 3 Then GoTo 15770
-15760 R38 = 15
-15770 Palette R42, R38
-Rem error 12 (1 )
-15780 GoTo 15840 '????
-15790 If Rnd >= 0.9 Then GoTo 15820
-15800 SOUND (Rnd * 71) + 50, (Rnd * 0.2) + 0.3
-15810 GoTo 15830
-15820 SOUND 32767, 0.5
-15830 R32 = R32 + 1
-15840 If R32 <= 5 Then GoTo 15790
-15850 R36 = R36 + 1
-15860 If R36 <= 3 Then GoTo 15690
-15870 R42 = R42 + 1
-15880 If R42 <= 3 Then GoTo 15680
-15890 Palette 0, 15
-15900 Key OFF
-Rem error 12 (1  ,0  ,0 )
-15910 GoTo 15930 '????
-15920 SOUND 32671, 0.5
-15930 R32 = R32 + 1
-15940 If R32 <= 7 Then GoTo 15920
-15950 Palette 0, 0
-Rem error 12 (1 )
-15960 GoTo 16160 '????
-Rem error 12 (1 )
-15970 GoTo 16150 '????
-15980 If R36 <> 1 Then GoTo 16010
-15990 R38 = 8
-16000 GoTo 16060
-16010 If R36 <> 2 Then GoTo 16040
-16020 R38 = 7
-16030 GoTo 16060
-16040 If R36 <> 3 Then GoTo 16060
-16050 GOSUB 16440
-16060 Palette R42, R38
-Rem error 12 (1 )
-16070 GoTo 16130 '????
-16080 If Rnd >= 0.9 Then GoTo 16110
-16090 SOUND (Rnd * 71) + 50, (Rnd * 0.2) + 0.3
-16100 GoTo 16120
-16110 SOUND 32767, 0.5
-16120 R32 = R32 + 1
-16130 If R32 <= 5 Then GoTo 16080
-16140 R36 = R36 + 1
-16150 If R36 <= 3 Then GoTo 15980
-16160 R42 = R42 + 1
-16170 If R42 <= 3 Then GoTo 15970
-Rem error 12 (1 )
-16180 GoTo 16200 '????
-16190 SOUND 32676, 0.1
-16200 R32 = R32 + 1
-16210 If R32 <= 40 Then GoTo 16190
-16220 GOSUB 16620
-Rem error 12 (1 )
-16230 GoTo 16250 '????
-16240 SOUND 32761, 1
-16250 R32 = R32 + 1
-16260 If R32 <= 20 Then GoTo 16240
-16270 GOSUB 16510
-16280 Print "You run swiftly from the flaming"
-16290 Print "building that is being consumed by"
-16300 Print "the blaze. As you look back at the"
-16310 Print "burning house, spewing fiery shrapnel"
-16320 Print "about the grounds you wonder about"
-16330 Print "your uncle and his work. What was"
-16340 Print "he really like? What was obliterated"
-16350 Print "in the house? Did you leave something"
-16360 Print "behind or undone ...."
-16370 Print "Maybe some day you'll find out."
-16380 Print ""
-16390 Print "Press a key to exit."
-16400 R46$ = INKEY$
-16410 If (R46$) <> "" Then GoTo 16430
-16420 GoTo 16400
-16430 System
-16440 If R42 <> 1 Then GoTo 16460
-16450 R38 = 8
-16460 If R42 <> 2 Then GoTo 16480
-16470 R38 = 2
-16480 If R42 <> 3 Then GoTo 16500
-16490 R38 = 6
-16500
-Rem error 12 (1 )
-16510 GoTo 16580 '????
-Rem error 12 (1 )
-16520 GoTo 16560 '????
-16530 LOCATE Int(Rnd * 23) + 1, Int(Rnd * 40) + 1
-16540 Print " "
-16550 SOUND 32676, 0.05
-16560 R50 = R50 + 1
-16570 If R50 <= 40 Then GoTo 16530
-16580 R32 = R32 + 1
-16590 If R32 <= 23 Then GoTo 16520
-16600 Cls
-16610
-16620 GET (212,140)-(262,160),R28
-16630 PUT (212,140),R28,XOR
-16640 Line (211, 148)-(265, 148), 1
-Rem error 12 (212 )
-16650 GoTo 16710 '????
-16660 PUT (R54,140),R28,XOR
-16670 SOUND (Rnd * 100) + 50, 0.1
-16680 SOUND L95, 0.1
-16690 PUT (R54,140),R28,XOR
-16700 R54 = R54 - 1
-16710 If R54 >= 65 Then GoTo 16660
-16720
-16730 Erase R28
-16740 End Sub
-16750 GoTo 18680
-16760 SUB S16760
-16770 Screen 1
-16780 Randomize 0#
-16790 Key 16, Chr$(0) + Chr$(1)
-16800 REM PASS2-RECON: ON KEY(16) handler disabled (QB45 disallows in SUB)
-16810 KEY(16) ON
-16820 Palette 3, 6
-16830 Palette 1, 2
-16840 Palette 2, 11
-16850 Key OFF
-16860 Key 16, Chr$(0) + Chr$(1)
-16870 REM PASS2-RECON: ON KEY(16) handler disabled
-16880 KEY(16) ON
-16890 Dim R28(1000)
-16900 Dim R46(130)
-16910 Dim R64(130)
-16915 DEF SEG = &HB800: BLOAD "carr.pic", 0: DEF SEG 'PASS2-RECON: load first intro image (car driving scene). Spring lost all BLOADs.
-16920 R68 = 133
-16930 GET (0, 0)-(15, 15), R28 'PASS2-RECON: original GET had garbage coords; placeholder (sprite extraction from loaded carr.pic - real coords TBD in Phase 3)
-16940 PUT (8,133),R28,XOR
-16950 Line (8, 155)-(105, 145), 3
-16960 Line (75, 175)-(120, 170), 3
-16970 For IR70 = 1 To 2
-16980   SOUND 32676, 1
-16990 Next
-17000 For IR72 = 8 To 220 Step 4
-17010   R68 = R68 - 0.5
-17020   PUT (IR72,R68),R28,XOR
-17030   GOSUB 17070
-17040   PUT (IR72,R68),R28,XOR
-17050 Next
-17060 GoTo 17160
-Rem error 12 (50 )
-17070 R76 = 50 'PASS2-RECON: from Rem error 12 (50 ) hint
-17080 SOUND R76, 0.06
-17090 SOUND L95, 0.06
-17100 R80$ = INKEY$
-17110 If (R80$) <> "s" Then GoTo 17130
-17120 GoTo 18640
-17130 R76 = R76 + 18
-17140 If R76 <= 200 Then GoTo 17080
-17150 RETURN 'PASS2-RECON: sound subroutine end
-Rem error 12 (1 )
-17160 GoTo 17180 '????
-17170 R76 = R76 + 1
-17180 If R76 <= 500 Then GoTo 17170
-17185 DEF SEG = &HB800: BLOAD "hill.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 2 (hill with lightning)
-17190 Palette 2, 11
-17200 Palette 3, 3
-17210 Key OFF
-17220 R76 = 0#
-17230 For IR70 = 1 To 35
-17240   GOSUB 17070
-17250   If Rnd <= 0.8 Then GoTo 17310
-17260   Color 15
-Rem error 12 (1 )
-17270   GoTo 17290 '????
-17280   SOUND 32676, 0.04
-17290   R76 = R76 + 1
-17300   If R76 <= 2 Then GoTo 17280
-17310   Color 0
-17320 Next
-Rem error 12 (200 )
-17330 GoTo 17380 '????
-17340 SOUND R76, 0.1
-17350 SOUND L632, 0.1
-17360 SOUND 32676, 1
-17370 R76 = R76 - 10
-17380 If R76 >= 50 Then GoTo 17340
-17390 Color 15
-17400 Color 0
-Rem error 12 (1 )
-17410 GoTo 17430 '????
-17420 R76 = R76 + 1
-17430 If R76 <= 500 Then GoTo 17420
-Rem error 12 (200 )
-17440 GoTo 17470 '????
-17450 SOUND R76, 0.1
-17460 SOUND L87, 0.2
-17470 R76 = R76 - 30
-17480 If R76 >= 50 Then GoTo 17450
-17490 SOUND L279, 0.1
-Rem error 12 (1 )
-17500 GoTo 17510 '????
-17510 R76 = R76 + 1
-17520 If R76 <= 1000 Then GoTo 17510
-17530 Palette 1, 8
-17540 Palette 2, 1
-17550 Palette 3, 6
-17560 Key OFF
-17565 DEF SEG = &HB800: BLOAD "enter.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 3 (Joe walks in)
-17566 SLEEP 2 'PASS2-RECON: brief delay so ENTER scene is visible (original DV1 had Joe walking animation here that we bypass)
-17570 GOSUB 18310
-Rem error 12 (0  ,0 )
-17580 REM PASS2-RECON: was "GoTo 17780" (skipped TALK + ENTER scenes). Fall through to 17590 instead.
-17590 Key OFF
-17600 Palette 1, 12
-17610 Palette 2, 6
-17620 Palette 3, 8
-17625 DEF SEG = &HB800: BLOAD "talk.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 4 (dialog)
-17630 R80$ = INKEY$
-17640 GOSUB 17850
-17650 R80$ = INKEY$
-17660 If (R80$) <> "" Then GoTo 17690
-17670 GoTo 17640
-17680 GoTo 17780
-17690 For IR70 = 1 To 24
-17700   LOCATE 25, 1
-17710   Print " "
-17720 Next
-17730 Key OFF
-17740 Palette 1, 8
-17750 Palette 2, 1
-17760 Palette 3, 6
-17765 DEF SEG = &HB800: BLOAD "enter.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 5 (Joe walks up the rest of screen)
-17766 SLEEP 2 'PASS2-RECON: brief delay so ENTER scene 5 is visible
-17770 DEF SEG 'PASS2-RECON: was Print 0 - likely DEF SEG reset after video-memory BLOAD
-17780 Palette 2, 9
-17790 Palette 1, 11
-17800 Palette 3, 1
-17810 Key OFF
-17815 DEF SEG = &HB800: BLOAD "title.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 6 (title screen with Alfred Hitchcock music)
-17820 GOSUB 18200
-17830 SOUND 32676, 1
-Rem error 12 (0  ,0 )
-17840 GoTo 18640 'PASS2-RECON: was GoTo 18020 (leads to palette fade + 18190 System which exits program). Skip to End Sub cleanup so main can continue.
-Rem error 12 (50 )
-17850 R84 = 50 'PASS2-RECON: from "Rem error 12 (50 )" hint + loop context (R84 += 10 to 250). Was GoTo 17890.
-17860 SOUND L95, 0.05
-17870 SOUND R84, 0.05
-17880 SOUND (450 - R84) / 2, 0.05
-17890 R84 = R84 + 10
-17900 If R84 <= 250 Then GoTo 17860
-17902 SOUND 32576, Int(Rnd * 9) 'PASS2-RECON: random silence between sound bursts (from line 17960 pattern)
-17905 RETURN 'PASS2-RECON: end of sound-effect subroutine
-17910 If R88 <> 1 Then GoTo 17930
-17920
-17930 R80$ = INKEY$
-17940 If (R80$) <> "s" Then GoTo 17960
-17950 GoTo 18640
-17960 SOUND 32576, Int(Rnd * 9)
-17970
-17980 R92 = R92 + 1
-17990 If (Int(Rnd * 4) + 2) <= R92 Then GoTo 18010
-18000 GoTo 17850
-18010
-Rem error 12 (1 )
-18020 GoTo 18160 '????
-Rem error 12 (1 )
-18030 GoTo 18140 '????
-18040 For IR70 = 1 To 1000
-18050 Next
-18060 If R76 <> 1 Then GoTo 18080
-18070 Palette R96, 15
-18080 If R76 <> 2 Then GoTo 18100
-18090 Palette R96, 7
-18100 If R76 <> 3 Then GoTo 18120
-18110 Palette R96, 8
-18120 If R76 <> 4 Then GoTo 18140
-18130 Palette R96, 0
-18140 R96 = R96 + 1
-18150 If R96 <= 3 Then GoTo 18040
-18160 R76 = R76 + 1
-18170 If R76 <= 4 Then GoTo 18030
-18180 Screen 0
-18190 System
-18200 Key 16, Chr$(0) + Chr$(1)
-18210 REM PASS2-RECON: ON KEY(16) handler disabled
-18220 KEY(16) ON
-18230 PLAY "<d4d8d8c+8<b8>c+4d8e4<<a8d4"
-18240 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
-18250 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
-18260 PLAY "d4d8d8c+8<b8>c+4d8e4<<a8d4"
-18270 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
-18280 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
-18290 PLAY "<d8c+8d8e4f8c+4d4"
-18300
-18310 Close
-18320 R100$ = "joew2"
-18330 Open (R100$) + ".pct" For Input As #1
-18340 GET (1,8)-(9,18),R46
-18350 GET (1,8)-(9,18),R64
-Rem error 12 (0. )
-18360 GoTo 18380 '????
-18370 Input #1, R46(CINT(R76) * 2), R64(CINT(R76) * 2)
-18380 R76 = R76 + 1
-18390 If R76 <= 125 Then GoTo 18370
-18400 R104 = R104 + 1
-Rem error 12 (150 )
-18410 RETURN 'PASS2-RECON: was GoTo 18640 (jumped to End Sub) - now RETURN so GOSUB 18310/18200 callers proceed properly through intro
-18420 PUT (143,R76),R46,XOR
-18430 GOSUB 17850
-18440 For IR70 = 1 To 2
-18450   SOUND 32676, 0.3
-18460 Next
-18470 PUT (143,R76),R46,XOR
-18480 If R76 <> 130 Then GoTo 18530
-18490 For IR70 = 1 To 10000
-18500 Next
-18510 R88 = 0#
-18520 GOSUB 17590
-18530 R88 = 1
-18540 R76 = R76 - 2
-18550 PUT (143,R76),R64,XOR
-18560 GOSUB 17850
-18570 For IR70 = 1 To 2
-18580   SOUND 32676, 0.3
-18590 Next
-18600 PUT (143,R76),R64,XOR
-18610 R76 = R76 - 2
-18620 If R76 >= 120 Then GoTo 18420
-18630
-18640 Erase R28
-18650 Erase R46
-18660 Erase R64
-18670 End Sub
-18680 End
+15530 GOTO 16750
+16750 GOTO 18680
+18680 END
 'Symbol Address  Symbol Address  Symbol Address  Symbol Address
 'L0     0036 E   L10    10A3     I14    2958 IE  I15    0CE6 IA
 'L16    0DEC A   L17    0EF2 A   L18    0FF8 A   L22$   2EAE S
@@ -2109,3 +1761,353 @@ Rem error 12 (150 )
 'L417   3F72 EA  L419   3F84 EA  L421   3F96 EA  L423   3FA8 EA
 'L425   3FBA EA  L427   3FCC EA  L429   3FDE EA  L455   401E EA
 'L457   4030 EA  L459   4042 EA  L461   4054 EA
+
+15540 SUB S15540
+15550 DIM R28(600)
+15560 SCREEN 1
+15570 PALETTE 1, 8
+15580 PALETTE 2, 4
+15590 PALETTE 3, 14
+15600 KEY OFF
+15610 PLAY "e-6d5e-5d5f7p7"
+15620 PLAY "a5>c6<b6a5g6a4"
+REM error 12 (1  ,0  ,0 )
+15630 GOTO 15650 '????
+15640 SOUND 32761, 1
+15650 R32 = R32 + 1
+15660 IF R32 <= 5 THEN GOTO 15640
+REM error 12 (1 )
+15670 GOTO 15870 '????
+REM error 12 (1 )
+15680 GOTO 15860 '????
+15690 IF R36 <> 1 THEN GOTO 15720
+15700 R38 = 8
+15710 GOTO 15770
+15720 IF R36 <> 2 THEN GOTO 15750
+15730 R38 = 7
+15740 GOTO 15770
+15750 IF R36 <> 3 THEN GOTO 15770
+15760 R38 = 15
+15770 PALETTE R42, R38
+REM error 12 (1 )
+15780 GOTO 15840 '????
+15790 IF RND >= .9 THEN GOTO 15820
+15800 SOUND (RND * 71) + 50, (RND * .2) + .3
+15810 GOTO 15830
+15820 SOUND 32767, .5
+15830 R32 = R32 + 1
+15840 IF R32 <= 5 THEN GOTO 15790
+15850 R36 = R36 + 1
+15860 IF R36 <= 3 THEN GOTO 15690
+15870 R42 = R42 + 1
+15880 IF R42 <= 3 THEN GOTO 15680
+15890 PALETTE 0, 15
+15900 KEY OFF
+REM error 12 (1  ,0  ,0 )
+15910 GOTO 15930 '????
+15920 SOUND 32671, .5
+15930 R32 = R32 + 1
+15940 IF R32 <= 7 THEN GOTO 15920
+15950 PALETTE 0, 0
+REM error 12 (1 )
+15960 GOTO 16160 '????
+REM error 12 (1 )
+15970 GOTO 16150 '????
+15980 IF R36 <> 1 THEN GOTO 16010
+15990 R38 = 8
+16000 GOTO 16060
+16010 IF R36 <> 2 THEN GOTO 16040
+16020 R38 = 7
+16030 GOTO 16060
+16040 IF R36 <> 3 THEN GOTO 16060
+16050 GOSUB 16440
+16060 PALETTE R42, R38
+REM error 12 (1 )
+16070 GOTO 16130 '????
+16080 IF RND >= .9 THEN GOTO 16110
+16090 SOUND (RND * 71) + 50, (RND * .2) + .3
+16100 GOTO 16120
+16110 SOUND 32767, .5
+16120 R32 = R32 + 1
+16130 IF R32 <= 5 THEN GOTO 16080
+16140 R36 = R36 + 1
+16150 IF R36 <= 3 THEN GOTO 15980
+16160 R42 = R42 + 1
+16170 IF R42 <= 3 THEN GOTO 15970
+REM error 12 (1 )
+16180 GOTO 16200 '????
+16190 SOUND 32676, .1
+16200 R32 = R32 + 1
+16210 IF R32 <= 40 THEN GOTO 16190
+16220 GOSUB 16620
+REM error 12 (1 )
+16230 GOTO 16250 '????
+16240 SOUND 32761, 1
+16250 R32 = R32 + 1
+16260 IF R32 <= 20 THEN GOTO 16240
+16270 GOSUB 16510
+16280 PRINT "You run swiftly from the flaming"
+16290 PRINT "building that is being consumed by"
+16300 PRINT "the blaze. As you look back at the"
+16310 PRINT "burning house, spewing fiery shrapnel"
+16320 PRINT "about the grounds you wonder about"
+16330 PRINT "your uncle and his work. What was"
+16340 PRINT "he really like? What was obliterated"
+16350 PRINT "in the house? Did you leave something"
+16360 PRINT "behind or undone ...."
+16370 PRINT "Maybe some day you'll find out."
+16380 PRINT ""
+16390 PRINT "Press a key to exit."
+16400 R46$ = INKEY$
+16410 IF (R46$) <> "" THEN GOTO 16430
+16420 GOTO 16400
+16430 SYSTEM
+16440 IF R42 <> 1 THEN GOTO 16460
+16450 R38 = 8
+16460 IF R42 <> 2 THEN GOTO 16480
+16470 R38 = 2
+16480 IF R42 <> 3 THEN GOTO 16500
+16490 R38 = 6
+16500
+REM error 12 (1 )
+16510 GOTO 16580 '????
+REM error 12 (1 )
+16520 GOTO 16560 '????
+16530 LOCATE INT(RND * 23) + 1, INT(RND * 40) + 1
+16540 PRINT " "
+16550 SOUND 32676, .05
+16560 R50 = R50 + 1
+16570 IF R50 <= 40 THEN GOTO 16530
+16580 R32 = R32 + 1
+16590 IF R32 <= 23 THEN GOTO 16520
+16600 CLS
+16610
+16620 GET (212, 140)-(262, 160), R28
+16630 PUT (212, 140), R28, XOR
+16640 LINE (211, 148)-(265, 148), 1
+REM error 12 (212 )
+16650 GOTO 16710 '????
+16660 PUT (R54, 140), R28, XOR
+16670 SOUND (RND * 100) + 50, .1
+16680 SOUND L95, .1
+16690 PUT (R54, 140), R28, XOR
+16700 R54 = R54 - 1
+16710 IF R54 >= 65 THEN GOTO 16660
+16720
+16730 ERASE R28
+16740 END SUB
+
+16760 SUB S16760
+16770 SCREEN 1
+16780 RANDOMIZE 0#
+16790 KEY 16, CHR$(0) + CHR$(1)
+16800 REM PASS2-RECON: ON KEY(16) handler disabled (QB45 disallows in SUB)
+16810 KEY(16) ON
+16820 PALETTE 3, 6
+16830 PALETTE 1, 2
+16840 PALETTE 2, 11
+16850 KEY OFF
+16860 KEY 16, CHR$(0) + CHR$(1)
+16870 REM PASS2-RECON: ON KEY(16) handler disabled
+16880 KEY(16) ON
+16890 DIM R28(1000) AS INTEGER 'PASS2-RECON: AS INTEGER - GET/PUT sprite arrays must be 2-byte integers to match .pct data (saved from integer GET arrays)
+16900 DIM R46(130) AS INTEGER 'PASS2-RECON: walk frame A sprite (31x31)
+16910 DIM R64(130) AS INTEGER 'PASS2-RECON: walk frame B sprite (31x31)
+16915 DEF SEG = &HB800: BLOAD "carr.pic", 0: DEF SEG 'PASS2-RECON: load first intro image (car driving scene). Spring lost all BLOADs.
+16920 R68 = 133
+16930 GET (8, 133)-(105, 175), R28 'PASS2-RECON: car sprite is exactly 98x43 (per SRC/art/carmask.pcx). Box = (8,133)-(105,175): 98 wide x 43 tall, origin matches PUT(8,133) for clean XOR-erase.
+16940 PUT (8, 133), R28, XOR
+16950 LINE (8, 155)-(105, 145), 3
+16960 LINE (75, 175)-(120, 170), 3
+16970 FOR IR70 = 1 TO 2
+16980   SOUND 32676, 1
+16990 NEXT
+17000 FOR IR72 = 8 TO 220 STEP 4
+17010   R68 = R68 - .5
+17020   PUT (IR72, R68), R28, XOR
+17030   GOSUB 17070
+17040   PUT (IR72, R68), R28, XOR
+17050 NEXT
+17060 GOTO 17160
+REM error 12 (50 )
+17070 R76 = 50 'PASS2-RECON: from Rem error 12 (50 ) hint
+17080 SOUND R76, .06
+17090 SOUND L95, .06
+17100 R80$ = INKEY$
+17110 IF (R80$) <> "s" THEN GOTO 17130
+17120 GOTO 18640
+17130 R76 = R76 + 18
+17140 IF R76 <= 200 THEN GOTO 17080
+17150 RETURN 'PASS2-RECON: sound subroutine end
+REM error 12 (1 )
+17160 GOTO 17180 '????
+17170 R76 = R76 + 1
+17180 IF R76 <= 500 THEN GOTO 17170
+17185 DEF SEG = &HB800: BLOAD "hill.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 2 (hill with lightning)
+17190 PALETTE 2, 11
+17200 PALETTE 3, 3
+17210 KEY OFF
+17220 R76 = 0#
+17230 FOR IR70 = 1 TO 35
+17240   GOSUB 17070
+17250   IF RND <= .8 THEN GOTO 17310
+17260   COLOR 15
+17270   R76 = 1 'PASS2-RECON: reset hold counter (was GoTo 17290 '????; Rem error 12 (1) hint = arg 1). R76 was clobbered by GOSUB 17070 above; resetting lets the white flash linger ~2 ticks so the lightning is visible.
+17280   SOUND 32676, .04
+17290   R76 = R76 + 1
+17300   IF R76 <= 2 THEN GOTO 17280
+17310   COLOR 0
+17320 NEXT
+REM error 12 (200 )
+17330 R76 = 200 'PASS2-RECON: from "Rem error 12 (200 )" hint. Starts the descending thunder-rumble sweep (17340-17380, R76 200->50). Was GOTO 17380, which skipped the whole rumble.
+17340 SOUND R76, .1
+17350 SOUND L632, .1
+17360 SOUND 32676, 1
+17370 R76 = R76 - 10
+17380 IF R76 >= 50 THEN GOTO 17340
+17390 COLOR 15
+17400 COLOR 0
+REM error 12 (1 )
+17410 R76 = 1 'PASS2-RECON: from "Rem error 12 (1 )" hint. Resets the delay-loop counter (17420-17430 counts to 500 = pause between thunderclaps). Was GOTO 17430.
+17420 R76 = R76 + 1
+17430 IF R76 <= 500 THEN GOTO 17420
+REM error 12 (200 )
+17440 R76 = 200 'PASS2-RECON: from "Rem error 12 (200 )" hint. Starts the second thunder sweep (17450-17480, R76 200->50 by 30). Was GOTO 17470.
+17450 SOUND R76, .1
+17460 SOUND L87, .2
+17470 R76 = R76 - 30
+17480 IF R76 >= 50 THEN GOTO 17450
+17490 SOUND L279, .1
+REM error 12 (1 )
+17500 GOTO 17510 '????
+17510 R76 = R76 + 1
+17520 IF R76 <= 1000 THEN GOTO 17510
+17530 PALETTE 1, 8
+17540 PALETTE 2, 1
+17550 PALETTE 3, 6
+17560 KEY OFF
+17565 DEF SEG = &HB800: BLOAD "enter.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 3 (Joe walks in)
+17570 GOSUB 18310 'joe-walk animation; at midpoint (Y=130) it GOSUBs 17590 to show TALK, then reloads enter.pic and walks the rest
+REM error 12 (0  ,0 )
+17580 GOTO 17780 'PASS2-RECON: skip the talk subroutine (17590-17775) in linear flow - it's reached via GOSUB from inside the walk at line 18520
+17590 KEY OFF
+17600 PALETTE 1, 12
+17610 PALETTE 2, 6
+17620 PALETTE 3, 8
+17625 DEF SEG = &HB800: BLOAD "talk.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 4 (dialog)
+17630 R80$ = INKEY$
+17640 GOSUB 17850
+17645 SOUND 32576, INT(RND * 9) 'PASS2-RECON: random silence gives the TALK its gaps (moved here from sub 17850; the walk shares 17850 and must stay tight)
+17650 R80$ = INKEY$
+17660 IF (R80$) <> "" THEN GOTO 17690
+17670 GOTO 17640
+17680 GOTO 17780
+17690 FOR IR70 = 1 TO 24
+17700   LOCATE 25, 1
+17710   PRINT " "
+17720 NEXT
+17730 KEY OFF
+17740 PALETTE 1, 8
+17750 PALETTE 2, 1
+17760 PALETTE 3, 6
+17765 DEF SEG = &HB800: BLOAD "enter.pic", 0: DEF SEG 'PASS2-RECON: reload enter.pic so Joe walks the rest on the entry scene (after talk)
+17770 DEF SEG 'PASS2-RECON: was Print 0 - segment reset
+17775 RETURN 'PASS2-RECON: end of talk subroutine (GOSUB'd from joe-walk at 18520) - returns so Joe finishes walking up enter.pic
+17780 PALETTE 2, 9
+17790 PALETTE 1, 11
+17800 PALETTE 3, 1
+17810 KEY OFF
+17815 DEF SEG = &HB800: BLOAD "title.pic", 0: DEF SEG 'PASS2-RECON: load intro scene 6 (title screen with Alfred Hitchcock music)
+17820 GOSUB 18200
+17830 SOUND 32676, 1
+REM error 12 (0  ,0 )
+17840 GOTO 18640 'PASS2-RECON: was GoTo 18020 (leads to palette fade + 18190 System which exits program). Skip to End Sub cleanup so main can continue.
+REM error 12 (50 )
+17850 R84 = 50 'PASS2-RECON: from "Rem error 12 (50 )" hint + loop context (R84 += 10 to 250). Was GoTo 17890.
+17860 SOUND L95, .05
+17870 SOUND R84, .05
+17880 SOUND (450 - R84) / 2, .05
+17890 R84 = R84 + 10
+17900 IF R84 <= 250 THEN GOTO 17860
+17902 REM PASS2-RECON: random silence moved to the talk loop (17645) so it does not drag the walk, which shares this sub
+17905 RETURN 'PASS2-RECON: end of sound-effect subroutine (bare warble ~0.16s = authentic footstep + talk tone)
+17910 IF R88 <> 1 THEN GOTO 17930
+17920
+17930 R80$ = INKEY$
+17940 IF (R80$) <> "s" THEN GOTO 17960
+17950 GOTO 18640
+17960 SOUND 32576, INT(RND * 9)
+17970
+17980 R92 = R92 + 1
+17990 IF (INT(RND * 4) + 2) <= R92 THEN GOTO 18010
+18000 GOTO 17850
+18010
+REM error 12 (1 )
+18020 GOTO 18160 '????
+REM error 12 (1 )
+18030 GOTO 18140 '????
+18040 FOR IR70 = 1 TO 1000
+18050 NEXT
+18060 IF R76 <> 1 THEN GOTO 18080
+18070 PALETTE R96, 15
+18080 IF R76 <> 2 THEN GOTO 18100
+18090 PALETTE R96, 7
+18100 IF R76 <> 3 THEN GOTO 18120
+18110 PALETTE R96, 8
+18120 IF R76 <> 4 THEN GOTO 18140
+18130 PALETTE R96, 0
+18140 R96 = R96 + 1
+18150 IF R96 <= 3 THEN GOTO 18040
+18160 R76 = R76 + 1
+18170 IF R76 <= 4 THEN GOTO 18030
+18180 SCREEN 0
+18190 SYSTEM
+18200 KEY 16, CHR$(0) + CHR$(1)
+18210 REM PASS2-RECON: ON KEY(16) handler disabled
+18220 KEY(16) ON
+18230 PLAY "<d4d8d8c+8<b8>c+4d8e4<<a8d4"
+18240 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
+18250 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
+18260 PLAY "d4d8d8c+8<b8>c+4d8e4<<a8d4"
+18270 PLAY ">>d8d8c+8<b8>c+4d8e4<<a8d4"
+18280 PLAY "f8a4g8f4a8>c4<b-8a4>c8e4d8c+8<b8a8g8f8e8"
+18290 PLAY "<d8c+8d8e4f8c+4d4"
+18300 RETURN 'PASS2-RECON: end of title-music subroutine (GOSUB'd from 17820)
+18310 CLOSE
+18320 R100$ = "joew2"
+18330 OPEN (R100$) + ".pct" FOR INPUT AS #1
+18340 R76 = 0 'PASS2-RECON: load-index init (was bogus GET (1,8)-(9,18),R46; .pct already contains the 62,31 GET-array header)
+18350 REM PASS2-RECON: removed 2nd bogus GET
+18360 REM PASS2-RECON: fall through to load loop (was GoTo 18380, which skipped the INPUT)
+18370 INPUT #1, R46(R76), R64(R76) 'PASS2-RECON: contiguous load (was R46(CINT(R76)*2)); col0=walk frame A -> R46, col1=frame B -> R64, each a full 31x31 sprite
+18380 R76 = R76 + 1
+18390 IF R76 <= 125 THEN GOTO 18370
+18400 R104 = R104 + 1
+18410 R76 = 150 'PASS2-RECON: from "Rem error 12 (150 )" hint - starting Y for the walk-up animation (loop decrements toward 120)
+18420 PUT (143, R76), R46, XOR
+18430 GOSUB 17850 'PASS2-RECON: AUTHENTIC footstep = the talk warble. Original code called GOSUB 17850 here (same sub as the talk).
+18440 FOR IR70 = 1 TO 2
+18450   SOUND 32676, .3 'PASS2-RECON: original inter-frame delay (.3). The GOSUB 17850 footstep now carries the pacing. TUNE: bigger=slower.
+18460 NEXT
+18470 PUT (143, R76), R46, XOR
+18480 IF R76 <> 130 THEN GOTO 18530
+18490 FOR IR70 = 1 TO 10000
+18500 NEXT
+18510 R88 = 0#
+18520 GOSUB 17590
+18530 R88 = 1
+18540 R76 = R76 - 2
+18550 PUT (143, R76), R64, XOR
+18560 GOSUB 17850 'PASS2-RECON: AUTHENTIC footstep, same sub (the original used the same sound for both feet)
+18570 FOR IR70 = 1 TO 2
+18580   SOUND 32676, .3 'PASS2-RECON: original inter-frame delay; matches 18450
+18590 NEXT
+18600 PUT (143, R76), R64, XOR
+18610 R76 = R76 - 2
+18620 IF R76 >= 116 THEN GOTO 18420 'PASS2-RECON: stop point - Joe walks up into the doorway after the talk. Raise toward 125 if still too far up; lower for further. TUNE.
+18630 RETURN 'PASS2-RECON: end of joe-walk subroutine (GOSUB'd from 17570) - return to caller after Joe finishes walking
+18640 ERASE R28
+18650 ERASE R46
+18660 ERASE R64
+18670 END SUB
+
