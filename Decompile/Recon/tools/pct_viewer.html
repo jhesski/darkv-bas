@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dark Visions .PCT Sprite Viewer</title>
+<style>
+  :root { color-scheme: dark; }
+  body { font-family: system-ui, sans-serif; margin: 0; background:#15171c; color:#e6e6e6; }
+  header { padding:16px 24px; background:#1d2027; border-bottom:1px solid #2c3038; position:sticky; top:0; z-index:10;}
+  h1 { font-size:18px; margin:0 0 4px; }
+  .sub { font-size:13px; color:#9aa0aa; }
+  .controls { display:flex; flex-wrap:wrap; gap:18px; align-items:center; padding:14px 24px; background:#191c22; border-bottom:1px solid #2c3038; }
+  .controls label { font-size:13px; display:flex; align-items:center; gap:6px; }
+  #drop { margin:20px 24px; border:2px dashed #3a4150; border-radius:10px; padding:26px; text-align:center; color:#9aa0aa; }
+  #drop.hover { border-color:#6ea8fe; color:#cfe0ff; background:#1b2230; }
+  #out { padding:0 24px 60px; }
+  .file { margin:22px 0; }
+  .file h2 { font-size:15px; margin:0 0 2px; color:#fff; }
+  .file .meta { font-size:12px; color:#9aa0aa; margin-bottom:10px; font-family:ui-monospace,monospace; }
+  .frames { display:flex; flex-wrap:wrap; gap:18px; }
+  .frame { background:#1d2027; border:1px solid #2c3038; border-radius:8px; padding:10px; }
+  .frame .cap { font-size:12px; color:#9aa0aa; margin-top:6px; font-family:ui-monospace,monospace; text-align:center;}
+  canvas { image-rendering: pixelated; display:block; background:#000; border-radius:3px; }
+  .err { color:#ff8a8a; font-size:12px; }
+  input[type=range]{ width:120px; }
+  select, input[type=number]{ background:#23262e; color:#e6e6e6; border:1px solid #3a4150; border-radius:5px; padding:3px 6px; }
+  button { background:#2b6cf0; color:#fff; border:0; border-radius:6px; padding:6px 12px; cursor:pointer; }
+  code { background:#23262e; padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Dark Visions &mdash; .PCT Sprite Viewer</h1>
+  <div class="sub">Decodes QB4.5 SCREEN&nbsp;1 GET-array dumps. Pick the <code>.PCT</code> files from your <code>org\</code> folder (you can select many at once).</div>
+</header>
+
+<div class="controls">
+  <label><input type="file" id="picker" multiple accept=".pct,.PCT"></label>
+  <label>Palette:
+    <select id="pal">
+      <option value="gbb" selected>Dark Gray / Blue / Brown (CGA 8/1/6)</option>
+      <option value="1">CGA 1 (cyan / magenta / white)</option>
+      <option value="0">CGA 0 (green / red / brown)</option>
+      <option value="hi1">CGA 1 hi (bright)</option>
+      <option value="gray">Grayscale</option>
+    </select>
+  </label>
+  <label>Layout:
+    <select id="layout">
+      <option value="auto">Auto-detect</option>
+      <option value="columns">Columns = frames (JOEW)</option>
+      <option value="linear">Linear = 1 sprite (JOES)</option>
+    </select>
+  </label>
+  <label>Zoom: <input type="range" id="scale" min="1" max="16" value="6"><span id="scaleVal">6&times;</span></label>
+  <label><input type="checkbox" id="trans" checked> color 0 = transparent (checkerboard)</label>
+  <label>Width fix: <input type="number" id="wfix" value="0" min="-8" max="8" style="width:54px"> px</label>
+  <button id="reload">Re-render</button>
+</div>
+
+<div id="drop">&hellip; or drag &amp; drop .PCT files here &hellip;</div>
+<div id="out"></div>
+
+<script>
+const PALETTES = {
+  'gbb': ['#000000','#555555','#0000aa','#aa5500'],  // dark-gray / blue / brown (CGA 8 / 1 / 6) - default
+  '1':   ['#000000','#55ffff','#ff55ff','#ffffff'],
+  '0':   ['#000000','#00aa00','#aa0000','#aa5500'],
+  'hi1': ['#000000','#55ffff','#ff55ff','#ffffff'],
+  'gray':['#000000','#666666','#aaaaaa','#ffffff'],
+};
+
+let loaded = []; // {name, text}
+
+function parseColumns(text){
+  // Each line = one CSV row; column j accumulates value j across rows.
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l.length);
+  let cols = [];
+  for(const line of lines){
+    const parts = line.split(',').map(s=>s.trim()).filter(s=>s.length);
+    for(let j=0;j<parts.length;j++){
+      const v = parseInt(parts[j],10);
+      if(Number.isNaN(v)) continue;
+      (cols[j] ||= []).push(v);
+    }
+  }
+  return cols; // array of columns; each column = array of ints (the GET array)
+}
+
+function decodeSprite(ints, wfix){
+  // QB SCREEN 1 GET array: ints[0]=width*bitsPerPixel(=*2), ints[1]=height, then packed 2bpp rows.
+  if(ints.length < 3) throw new Error('too few values ('+ints.length+')');
+  const w2 = ints[0], h = ints[1];
+  let width = Math.round(w2/2) + (wfix|0);
+  const height = h;
+  if(width<=0 || height<=0 || width>320 || height>200)
+    throw new Error('implausible header: el0='+w2+' el1='+h+' -> '+width+'x'+height);
+  // ints[2..] -> little-endian bytes
+  const data = ints.slice(2);
+  const bytes = new Uint8Array(data.length*2);
+  for(let i=0;i<data.length;i++){
+    const u = ((data[i] % 65536) + 65536) % 65536;
+    bytes[i*2]   = u & 0xff;
+    bytes[i*2+1] = (u>>8) & 0xff;
+  }
+  const bytesPerRow = Math.ceil(width*2/8);
+  const px = new Uint8Array(width*height);
+  for(let y=0;y<height;y++){
+    for(let x=0;x<width;x++){
+      const bi = y*bytesPerRow + (x>>2);
+      const b = bytes[bi] || 0;
+      const shift = (3-(x&3))*2;       // leftmost pixel = high bits
+      px[y*width+x] = (b>>shift) & 3;
+    }
+  }
+  return {width, height, px, w2, h, ints: data.length+2, bytesPerRow};
+}
+
+function drawSprite(sp, scale, pal, transparent){
+  const cv = document.createElement('canvas');
+  cv.width = sp.width*scale; cv.height = sp.height*scale;
+  const ctx = cv.getContext('2d');
+  for(let y=0;y<sp.height;y++){
+    for(let x=0;x<sp.width;x++){
+      const v = sp.px[y*sp.width+x];
+      if(v===0 && transparent){
+        // checkerboard
+        ctx.fillStyle = ((x+y)&1) ? '#202020' : '#2c2c2c';
+      } else {
+        ctx.fillStyle = pal[v];
+      }
+      ctx.fillRect(x*scale,y*scale,scale,scale);
+    }
+  }
+  return cv;
+}
+
+function flatten(text){
+  const vals = [];
+  for(const line of text.split(/\r?\n/))
+    for(const s of line.split(',')){ const t=s.trim(); if(!t) continue; const v=parseInt(t,10); if(!Number.isNaN(v)) vals.push(v); }
+  return vals;
+}
+
+// JOEW stores 1 frame per column; JOES stores 1 sprite row-major. Decide which.
+function decideFrames(text, layout, wfix){
+  const cols = parseColumns(text);
+  if(layout==='columns') return cols;
+  if(layout==='linear')  return [flatten(text)];
+  try{ decodeSprite(cols[0]||[], wfix); return cols; }   // auto: col0 sane -> frames
+  catch(e){ return [flatten(text)]; }                    // else -> one row-major sprite
+}
+
+function render(){
+  const out = document.getElementById('out');
+  out.innerHTML='';
+  const scale = +document.getElementById('scale').value;
+  const pal = PALETTES[document.getElementById('pal').value];
+  const transparent = document.getElementById('trans').checked;
+  const wfix = +document.getElementById('wfix').value;
+  const layout = document.getElementById('layout').value;
+  document.getElementById('scaleVal').innerHTML = scale+'&times;';
+
+  if(!loaded.length){ out.innerHTML='<p class="sub" style="margin:20px 0">No files loaded yet.</p>'; return; }
+
+  for(const f of loaded){
+    const cols = decideFrames(f.text, layout, wfix);
+    const div = document.createElement('div'); div.className='file';
+    const lens = cols.map(c=>c.length);
+    div.innerHTML = `<h2>${f.name}</h2>
+      <div class="meta">${cols.length} column(s) / frame(s) &middot; ${lens.join(', ')} values each &middot; first ints: [${(cols[0]||[]).slice(0,6).join(', ')} ...]</div>`;
+    const frames = document.createElement('div'); frames.className='frames';
+    cols.forEach((col,idx)=>{
+      const cell = document.createElement('div'); cell.className='frame';
+      try{
+        const sp = decodeSprite(col, wfix);
+        cell.appendChild(drawSprite(sp, scale, pal, transparent));
+        const cap = document.createElement('div'); cap.className='cap';
+        cap.innerHTML = `frame ${idx} &middot; ${sp.width}&times;${sp.height}<br>(hdr ${sp.w2},${sp.h})`;
+        cell.appendChild(cap);
+      }catch(e){
+        cell.innerHTML = `<div class="err">frame ${idx}: ${e.message}</div>`;
+      }
+      frames.appendChild(cell);
+    });
+    div.appendChild(frames);
+    out.appendChild(div);
+  }
+}
+
+function addFiles(fileList){
+  const arr = [...fileList];
+  let pending = arr.length;
+  if(!pending) return;
+  arr.forEach(file=>{
+    const r = new FileReader();
+    r.onload = ()=>{
+      // replace if same name already loaded
+      loaded = loaded.filter(x=>x.name!==file.name);
+      loaded.push({name:file.name, text:r.result});
+      loaded.sort((a,b)=>a.name.localeCompare(b.name));
+      if(--pending===0) render();
+    };
+    r.readAsText(file);
+  });
+}
+
+document.getElementById('picker').addEventListener('change', e=>addFiles(e.target.files));
+['scale','pal','trans','wfix','layout'].forEach(id=>document.getElementById(id).addEventListener('input', render));
+document.getElementById('reload').addEventListener('click', render);
+
+const drop = document.getElementById('drop');
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('hover');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('hover');}));
+drop.addEventListener('drop', e=>addFiles(e.dataTransfer.files));
+window.addEventListener('dragover', e=>e.preventDefault());
+window.addEventListener('drop', e=>e.preventDefault());
+
+render();
+</script>
+</body>
+</html>

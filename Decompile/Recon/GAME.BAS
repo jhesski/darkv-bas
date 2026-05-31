@@ -13,8 +13,8 @@ COMMON SHARED L312(), I313, L314(), L315$(), I316(), I317, I318(), L319(), L320,
 COMMON SHARED L323$(), L325$, I327, L336, L338, L339$(), I340, L341, L343, L348$, L355
 COMMON SHARED L357$, I358, I359, L364, L367, L370, L371, I375, I376, I377, L384
 COMMON SHARED I386(), L387(), L388(), L389(), L390(), L391(), L392(), L393(), L394(), L395()
-COMMON SHARED L406$, L407, I408, L411, I431(), L432(), L433(), L434(), L435(), L436()
-COMMON SHARED L437(), L438(), L439, I440, L441, I442, L444, L445, L448$, I449, I451
+COMMON SHARED L406$, L407, I408, L411
+COMMON SHARED L439, I440, L441, I442, L444, L445, L448$, I449, I451
 COMMON SHARED L452, L453, L466, L467, L468, I471, L476$(), I477, L478, L482$, I566
 COMMON SHARED I567, I574, L579, L586, L587, L612, L613, L614, L615, L616, L617
 COMMON SHARED L623, L628, L629, L630, L631, L632, L633, L634
@@ -68,14 +68,14 @@ DIM L394(50)
 DIM L395(50)
 DIM SHARED I404(150) AS INTEGER 'PASS2-RECON: moved out of COMMON SHARED (lines 15-16) so it can be typed here. MUST be INTEGER - it's a GET/PUT sprite buffer loaded via INPUT (walk frame A, wilb/golf death). Without AS INTEGER it defaults to SINGLE, so INPUT stores 4-byte floats and PUT misreads the packed-sprite header -> ERR 5 (the in-room walk crash at 8740). The intro's R46/R64 are AS INTEGER for exactly this reason.
 DIM SHARED L405(300) AS INTEGER 'PASS2-RECON: moved out of COMMON SHARED. Integer sprite buffer (walk frame B / death). Same reason as I404.
-DIM I431(150)
-DIM L432(300)
-DIM L433(300)
-DIM L434(300)
-DIM L435(300)
-DIM L436(300)
-DIM L437(300)
-DIM L438(300)
+DIM SHARED I431(150) AS INTEGER 'PASS2-RECON: the 8 joed.pct facing sprites - I431=down, L432=up, L433=right, L434=left, L435=dn-left, L436=dn-right, L437=up-left, L438=up-right. MUST be INTEGER for PUT in 9230 (same rule as the walk arrays). Moved out of COMMON SHARED to type here. (JS band-aid removed - facing now uses the real 9230/joed.)
+DIM SHARED L432(300) AS INTEGER
+DIM SHARED L433(300) AS INTEGER
+DIM SHARED L434(300) AS INTEGER
+DIM SHARED L435(300) AS INTEGER
+DIM SHARED L436(300) AS INTEGER
+DIM SHARED L437(300) AS INTEGER
+DIM SHARED L438(300) AS INTEGER
 DIM L476$(50)
 
 ' PASS2-RECON: SOUND-frequency var inits (DATA blocks lost). Values from symbol-table addresses.
@@ -90,7 +90,7 @@ L281 = 700
 ' L145/L149/L150 = hour thresholds (8->9 at 59, 9->10 at 119, 10->11 at 179). These defaulted to 0, forcing every readout to "11".
 ' (Earlier these were wrongly guessed as sound vars: L143=60, L144=60.)
 L144 = 0
-L143 = .01
+L143 = 1 / 60 'PASS2-RECON: NAILED from two original saves - L144=76 -> 8:01 (76/60=1.267->INT 1) and L144=456 (12 moves) -> 8:07 (456/60=7.6->INT 7). So L143 = 1/60: L144 is a SECONDS counter (+8/action at 6090, +30/move-load at 7020) and clock = INT(L144/60) minutes past 8:00 (8 sec/action, 30 sec/move). Earlier guesses .01 and .0133 were both too slow.
 L145 = 59
 L149 = 119
 L150 = 179
@@ -753,22 +753,22 @@ REM error 17 (2 )
 6510 IF RIGHT$(L323$(I14), 1) <> "s" THEN GOTO 6560
 6520 I327 = I14
 6530 L22$ = "1"
-6540 GOSUB 8130
+6540 WALKMD = 1: GOSUB 8130: WALKMD = 0 'PASS2-RECON: walk-OUT south. WALKMD=1 -> 8240 WALKS (L22$=1=down, set at 6530). Without it, 8240 fell to the standing code which reset L22$ to "2" -> my old 6805 then always walked UP.
 6550 I14 = I327
 6560 IF RIGHT$(L323$(I14), 1) <> "n" THEN GOTO 6610
 6570 I327 = I14
 6580 L22$ = "2"
-6590 GOSUB 8130
+6590 WALKMD = 1: GOSUB 8130: WALKMD = 0 'PASS2-RECON: walk-OUT north (L22$=2=up).
 6600 I14 = I327
 6610 IF RIGHT$(L323$(I14), 1) <> "e" THEN GOTO 6660
 6620 I327 = I14
 6630 L22$ = "3"
-6640 GOSUB 8130
+6640 WALKMD = 1: GOSUB 8130: WALKMD = 0 'PASS2-RECON: walk-OUT east (L22$=3=right).
 6650 I14 = I327
 6660 IF RIGHT$(L323$(I14), 1) <> "w" THEN GOTO 6710
 6670 I327 = I14
 6680 L22$ = "4"
-6690 GOSUB 8130
+6690 WALKMD = 1: GOSUB 8130: WALKMD = 0 'PASS2-RECON: walk-OUT west (L22$=4=left).
 6700 I14 = I327
 6710 IF LEFT$(L323$(I14), 1) <> "f" THEN GOTO 6740
 6720 L22$ = RIGHT$(L323$(I14), 1)
@@ -779,7 +779,7 @@ REM error 17 (2 )
 6770 GOSUB 5520
 6780 IF L339$(I14) <> "" THEN GOTO 6800
 6790 RETURN 'PASS2-RECON: object processed (look/get/use) but it has no room-transition (L339$ empty), so exit the action routine here. Without this, flow falls into the transition code and tries to load room "".
-6800 FOR I340 = 1 TO 500
+6800 FOR I340 = 1 TO 500 'PASS2-RECON: restored the original brief pause. The walk-OUT is the original GOSUB 8130 at 6540/6590/6640/6690 (now WALKMD=1) - the exit's "wX" suffix (ws/wn/we/ww) already set the correct direction in L22$. My earlier 6805 walk-out used a clobbered L22$ (always up) and is removed; I14 is preserved by the existing I327 save/restore in the s/n/e/w block.
 6810 NEXT
 6820 GOSUB 5280
 6830 IF L339$(I14) <> "dial" THEN GOTO 6860
@@ -803,7 +803,7 @@ REM error 17 (2 )
 7010 L325$ = "z"
 7020 L144 = L144 + 30
 7030 GOSUB 9230
-7040
+7040 RETURN 'PASS2-RECON: lost RETURN (Spring left 7040 blank). Move actions (GOSUB 6060 at 7700) run this post-room-load block; with no RETURN they fell straight into the main loop at 7050, abandoning the GOSUB and SKIPPING the timed-death check (7710 GOSUB 10820) AND win check (7720). That's why down+left reached room2 at 8:01 but the golf death never fired. Non-move verbs already RETURN at 6790. Also plugs a slow GOSUB-stack leak.
 7050 PUT (I24, I25), L33, XOR
 7060 L299 = (TIMER - L0) + L299
 7070 L0 = TIMER
@@ -903,7 +903,7 @@ REM error 17 (2 )
 8040 DEF SEG = -18432
 8045 BLOAD L36$ + ".pic", 0 'PASS2-RECON: Spring lost ALL BLOAD statements - load room image into video memory at &HB800
 8050 KEY OFF 'PASS2-RECON: was KEY ON which displays F-key labels at row 25
-8055 GET (1, 8)-(9, 18), L278: GET (1, 8)-(9, 18), L403 'PASS2-RECON: capture a valid 9x11 sprite from the just-BLOADed room image into the death-animation buffers (same region/arrays the Joe-walk uses at 8360/8370). That routine (8240) is gated off for normal rooms (8245), so without this L278/L403 stay zero and the timed golf/wilb death (10140/9910) crashes ERR 5 on PUT (135,135),L278. Placeholder content until the lost joewN.pic Joe-sprite BLOAD is recovered (Phase 3, with the in-room walk animation).
+8055 GET (1, 8)-(9, 18), L278: GET (1, 8)-(9, 18), L403 'PASS2-RECON: init L278/L403 so a PUT never hits a zero array. The wilb/golf deaths now load+draw their OWN sprites (I404/L405, fixed at 9960/10210+), so this no longer feeds them - it only backstops the inventory PUT at 5200 and the cutscene PUT at 14550, both of which still reference L278 (likely separate disconnects to chase later). Without some init, those PUTs throw ERR 5.
 8060 DEF SEG 'PASS2-RECON: was Print 0 - likely DEF SEG reset after video-memory BLOAD
 8061 IF L36$ <> "title" THEN GOTO 8130 'PASS2-RECON: gate music to title scene only (Spring dropped conditional)
 8070 PLAY "<d5f5g+5A+5d5f5G+5A+5e5g5a+5b5a5>c+5d5c+5"
@@ -924,9 +924,10 @@ REM error 17 (2 )
 8220 NEXT
 8230 SYSTEM
 8240 CLOSE
-8245 IF L36$ = "title" OR L36$ = "death" OR L36$ = "dindead" THEN RETURN 'PASS2-RECON: run the in-room Joe-walk for normal rooms (Joe walks in on entry); skip it for the title screen and the death cutscenes, which have their own animations. Flipped from the earlier "skip normal rooms" stub now that the walk sprites are reconstructed (joewN.pct -> I404/L405, PUT those).
-8250 REM PASS2-RECON: removed PALETTE 2,1 - the walk now uses the room's own palette (set at 8010-8030), matching the intro walk (18310) which has no palette change yet renders Joe correctly. Keeping it recolored the room and was never restored after the walk.
-8260 REM PASS2-RECON: removed PALETTE 1,8 (see 8250).
+8245 IF L36$ = "title" OR L36$ = "death" OR L36$ = "dindead" THEN RETURN 'PASS2-RECON: cutscenes animate themselves.
+8246 IF WALKMD = 1 THEN GOTO 8265 'PASS2-RECON: move action -> load joewN and animate the walk-out (8265+). Else (room load) just RETURN below - do NOT draw Joe here.
+8248 RETURN 'PASS2-RECON: room load -> return WITHOUT drawing. The original draws the standing facing in the CALLER from L22$: line 510 (first room, L22$="2"=down) and 7030 (after each move). KEY: the walk-out leaves L22$ = the walk code 1-4, and the original reuses it AS a numpad facing -> 1->down-left, 2->down, 3->down-right, 4->left (matches the real game). My earlier draw here set L22$="2", clobbering the walk code so every room wrongly faced down.
+8250 RETURN
 8265 L36$ = "joew2" 'PASS2-RECON: default joe sprite filename
 8270 IF L22$ <> "1" THEN GOTO 8290
 8280 L36$ = "joew1"
@@ -1026,53 +1027,53 @@ REM error 17 (2 )
 9210 IF I14 >= 90 THEN GOTO 9070
 9220 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 9220 and next line 9230 is a GOSUB'd subroutine, so 9220 is a routine-end RETURN.
 9230 IF L275$ <> "4" THEN GOTO 9250
-9240 PUT (140, 130), L415, XOR
+9240 PUT (140, 130), L434, XOR
 9250 IF L275$ <> "2" THEN GOTO 9270
-9260 PUT (140, 130), L417, XOR
+9260 PUT (140, 130), I431, XOR
 9270 IF L275$ <> "6" THEN GOTO 9290
-9280 PUT (140, 130), L419, XOR
+9280 PUT (140, 130), L433, XOR
 9290 IF L275$ <> "8" THEN GOTO 9310
-9300 PUT (140, 130), L421, XOR
+9300 PUT (140, 130), L432, XOR
 9310 IF L275$ <> "1" THEN GOTO 9330
-9320 PUT (140, 130), L423, XOR
+9320 PUT (140, 130), L435, XOR
 9330 IF L275$ <> "7" THEN GOTO 9350
-9340 PUT (140, 130), L425, XOR
+9340 PUT (140, 130), L437, XOR
 9350 IF L275$ <> "9" THEN GOTO 9370
-9360 PUT (140, 130), L427, XOR
+9360 PUT (140, 130), L438, XOR
 9370 IF L275$ <> "3" THEN GOTO 9390
-9380 PUT (140, 130), L429, XOR
+9380 PUT (140, 130), L436, XOR
 9390 IF L22$ <> "4" THEN GOTO 9410
-9400 PUT (140, 130), L415, XOR
+9400 PUT (140, 130), L434, XOR
 9410 IF L22$ <> "2" THEN GOTO 9430
-9420 PUT (140, 130), L417, XOR
+9420 PUT (140, 130), I431, XOR
 9430 IF L22$ <> "6" THEN GOTO 9450
-9440 PUT (140, 130), L419, XOR
+9440 PUT (140, 130), L433, XOR
 9450 IF L22$ <> "8" THEN GOTO 9470
-9460 PUT (140, 130), L421, XOR
+9460 PUT (140, 130), L432, XOR
 9470 IF L22$ <> "1" THEN GOTO 9490
-9480 PUT (140, 130), L423, XOR
+9480 PUT (140, 130), L435, XOR
 9490 IF L22$ <> "7" THEN GOTO 9510
-9500 PUT (140, 130), L425, XOR
+9500 PUT (140, 130), L437, XOR
 9510 IF L22$ <> "9" THEN GOTO 9530
-9520 PUT (140, 130), L427, XOR
+9520 PUT (140, 130), L438, XOR
 9530 IF L22$ <> "3" THEN GOTO 9550
-9540 PUT (140, 130), L429, XOR
+9540 PUT (140, 130), L436, XOR
 9550 L275$ = L22$
 9560 RETURN 'PASS2-RECON: end of cursor display routine (GOSUB 9230 from many callers). Without RETURN, execution falls through into the 9570 intro routine which eventually GoTo 6880 = infinite song loop.
-9570 GET (1, 1)-(3, 18), L421
-9580 GET (1, 1)-(3, 18), L423
-9590 GET (1, 1)-(3, 18), L417
-9600 GET (1, 1)-(3, 18), L429
-9610 GET (1, 1)-(3, 18), L419
-9620 GET (1, 1)-(3, 18), L425
-9630 GET (1, 1)-(3, 18), L415
-9640 GET (1, 1)-(3, 18), L427
+9570 REM PASS2-RECON: removed 8 bogus GET (1,1)-(3,18) into L415-L429 (all grabbed the same blank corner - decompiler artifact). The real facing art loads from joed.pct into I431/L432-L438 (9660+), which 9230 now PUTs. 9570 stays as the GOSUB target (from line 340).
+9580 REM PASS2-RECON: bogus GET removed
+9590 REM PASS2-RECON: bogus GET removed
+9600 REM PASS2-RECON: bogus GET removed
+9610 REM PASS2-RECON: bogus GET removed
+9620 REM PASS2-RECON: bogus GET removed
+9630 REM PASS2-RECON: bogus GET removed
+9640 REM PASS2-RECON: bogus GET removed
 9650 CLOSE
 9660 OPEN "joed.pct" FOR INPUT AS #1
 9670 FOR I14 = 0 TO 125
 9675   IF EOF(1) THEN GOTO 9710 'PASS2-RECON: joed EOF
-9680   IR12 = (I14 * 2)
-9690   INPUT #1, I431(I14), L432(IR12), L433(IR12), L434(IR12), L435(IR12), L436(IR12), L437(IR12), L438(IR12)
+9680   REM PASS2-RECON: IR12 stride removed (contiguous load of the 8 facing sprites)
+9690   INPUT #1, I431(I14), L432(I14), L433(I14), L434(I14), L435(I14), L436(I14), L437(I14), L438(I14)
 9700 NEXT
 9710
 9720 I440 = L439 - I24
@@ -1100,8 +1101,8 @@ REM error 17 (2 )
 9935   IF EOF(1) THEN GOTO 9960 'PASS2-RECON: wilb EOF
 9940   INPUT #1, I404(I14)
 9950 NEXT
-9955 GET (0, 0)-(7, 7), L278 'PASS2-RECON: placeholder sprite header
-9960 PUT (110, 128), L278, XOR
+9955 REM PASS2-RECON: removed bogus GET (0,0)-(7,7),L278 placeholder. wilb.pct loads as one linear 31x31 frame into I404 above; PUT it directly (same load/draw reconnection as the walk).
+9960 PUT (110, 128), I404, XOR 'PASS2-RECON: draw the loaded Wilbur sprite (I404 from wilb.pct); was the L278 placeholder blob.
 9970 L137 = TIMER
 9980 FOR I14 = 1 TO 4
 9990   IF (TIMER - L137) <= XYZ THEN GOTO 10020
@@ -1118,31 +1119,31 @@ REM error 17 (2 )
 10100 L274$ = "y"
 10110 I14 = 0
 10120 L339$(I14) = "death"
-10130 RETURN 'PASS2-RECON: was GoTo 6880 (forced death cutscene). Original was likely RETURN so main flow continues to capture L33 cursor sprite and reach the main game loop at 7050.
+10130 GOTO 6880 'PASS2-RECON: REVERTED to the original GOTO 6880 (I had wrongly changed it to RETURN during the intro-beep fix). Exactly like the golf death's 10500 GOTO 6880, the wilb death must jump to the room-transition (6880 -> 6890) to load the "death" room after drawing Wilbur + sounds. With RETURN it drew Wilbur and set L339$="death" but never loaded the kill screen - so you saw Wilbur but didn't die. The intro no longer falls into 9910 (that's gated by 9900 RETURN), so this GOTO only ever fires from the timed-event deaths.
 10140 CLOSE
 10150 OPEN "golf.pct" FOR INPUT AS #1
 10160 FOR I14 = 0 TO 125
 10165   IF EOF(1) THEN GOTO 10200 'PASS2-RECON: golf EOF
-10170   IR12 = (I14 * 2)
-10180   INPUT #1, I404(I14), L405(IR12)
+10170   REM PASS2-RECON: IR12=(I14*2) stride removed (contiguous load of golf.pct's 2 frames)
+10180   INPUT #1, I404(I14), L405(I14) 'PASS2-RECON: golf.pct col0=frame A -> I404, col1=frame B -> L405 (de-strided; was L405(I14*2), the same Spring stride bug as the walk).
 10190 NEXT
-10200 GOTO 10340 '????
-10210 PUT (135, I14), L278, XOR
+10200 I14 = 150 'PASS2-RECON: reconstructed the loop-init Spring lost (it left '????). The swing loop (10210-10350) decrements I14 by 4/cycle while I14>=135, so it needs a start Y>135; otherwise I14=126 (from the FOR above) and the ENTIRE swing is skipped - which is why the timed death only ever reached the final PUT at 10360. 150 = the play-area floor (the walk's max Y at 8570). The exact start was a lost immediate - VERIFY against the original golf death and I'll tune it.
+10210 PUT (135, I14), I404, XOR 'PASS2-RECON: golf frame A (I404); was L278 placeholder.
 10220 SOUND L95, .1
 10230 FOR I408 = 1 TO 2
 10240   SOUND 32676, 1.2
 10250 NEXT
-10260 PUT (135, I14), L278, XOR
+10260 PUT (135, I14), I404, XOR 'PASS2-RECON: erase frame A (I404).
 10270 I14 = I14 - 2
-10280 PUT (135, I14), L403, XOR
+10280 PUT (135, I14), L405, XOR 'PASS2-RECON: golf frame B (L405); was L403 placeholder.
 10290 SOUND L95, .1
 10300 FOR I408 = 1 TO 2
 10310   SOUND 32676, 1.2
 10320 NEXT
-10330 PUT (135, I14), L403, XOR
+10330 PUT (135, I14), L405, XOR 'PASS2-RECON: erase frame B (L405).
 10340 I14 = I14 + -2
 10350 IF I14 >= 135 THEN GOTO 10210
-10360 PUT (135, 135), L278, XOR
+10360 PUT (135, 135), I404, XOR 'PASS2-RECON: final golf frame (I404) at rest; was L278 placeholder.
 10370 IF L448$ <> "y" THEN GOTO 10400
 10380 L448$ = ""
 10390
@@ -1656,14 +1657,14 @@ REM error 41 ()
 15420 GOTO 15440
 15430 GOTO 15510
 15440 PLAY "<<<g-2g8a+8f+8e8d-3e4f+5f+5e-5e3>d2>>"
-15450
+15450 RETURN 'PASS2-RECON: lost RETURN (Spring left 15450 blank). The death-music routine (15320, GOSUB'd from 14590) picks ONE of 4 random tunes (L579) and jumps to it; each tune must RETURN so the death screen continues to the timer/INKEY$ wait + inventory at 14600+. Without it the chosen tune fell through into the other tunes and then into 15530 -> 16750 -> 18680 END: it played everything and quit.
 15460 PLAY "<<<d+8e-8<a8g8f3b8g8f+8e3"
 15470 PLAY "  g-2g8a8f+8e8d-3e4f+5c8c8c3>>>"
-15480
+15480 RETURN 'PASS2-RECON: lost RETURN - end of death tune 2 (15460/15470).
 15490 PLAY "<<<c3c3d-5d-5c3c3<b-5a-5>c3c3d-5e-5c3c3>>>"
-15500
+15500 RETURN 'PASS2-RECON: lost RETURN - end of death tune 3.
 15510 PLAY "<g8a8b-8b8<c8g8a8b-8a8a8b8a8>>"
-15520
+15520 RETURN 'PASS2-RECON: lost RETURN - end of death tune 4. This makes 15530 (GOTO 16750 -> 18680 END) dead code: it was only the fall-through quit the music kept hitting.
 15530 GOTO 16750
 16750 GOTO 18680
 18680 END
