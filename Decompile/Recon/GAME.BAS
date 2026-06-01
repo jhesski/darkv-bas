@@ -1,14 +1,16 @@
 DECLARE SUB S16760 ()
 DECLARE SUB S15540 ()
-COMMON SHARED L0, L10, I14, I15(), L16(), L17(), L18(), L22$, I24, I25, L30
+DECLARE SUB InitVars ()
+' PASS2-RECON: DEFINT I,L,R,X removed - it BACKFIRED on this float-heavy code. The intro's single math (the I107/10 comparisons, animation) needed integer<->single conversions that cost more than the integer savings, pushing the 64KB overflow EARLIER (to ~line 2000). The DIM SHARED ... AS SINGLE declarations below are redundant without DEFINT but harmless. Real headroom comes from the SUB offloads instead.
+COMMON SHARED L10, I14, I15(), L16(), L17(), L18(), L22$, I24, I25, L30
 COMMON SHARED L36$, L39, L81, L87, L88, L95, L105, I107, L109, L110, L111
-COMMON SHARED L112, L113, I114, L134, L137, L138, I139, I140, I141, L142$, L143
+COMMON SHARED L112, L113, I114, L134, I139, I140, I141, L142$
 COMMON SHARED L144, L145, L146, L147, L149, L150, L154, L156, I186, I188, I189
 COMMON SHARED L191, I192(), I193, I195, I197, I199, I201, I203, I205, I207, I209
 COMMON SHARED I211, I213, I215, I217, I219, I221, I223, I225, I228, I230, I232
 COMMON SHARED I234, I236, I238, I239, I241, I243, I245, I247, I250, I252, I255
 COMMON SHARED L261, L263, L265, L270$, I272, L274$, L275$, L276, L279, L280, L281
-COMMON SHARED L282, L284, I286, L287, L294, L299, I300(), L302(), L305, L306, L311()
+COMMON SHARED L282, L284, I286, L287, L294, I300(), L302(), L305, L306, L311()
 COMMON SHARED L312(), I313, L314(), L315$(), I316(), I317, I318(), L319(), L320, L321, L322$()
 COMMON SHARED L323$(), L325$, I327, L336, L338, L339$(), I340, L341, L343, L348$, L355
 COMMON SHARED L357$, I358, I359, L364, L367, L370, L371, I375, I376, I377, L384
@@ -18,6 +20,12 @@ COMMON SHARED L439, I440, L441, I442, L444, L445, L448$, I449, I451
 COMMON SHARED L452, L453, L466, L467, L468, I471, L476$(), I477, L478, L482$, I566
 COMMON SHARED I567, I574, L579, L586, L587, L612, L613, L614, L615, L616, L617
 COMMON SHARED L623, L628, L629, L630, L631, L632, L633, L634
+' PASS2-RECON: the 5 fractional vars - kept SINGLE despite DEFINT L (as INTEGER they'd truncate: L143->0 kills the clock, the TIMER vars lose all death/intro pacing). Pulled out of COMMON SHARED above so they can be explicitly typed here.
+DIM SHARED L0 AS SINGLE   'TIMER baseline (140 / 7060 / 7070)
+DIM SHARED L137 AS SINGLE 'TIMER snapshot (death + intro pacing)
+DIM SHARED L138 AS SINGLE 'TIMER snapshot
+DIM SHARED L143 AS SINGLE 'clock rate = 1/60 - as INTEGER it is 0, breaking the whole game clock
+DIM SHARED L299 AS SINGLE 'TIMER play-accumulator (saved in save-games)
 
 ' PASS2-RECON: DIM block for arrays. Spring kept COMMON SHARED but dropped DIM.
 ' Sizes generous; the parallel action arrays (I386..L395) match Dream-Giver's 40-entry pattern.
@@ -79,28 +87,13 @@ DIM SHARED L438(300) AS INTEGER
 DIM L476$(50)
 
 ' PASS2-RECON: SOUND-frequency var inits (DATA blocks lost). Values from symbol-table addresses.
-L87 = 50
-L88 = 500
-L95 = 100
-L113 = 200
-L134 = 1000
-L281 = 700
+CALL InitVars 'PASS2-RECON: these SOUND freqs + the recovered lost-DATA consts moved into SUB InitVars (file end) to keep module-level code under QB's 64KB code-segment limit. Runs once at startup.
 ' PASS2-RECON: TIME variables (Spring lost their DATA init). Game clock = L144*L143 minutes past 8:00.
 ' L144 = time counter (starts 0 = 8:00, +8 per action, overwritten by save load). L143 = minutes-per-unit multiplier.
 ' L145/L149/L150 = hour thresholds (8->9 at 59, 9->10 at 119, 10->11 at 179). These defaulted to 0, forcing every readout to "11".
 ' (Earlier these were wrongly guessed as sound vars: L143=60, L144=60.)
-L144 = 0
-L143 = 1 / 60 'PASS2-RECON: NAILED from two original saves - L144=76 -> 8:01 (76/60=1.267->INT 1) and L144=456 (12 moves) -> 8:07 (456/60=7.6->INT 7). So L143 = 1/60: L144 is a SECONDS counter (+8/action at 6090, +30/move-load at 7020) and clock = INT(L144/60) minutes past 8:00 (8 sec/action, 30 sec/move). Earlier guesses .01 and .0133 were both too slow.
-L145 = 59
-L149 = 119
-L150 = 179
-' PASS2-RECON: timed-event time thresholds (minutes). Lost by Spring -> defaulted to 0, which
-' made room death-windows like (L468,L95)=(0,100) fire the instant the clock left 0 (premature deaths).
-' They form the event-boundary sequence ...47, 59, 65, 74, 88, 100.
-L466 = 65
-L467 = 74
-L468 = 88
-L191 = 71
+' PASS2-RECON: clock counter + hour/death thresholds (L144/L145/L149/L150/L466/L467/L468/L191) moved into SUB InitVars (file end) to free module-level code. L143 dropped entirely: the clock now uses integer division (L144 backslash 60), so the 1/60 single is no longer referenced anywhere.
+' PASS2-RECON: the lost-DATA consts that were here (L279/L280/L632/L355/L439/L441/L287) are now set in SUB InitVars (CALLed above), to keep this module-level block under QB's 64KB code limit.
 ' PASS2-RECON: XYZ was an undefined Spring placeholder (=0) used as a TIMER timeout threshold
 ' (7110/9990/12810/12900/14600). At 0 those timeouts are instant. The intro no longer uses this (9570 returns
 ' at 9900 before the 9910 wait); only in-game death/cutscene pacing depends on it now. A few seconds.
@@ -1613,17 +1606,18 @@ REM error 41 ()
 14990 GOTO 12840
 15000 IF I192((I186 + 1) + (L191 * I188)) <> 19 THEN GOTO 15020
 15010 GOTO 12840
-15020
+15020 RETURN 'PASS2-RECON: lost RETURN. 14940 (inventory use-item dispatch, GOSUB'd from 5020) routes the grid cell under the cursor: 16->15030, 3/21/10/9/19->12840. An empty/unmatched cell fell through HERE into 15030 (the palette + death-music sequence) - so pressing 'a' on an empty inventory slot wrongly ran the death songs + palette change. RETURN = an unusable/empty slot does nothing. (My death-music RETURN fix exposed this: before, 15030's music fell through to END, so it just quit instead.)
 15030 PALETTE 1, 6
 15040 PALETTE 2, 4
 15050 PALETTE 3, 8
+15055 DEF SEG = &HB800: BLOAD "map1.pic", 0: DEF SEG 'PASS2-RECON: load the map image (Spring lost this BLOAD - that's why nothing showed). Same pattern as the intro scenes at 16915. Palette set above (15030-15050) is the map's color scheme.
 15060 KEY OFF
 15070 L22$ = INKEY$
 15080 IF L22$ <> "" THEN GOTO 15100
 15090 GOTO 15070
 15100 L270$ = "y"
 15110 PALETTE 3, 6
-15120
+15120 RETURN 'PASS2-RECON: lost RETURN. The map page (15030+, reached as item 16 in the use-item dispatch GOSUB'd from 5020) sets the palette, BLOADs map1.pic, waits for a key, then must RETURN to the inventory. Blank here meant it fell into the infinite palette-flash loop at 15130 (15300 resets I14, so it never exits without a keypress) - that's the flicker, and why breaking landed on 15200.
 15130 KEY OFF
 15140 FOR I14 = 1 TO 300
 15150   PALETTE 1, 14
@@ -2125,4 +2119,17 @@ REM error 12 (1 )
 18650 ERASE R46
 18660 ERASE R64
 18670 END SUB
+
+SUB InitVars
+' PASS2-RECON: moved out of the module-level init block (was ~lines 82-113) so the main code
+' fits QB's 64KB code-segment limit ("Module level code too large"). All of these are
+' COMMON SHARED, so assigning them here sets the real globals. CALLed once at startup.
+L87 = 50: L88 = 500: L95 = 100: L113 = 200: L134 = 1000: L281 = 700   'SOUND freqs (DATA lost)
+L279 = 300: L280 = 450: L632 = 75   'SOUND freqs recovered by find_lost_constants.ps1
+L355 = 1047   'POKE target ADDRESS (7190 POKE L355,32); was 0 -> corrupting DGROUP offset 0
+L439 = 150: L441 = 156   'Joe X/Y for the facing direction-calc (9720/9730)
+L287 = 100   'PLACEHOLDER freq (5430/5470) - symbol is an address, real freq unrecoverable
+L143 = 1 / 60: L144 = 0: L145 = 59: L149 = 119: L150 = 179   'L143=clock rate 1/60, L144=counter, hour-boundary thresholds
+L466 = 65: L467 = 74: L468 = 88: L191 = 71   'timed-death thresholds + inventory grid stride
+END SUB
 
