@@ -1369,6 +1369,115 @@ REM error 18 ()
 12810 IF (TIMER - L137) >= XYZ THEN GOTO 12830
 12820 GOTO 12800
 12830 RETURN 'PASS2-RECON: lost RETURN. The "insert chemicals into syringe" action (12700) ends with this TIMER delay; blank here fell straight into the journal-note display (12840). RETURN ends the action - and lets 12840-13920 move cleanly into SUB NotesSub for the 64KB module limit.
+12840 KEY OFF
+12850 PALETTE 1, 7
+12860 PALETTE 2, 2
+12870 PALETTE 3, 15
+12880 L137 = TIMER
+12890 L144 = L144 + 40
+12900 IF (TIMER - L137) >= XYZ THEN GOTO 12920
+12910 GOTO 12900
+12920 L270$ = "y"
+12930 CLS
+12940 LOCATE 1, 1
+12950 PALETTE 3, 6
+12960 IF I192((I186 + 1) + (L191 * I188)) <> 21 THEN GOTO 12980
+12970 GOTO 13070
+12980 IF I192((I186 + 1) + (L191 * I188)) <> 3 THEN GOTO 13000
+12990 GOTO 13280
+13000 IF I192((I186 + 1) + (L191 * I188)) <> 10 THEN GOTO 13020
+13010 GOTO 13400
+13020 IF I192((I186 + 1) + (L191 * I188)) <> 9 THEN GOTO 13040
+13030 GOTO 13490
+13040 IF I192((I186 + 1) + (L191 * I188)) <> 19 THEN GOTO 13060
+13050 GOTO 13710
+13060
+13070 PRINT "   The Zombie Syrem        "
+13080 PRINT "MPTP this formula harbors  "
+13090 PRINT "the most dangerous compound"
+13100 PRINT "that will render a victim  "
+13110 PRINT "paralyzed up to days at a  "
+13120 PRINT "time. The conclusive test  "
+13130 PRINT "on human subjects has yielded"
+13140 PRINT "promising results.     "
+13150 PRINT "    The subjects though are"
+13160 PRINT "heightened in strength and "
+13170 PRINT "reflexes making them harder"
+13180 PRINT "to control. We have started"
+13190 PRINT "the use of torture to stop "
+13200 PRINT "this problem. It is almost "
+13210 PRINT "safer to leave them on it  "
+13220 PRINT "permantly so they do not   "
+13230 PRINT "overthrow the doctors.     "
+13240 L22$ = INKEY$
+13250 IF L22$ <> "" THEN GOTO 13270
+13260 GOTO 13240
+13270 RETURN 'PASS2-RECON: lost RETURN. The use-item journal-note routine (12840, reached via the inventory use-dispatch GOSUB'd from 5020) sets the note palette, prints the note matching the item, waits for a key, then must RETURN to the inventory. Blank here meant the MPTP/Zombie note (item 21) fell through into the headboard note (13280) and chained through every note. RETURN = read one note, back to inventory.
+13280 PRINT "The other doctors have become weary"
+13290 PRINT "as the research money is drying up. "
+13300 PRINT "I have taken the liberty to hide the"
+13310 PRINT "rest so they do not get gready and  "
+13320 PRINT "steal it. The money is now boarded up"
+13330 PRINT "in the headboard of my bed not even  "
+13340 PRINT "the servants know about it.Time is the"
+13350 PRINT "barrier to the place of the damned."
+13360 L22$ = INKEY$
+13370 IF L22$ <> "" THEN GOTO 13390
+13380 GOTO 13360
+13390 RETURN 'PASS2-RECON: lost RETURN - the shared note-exit for the item-3/10/9/19 journal notes (each GOTOs the 13360 wait, then keypress comes here). Blank meant the headboard note chained into the next; RETURN goes back to the inventory.
+13400 PRINT "I have concluded another successful"
+13410 PRINT "expirement. This time though the other"
+13420 PRINT "doctors have become gready and want "
+13430 PRINT "possession of the notes. I have given"
+13440 PRINT "them to servants and coded the notes"
+13450 PRINT "the code book is now hidden so the "
+13460 PRINT "other doctors cannot steal my break"
+13470 PRINT "though."
+13480 GOTO 13360
+13490 PRINT "Patient: Naton McDaniel     "
+13500 PRINT "Disorder: Paranoid Schitsofrension"
+13510 PRINT "Notes: Naton is very nervous and "
+13520 PRINT "complains of voices, often talks in"
+13530 PRINT "gibberish."
+13540 PRINT "ID:12443"
+13550 PRINT ""
+13560 PRINT "Patient: Havos Lobos     "
+13570 PRINT "Disorder: Severe Delusions"
+13580 PRINT "Notes: Havos not only see's and"
+13590 PRINT "hears things but they become his"
+13600 PRINT "reality. He is very dangerous"
+13610 PRINT "ID:385938"
+13620 PRINT ""
+13630 PRINT "Patient: Gary Coleman     "
+13640 PRINT "Disorder: Phyocosis dementia"
+13650 PRINT "Notes: Gary has become a leader"
+13660 PRINT "of the other patients. He has"
+13670 PRINT "a fixation with knives and human"
+13680 PRINT "blood and sacrifice. Extremely disturbed"
+13690 PRINT "ID:485970"
+13700 GOTO 13360
+13710 PRINT "3/15"
+13720 PRINT "The patients have become unruly"
+13730 PRINT "I'm afraid they will overpower us"
+13740 PRINT "but the research must go on."
+13750 PRINT "3/17"
+13760 PRINT "The other doctors to have become"
+13770 PRINT "concerned. We all are tired from"
+13780 PRINT "working long hours and are making"
+13790 PRINT "many judmental mistakes"
+13800 PRINT "3/23"
+13810 PRINT "There must be something in the air"
+13820 PRINT "down there it clouds my head. I have"
+13830 PRINT "moved my practice to the attic and to"
+13840 PRINT "conceal have placed a pit of ash in "
+13850 PRINT "front of the passage only openable by "
+13860 PRINT "an electric circuit. I have put the"
+13870 PRINT "MPTP vials in the upper left."
+13880 PRINT "3/29"
+13890 PRINT "Doctor Edwards has been following me"
+13900 PRINT "I'm afraid he is becoming suspicous."
+13910 PRINT "(The rest of the page has been torn out)"
+13920 GOTO 13360
 13930 IF ((I272 = 2) OR (I272 = 1)) = 0 THEN GOTO 13950
 13940
 13950 IR12 = (I300(43) = 1)
@@ -2038,115 +2147,3 @@ FOR I286 = 1 TO 300 STEP 20: SOUND (RND * 300) + 50, .1: NEXT
 SOUND L95, .2: SOUND 32676, 2: SOUND L95, .2: SOUND 32676, 2
 END SUB
 
-
-SUB NotesSub   'PASS2-RECON: journal-note display, was module 12840-13920 (GOTO'd from the use-dispatch). Moved to a SUB for the 64KB module limit; entries became CALL NotesSub:RETURN. Internal GOTOs/line numbers preserved; the two note-exit RETURNs became EXIT SUB.
-12840 KEY OFF
-12850 PALETTE 1, 7
-12860 PALETTE 2, 2
-12870 PALETTE 3, 15
-12880 L137 = TIMER
-12890 L144 = L144 + 40
-12900 IF (TIMER - L137) >= XYZ THEN GOTO 12920
-12910 GOTO 12900
-12920 L270$ = "y"
-12930 CLS
-12940 LOCATE 1, 1
-12950 PALETTE 3, 6
-12960 IF I192((I186 + 1) + (L191 * I188)) <> 21 THEN GOTO 12980
-12970 GOTO 13070
-12980 IF I192((I186 + 1) + (L191 * I188)) <> 3 THEN GOTO 13000
-12990 GOTO 13280
-13000 IF I192((I186 + 1) + (L191 * I188)) <> 10 THEN GOTO 13020
-13010 GOTO 13400
-13020 IF I192((I186 + 1) + (L191 * I188)) <> 9 THEN GOTO 13040
-13030 GOTO 13490
-13040 IF I192((I186 + 1) + (L191 * I188)) <> 19 THEN GOTO 13060
-13050 GOTO 13710
-13060
-13070 PRINT "   The Zombie Syrem        "
-13080 PRINT "MPTP this formula harbors  "
-13090 PRINT "the most dangerous compound"
-13100 PRINT "that will render a victim  "
-13110 PRINT "paralyzed up to days at a  "
-13120 PRINT "time. The conclusive test  "
-13130 PRINT "on human subjects has yielded"
-13140 PRINT "promising results.     "
-13150 PRINT "    The subjects though are"
-13160 PRINT "heightened in strength and "
-13170 PRINT "reflexes making them harder"
-13180 PRINT "to control. We have started"
-13190 PRINT "the use of torture to stop "
-13200 PRINT "this problem. It is almost "
-13210 PRINT "safer to leave them on it  "
-13220 PRINT "permantly so they do not   "
-13230 PRINT "overthrow the doctors.     "
-13240 L22$ = INKEY$
-13250 IF L22$ <> "" THEN GOTO 13270
-13260 GOTO 13240
-13270 EXIT SUB 'PASS2-RECON: lost RETURN. The use-item journal-note routine (12840, reached via the inventory use-dispatch GOSUB'd from 5020) sets the note palette, prints the note matching the item, waits for a key, then must RETURN to the inventory. Blank here meant the MPTP/Zombie note (item 21) fell through into the headboard note (13280) and chained through every note. RETURN = read one note, back to inventory.
-13280 PRINT "The other doctors have become weary"
-13290 PRINT "as the research money is drying up. "
-13300 PRINT "I have taken the liberty to hide the"
-13310 PRINT "rest so they do not get gready and  "
-13320 PRINT "steal it. The money is now boarded up"
-13330 PRINT "in the headboard of my bed not even  "
-13340 PRINT "the servants know about it.Time is the"
-13350 PRINT "barrier to the place of the damned."
-13360 L22$ = INKEY$
-13370 IF L22$ <> "" THEN GOTO 13390
-13380 GOTO 13360
-13390 EXIT SUB 'PASS2-RECON: lost RETURN - the shared note-exit for the item-3/10/9/19 journal notes (each GOTOs the 13360 wait, then keypress comes here). Blank meant the headboard note chained into the next; RETURN goes back to the inventory.
-13400 PRINT "I have concluded another successful"
-13410 PRINT "expirement. This time though the other"
-13420 PRINT "doctors have become gready and want "
-13430 PRINT "possession of the notes. I have given"
-13440 PRINT "them to servants and coded the notes"
-13450 PRINT "the code book is now hidden so the "
-13460 PRINT "other doctors cannot steal my break"
-13470 PRINT "though."
-13480 GOTO 13360
-13490 PRINT "Patient: Naton McDaniel     "
-13500 PRINT "Disorder: Paranoid Schitsofrension"
-13510 PRINT "Notes: Naton is very nervous and "
-13520 PRINT "complains of voices, often talks in"
-13530 PRINT "gibberish."
-13540 PRINT "ID:12443"
-13550 PRINT ""
-13560 PRINT "Patient: Havos Lobos     "
-13570 PRINT "Disorder: Severe Delusions"
-13580 PRINT "Notes: Havos not only see's and"
-13590 PRINT "hears things but they become his"
-13600 PRINT "reality. He is very dangerous"
-13610 PRINT "ID:385938"
-13620 PRINT ""
-13630 PRINT "Patient: Gary Coleman     "
-13640 PRINT "Disorder: Phyocosis dementia"
-13650 PRINT "Notes: Gary has become a leader"
-13660 PRINT "of the other patients. He has"
-13670 PRINT "a fixation with knives and human"
-13680 PRINT "blood and sacrifice. Extremely disturbed"
-13690 PRINT "ID:485970"
-13700 GOTO 13360
-13710 PRINT "3/15"
-13720 PRINT "The patients have become unruly"
-13730 PRINT "I'm afraid they will overpower us"
-13740 PRINT "but the research must go on."
-13750 PRINT "3/17"
-13760 PRINT "The other doctors to have become"
-13770 PRINT "concerned. We all are tired from"
-13780 PRINT "working long hours and are making"
-13790 PRINT "many judmental mistakes"
-13800 PRINT "3/23"
-13810 PRINT "There must be something in the air"
-13820 PRINT "down there it clouds my head. I have"
-13830 PRINT "moved my practice to the attic and to"
-13840 PRINT "conceal have placed a pit of ash in "
-13850 PRINT "front of the passage only openable by "
-13860 PRINT "an electric circuit. I have put the"
-13870 PRINT "MPTP vials in the upper left."
-13880 PRINT "3/29"
-13890 PRINT "Doctor Edwards has been following me"
-13900 PRINT "I'm afraid he is becoming suspicous."
-13910 PRINT "(The rest of the page has been torn out)"
-13920 GOTO 13360
-END SUB
