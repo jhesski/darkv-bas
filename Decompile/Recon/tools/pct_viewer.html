@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Dark Visions .PCT Sprite Viewer</title>
+<title>Dark Visions .PCT / .PIC Viewer</title>
 <style>
   :root { color-scheme: dark; }
   body { font-family: system-ui, sans-serif; margin: 0; background:#15171c; color:#e6e6e6; }
@@ -30,12 +30,13 @@
 </head>
 <body>
 <header>
-  <h1>Dark Visions &mdash; .PCT Sprite Viewer</h1>
-  <div class="sub">Decodes QB4.5 SCREEN&nbsp;1 GET-array dumps. Pick the <code>.PCT</code> files from your <code>org\</code> folder (you can select many at once).</div>
+  <h1>Dark Visions &mdash; .PCT Sprite &amp; .PIC Background Viewer</h1>
+  <div class="sub">Decodes QB4.5 SCREEN&nbsp;1 graphics: <code>.PCT</code> sprite GET-dumps (CSV text) and <code>.PIC</code> room backgrounds (BLOAD binary). Pick files from your <code>org\</code> folder &mdash; mix &amp; match. Backgrounds load as full 320&times;200 screens; try Zoom 2&times;&ndash;3&times; for those.</div>
 </header>
 
 <div class="controls">
-  <label><input type="file" id="picker" multiple accept=".pct,.PCT"></label>
+  <label><input type="file" id="picker" multiple accept=".pct,.PCT,.pic,.PIC"></label>
+  <label style="font-size:13px;color:#9aa0aa">&hellip;or a whole <b style="color:#cfe0ff">folder</b>: <input type="file" id="folder" webkitdirectory></label>
   <label>Palette:
     <select id="pal">
       <option value="gbb" selected>Dark Gray / Blue / Brown (CGA 8/1/6)</option>
@@ -58,7 +59,7 @@
   <button id="reload">Re-render</button>
 </div>
 
-<div id="drop">&hellip; or drag &amp; drop .PCT files here &hellip;</div>
+<div id="drop">&hellip; or drag &amp; drop .PCT / .PIC files here &hellip;</div>
 <div id="out"></div>
 
 <script>
@@ -116,22 +117,44 @@ function decodeSprite(ints, wfix){
   return {width, height, px, w2, h, ints: data.length+2, bytesPerRow};
 }
 
-function drawSprite(sp, scale, pal, transparent){
-  const cv = document.createElement('canvas');
-  cv.width = sp.width*scale; cv.height = sp.height*scale;
-  const ctx = cv.getContext('2d');
-  for(let y=0;y<sp.height;y++){
-    for(let x=0;x<sp.width;x++){
-      const v = sp.px[y*sp.width+x];
-      if(v===0 && transparent){
-        // checkerboard
-        ctx.fillStyle = ((x+y)&1) ? '#202020' : '#2c2c2c';
-      } else {
-        ctx.fillStyle = pal[v];
-      }
-      ctx.fillRect(x*scale,y*scale,scale,scale);
+function decodePIC(bytes){
+  // QB BSAVE/BLOAD format: 7-byte header (0xFD, seg lo/hi, off lo/hi, len lo/hi), then the raw video dump.
+  let data = bytes;
+  if(bytes[0] === 0xFD) data = bytes.subarray(7);
+  // CGA SCREEN 1: 320x200, 2bpp, INTERLACED - even scanlines @ offset 0x0000, odd @ 0x2000, 80 bytes/row.
+  const W = 320, H = 200;
+  const px = new Uint8Array(W*H);
+  for(let y=0;y<H;y++){
+    const base = (y & 1) * 0x2000 + (y >> 1) * 80;   // odd rows live in the 2nd 8KB bank
+    for(let x=0;x<W;x++){
+      const b = data[base + (x>>2)] || 0;
+      const shift = (3 - (x & 3)) * 2;                // leftmost pixel = high bits
+      px[y*W+x] = (b >> shift) & 3;
     }
   }
+  return {width:W, height:H, px};
+}
+
+function drawSprite(sp, scale, pal, transparent){
+  // native-size canvas + putImageData (fast), then CSS-scale (crisp via image-rendering:pixelated)
+  const cv = document.createElement('canvas');
+  cv.width = sp.width; cv.height = sp.height;
+  const ctx = cv.getContext('2d');
+  const img = ctx.createImageData(sp.width, sp.height);
+  for(let i=0;i<sp.width*sp.height;i++){
+    const v = sp.px[i];
+    let r,g,b;
+    if(v===0 && transparent){
+      const c = (((i%sp.width)+((i/sp.width)|0))&1) ? 0x20 : 0x2c;   // checkerboard
+      r=g=b=c;
+    } else {
+      const h = pal[v];
+      r=parseInt(h.slice(1,3),16); g=parseInt(h.slice(3,5),16); b=parseInt(h.slice(5,7),16);
+    }
+    const j=i*4; img.data[j]=r; img.data[j+1]=g; img.data[j+2]=b; img.data[j+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+  cv.style.width=(sp.width*scale)+'px'; cv.style.height=(sp.height*scale)+'px';
   return cv;
 }
 
@@ -164,8 +187,19 @@ function render(){
   if(!loaded.length){ out.innerHTML='<p class="sub" style="margin:20px 0">No files loaded yet.</p>'; return; }
 
   for(const f of loaded){
-    const cols = decideFrames(f.text, layout, wfix);
     const div = document.createElement('div'); div.className='file';
+    if(f.isPic){
+      try{
+        const sp = decodePIC(f.bytes);
+        div.innerHTML = `<h2>${f.name} <span style="color:#6ea8fe">[.PIC background]</span></h2><div class="meta">SCREEN 1 BLOAD &middot; ${sp.width}&times;${sp.height} &middot; ${f.bytes.length} bytes</div>`;
+        const fr = document.createElement('div'); fr.className='frames';
+        const cell = document.createElement('div'); cell.className='frame';
+        cell.appendChild(drawSprite(sp, scale, pal, false));   // backgrounds: color 0 is solid, not transparent
+        fr.appendChild(cell); div.appendChild(fr);
+      }catch(e){ div.innerHTML = `<h2>${f.name}</h2><div class="err">${e.message}</div>`; }
+      out.appendChild(div); continue;
+    }
+    const cols = decideFrames(f.text, layout, wfix);
     const lens = cols.map(c=>c.length);
     div.innerHTML = `<h2>${f.name}</h2>
       <div class="meta">${cols.length} column(s) / frame(s) &middot; ${lens.join(', ')} values each &middot; first ints: [${(cols[0]||[]).slice(0,6).join(', ')} ...]</div>`;
@@ -189,23 +223,26 @@ function render(){
 }
 
 function addFiles(fileList){
-  const arr = [...fileList];
+  const arr = [...fileList].filter(f=>/\.(pic|pct)$/i.test(f.name));   // folder picker brings everything - keep only graphics
   let pending = arr.length;
   if(!pending) return;
   arr.forEach(file=>{
+    const isPic = /\.pic$/i.test(file.name);
     const r = new FileReader();
     r.onload = ()=>{
       // replace if same name already loaded
       loaded = loaded.filter(x=>x.name!==file.name);
-      loaded.push({name:file.name, text:r.result});
+      if(isPic) loaded.push({name:file.name, bytes:new Uint8Array(r.result), isPic:true});
+      else loaded.push({name:file.name, text:r.result});
       loaded.sort((a,b)=>a.name.localeCompare(b.name));
       if(--pending===0) render();
     };
-    r.readAsText(file);
+    if(isPic) r.readAsArrayBuffer(file); else r.readAsText(file);
   });
 }
 
 document.getElementById('picker').addEventListener('change', e=>addFiles(e.target.files));
+document.getElementById('folder').addEventListener('change', e=>addFiles(e.target.files));
 ['scale','pal','trans','wfix','layout'].forEach(id=>document.getElementById(id).addEventListener('input', render));
 document.getElementById('reload').addEventListener('click', render);
 

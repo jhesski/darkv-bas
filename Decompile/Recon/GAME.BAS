@@ -7,8 +7,9 @@ DECLARE SUB Snd5330 ()
 DECLARE SUB Snd5410 ()
 DECLARE SUB Snd5520 ()
 DECLARE SUB NotesSub ()
+DECLARE SUB DeathMusic ()
 ' PASS2-RECON: DEFINT I,L,R,X removed - it BACKFIRED on this float-heavy code. The intro's single math (the I107/10 comparisons, animation) needed integer<->single conversions that cost more than the integer savings, pushing the 64KB overflow EARLIER (to ~line 2000). The DIM SHARED ... AS SINGLE declarations below are redundant without DEFINT but harmless. Real headroom comes from the SUB offloads instead.
-COMMON SHARED L10, I14, I15(), L16(), L17(), L18(), L22$, I24, I25, L30
+COMMON SHARED L10, I14, L22$, I24, I25, L30 'PASS2-RECON: removed I15()/L16()/L17()/L18() - door.pct GET/PUT sprite frames, moved to DIM SHARED AS INTEGER below. As SINGLE (COMMON default) PUT threw ERR 5 at 10600. Same fix as I404/L405.
 COMMON SHARED L36$, L39, L81, L87, L88, L95, L105, I107, L109, L110, L111
 COMMON SHARED L112, L113, I114, L134, I139, I140, I141, L142$
 COMMON SHARED L144, L145, L146, L147, L149, L150, L154, L156, I186, I188, I189
@@ -53,10 +54,10 @@ DIM SHARED L459(100)
 DIM SHARED L461(100)
 
 ' PASS2-RECON: DIMs for COMMON SHARED arrays missing DIM in original decompile.
-DIM I15(150)
-DIM L16(300)
-DIM L17(300)
-DIM L18(300)
+DIM SHARED I15(150) AS INTEGER 'PASS2-RECON: door.pct frame 1. AS INTEGER for GET/PUT (was SINGLE -> ERR 5 at 10600).
+DIM SHARED L16(300) AS INTEGER 'PASS2-RECON: door.pct frame 2.
+DIM SHARED L17(300) AS INTEGER 'PASS2-RECON: door.pct frame 3.
+DIM SHARED L18(300) AS INTEGER 'PASS2-RECON: door.pct frame 4.
 DIM I192(2000) 'PASS2-RECON: grid array indexed (L191*I188)+I186. With L191=71 and I188 up to 21, max index ~1515 - was 500 (subscript-out-of-range at 14750/11650 etc.)
 DIM I300(100)
 DIM L302(100)
@@ -126,7 +127,7 @@ REM error 17 (2 )
 250 OPEN "door.pct " FOR INPUT AS #1
 260 FOR I14 = 0 TO 125
 270   IR12 = (I14 * 2)
-280   INPUT #1, I15(I14), L16(IR12), L17(IR12), L18(IR12)
+280   INPUT #1, I15(I14), L16(I14), L17(I14), L18(I14) 'PASS2-RECON: de-strided L16/L17/L18 (were at IR12=I14*2 - same Spring stride artifact as the death sprites; PUT needs contiguous arrays). door.pct = 4 frames (I15/L16/L17/L18), each a 31x31 GET-sprite (header 62,31).
 290 NEXT
 300 SCREEN 1
 310 LOCATE 10, 12
@@ -272,7 +273,7 @@ REM error 17 (2 )
 1710 I300(45) = 1
 1720 IR12 = (L22$ = "x")
 1730 IF ((L22$ = "g") OR (L22$ = "x")) = 0 THEN GOTO 1750
-1740
+1740 RETURN 'PASS2-RECON: lost RETURN - exit the safe dial on "x"/"g" (the dial is GOSUB'd from 6840). Blank here fell to 1750 GOTO 1560, so "x" looped back into the dial instead of exiting - couldn't leave, cursor never returned.
 1750 GOTO 1560
 1760 I107 = I107 - 10
 1770 IF I107 <> -10 THEN GOTO 1790
@@ -300,7 +301,7 @@ REM error 17 (2 )
 1990 SOUND L95, .1
 2000 IF (I107 / 10) <> 0# THEN GOTO 2020
 2010 SOUND L95, .1
-2020
+2020 RETURN 'PASS2-RECON: lost RETURN - end of the '6'-key rotate routine (1760: I107-=10 + dial feedback). Blank here fell into the '4'-key routine at 2030 (I107+=10), so pressing 6 did -10 then +10 = no net movement (the "6 does nothing" bug). RETURN ends the 6-rotate cleanly.
 2030 I107 = I107 + 10
 2040 IF I107 <> 360 THEN GOTO 2060
 2050 I107 = 0
@@ -325,7 +326,7 @@ REM error 17 (2 )
 2240 SOUND L95, .1
 2250 IF (I107 / 10) <> 0# THEN GOTO 2270
 2260 SOUND L95, .1
-2270
+2270 RETURN 'PASS2-RECON: lost RETURN. This routine (GOSUB'd while rotating the safe dial) plays a click/tone when the dial position I107/10 hits a combination number (18/23/27/32/0). Blank here fell straight into the ON ERROR diagnostic handler at 2280 - so pressing 6/4 to rotate dropped into the handler with ERR=0 (no real error, pure fall-through).
 2280 BEEP
 2290 SCREEN 0: WIDTH 80: CLS
 2300 LOCATE 5, 5: PRINT "PASS2-RECON DIAGNOSTIC -- error handler triggered"
@@ -751,7 +752,7 @@ REM error 17 (2 )
 6820 CALL Snd5280
 6830 IF L339$(I14) <> "dial" THEN GOTO 6860
 6840 GOSUB 1540
-6850
+6850 RETURN 'PASS2-RECON: lost RETURN. The "dial" action (6830) runs the safe dial (6840 GOSUB 1540), which is self-contained - exit the action routine here. Blank here fell into the transition code at 6860/6880, which set L36$ = L339$(I14) = "dial" and tried to OPEN "dial.pac" -> ERR 53. RETURN keeps you in the safe room (same pattern as 6790).
 6860 IF L339$(I14) <> "end" THEN GOTO 6880
 6870 GOTO 14260
 6880 L36$ = L339$(I14)
@@ -874,7 +875,7 @@ REM error 17 (2 )
 8055 GET (1, 8)-(9, 18), L278: GET (1, 8)-(9, 18), L403  _
 'PASS2-RECON: init L278/L403 so a PUT never hits a zero array. The wilb/golf deaths now load+draw their OWN sprites (I404/L405, fixed at 9960/10210+), so this no longer feeds them - it only backstops the inventory PUT at 5200 and the cutscene PUT at 14550, both of which still reference L278 (likely separate disconnects to chase later). Without some init, those PUTs throw ERR 5.
 8060 DEF SEG 'PASS2-RECON: was Print 0 - likely DEF SEG reset after video-memory BLOAD
-8061 IF L36$ <> "title" THEN GOTO 8130 'PASS2-RECON: gate music to title scene only (Spring dropped conditional)
+8061 IF L36$ <> "title" THEN GOTO 8130 'PASS2-RECON: reverted to "title". Re-gating 8070-8120 to room3 played the WRONG tune (user confirmed), so this block is NOT the room3 music - likely the title theme. The real room3 music ("doo-dah-doo-da-doo") is a different PLAY block; hunting it separately.
 8070 PLAY "<d5f5g+5A+5d5f5G+5A+5e5g5a+5b5a5>c+5d5c+5"
 8080 PLAY "<a>c+dc+<gaa+>d<gaa+.>d<g5g+5g 5g+5g5G+5"
 8090 PLAY "g05d04b-08g02g08f04g08a-08b-08c03a-04"
@@ -1120,7 +1121,7 @@ REM PASS2-RECON: removed 8 bogus GET (1,1)-(3,18) into L415-L429 (all grabbed th
 10360 PUT (135, 135), I404, XOR 'PASS2-RECON: final golf frame (I404) at rest; was L278 placeholder.
 10370 IF L448$ <> "y" THEN GOTO 10400
 10380 L448$ = ""
-10390
+10390 PUT (135, 135), I404, XOR: RETURN 'PASS2-RECON: reconstructed the injected-survive path (was blank/lost). A "y" in L448$ (checked at 10370) means you used the syringe in time, so golf leaves: erase his final frame (XOR over the 10360 PUT restores room4 underneath), then RETURN to keep playing in room4 - instead of falling through to the death transition at 10400-10500. (10380 already cleared L448$.) The golf death is GOSUB'd from the timed-death checks (11230+), so RETURN goes back to gameplay.
 10400 I14 = 0
 10410 L339$(I14) = "death"
 10420 L274$ = "y"
@@ -1132,29 +1133,29 @@ REM PASS2-RECON: removed 8 bogus GET (1,1)-(3,18) into L415-L429 (all grabbed th
 10480 SOUND L95, .2
 10490 SOUND L87, .5
 10500 GOTO 6880
-10510 RETURN 'PASS2-RECON: routine animates L455/457/459/461 sprites but they're never GET'd anywhere (Spring lost the init). Bypassing entirely until Phase 3 recovers proper sprite data.
+10510 REM PASS2-RECON: room3 door routine entry (GOSUB'd from 7090). UN-bypassed: the L455/457/459/461 PUTs below were Spring-corrupted array names (those are DIM 100, too small for the 31x31 door) - the real frames are door.pct's I15/L16/L17/L18 (DIM 150), loaded at 250-290. Fixed the PUTs + the 10540 RETURN. The tune at 10740 is the room3 door music.
 10515 IR12 = (I300(50) = 0)
 10520 IR14 = ((L36$ <> "room3") OR (I300(50) = 0))
 10530 IF ((L348$ = "d") OR (IR14)) = 0 THEN GOTO 10550
-10540
+10540 RETURN 'PASS2-RECON: lost RETURN - door-open conditions not met (not room3, prereq I300(50) unset, or already opened L348$="d"), so return without drawing. 10530 jumps past this to 10550 when the door SHOULD animate.
 10550 IF I300(42) <> 1 THEN GOTO 10570
 10560 GOTO 10720
 10570 FOR I408 = 1 TO 2
 10580   SOUND 32676, 1
 10590 NEXT
-10600 PUT (175, 109), L455, PSET
+10600 PUT (175, 109), I15, PSET 'PASS2-RECON: was L455 (Spring-corrupted; DIM 100 too small). I15 = door.pct frame 1.
 10610 FOR I408 = 1 TO 2
 10620   SOUND 32676, 1
 10630 NEXT
-10640 PUT (175, 109), L457, PSET
+10640 PUT (175, 109), L16, PSET 'PASS2-RECON: was L457. L16 = door.pct frame 2.
 10650 FOR I408 = 1 TO 2
 10660   SOUND 32676, 1
 10670 NEXT
-10680 PUT (175, 109), L459, PSET
+10680 PUT (175, 109), L17, PSET 'PASS2-RECON: was L459. L17 = door.pct frame 3.
 10690 FOR I408 = 1 TO 2
 10700   SOUND 32676, 1
 10710 NEXT
-10720 PUT (175, 109), L461, PSET
+10720 PUT (175, 109), L18, PSET 'PASS2-RECON: was L461. L18 = door.pct frame 4 (open door - also redrawn on later room3 visits via 10560).
 10730 IF I300(42) = 1 THEN GOTO 10750
 10740 PLAY "<<f6p20d7p20g-7p20e-7p20a5>>"
 10750 I300(42) = 1
@@ -1438,7 +1439,7 @@ REM error 41 ()
 14560
 14570 GOTO 2440
 14580 L137 = TIMER
-14590 GOSUB 15320
+14590 CALL DeathMusic
 14600 IF (TIMER - L137) <= XYZ THEN GOTO 14620
 14610 GOTO 14630
 14620 GOTO 14600
@@ -1496,6 +1497,7 @@ REM error 41 ()
 15120 RETURN  _
 'PASS2-RECON: lost RETURN. The map page (15030+, reached as item 16 in the use-item dispatch GOSUB'd from 5020) sets the palette, BLOADs map1.pic, waits for a key, then must RETURN to the inventory. Blank here meant it fell into the infinite palette-flash loop at 15130 (15300 resets I14, so it never exits without a keypress) - that's the flicker, and why breaking landed on 15200.
 15130 KEY OFF
+15135 DEF SEG = &HB800: BLOAD "burn.pic", 0: DEF SEG 'PASS2-RECON: load the fire/burn image (org BURN.PIC). Spring lost this BLOAD - that's why only the palette flashed with no fire picture. Same lost-BLOAD pattern as the map (15055). The flash loop below (15140+) flickers the palette over this image for the burning effect.
 15140 FOR I14 = 1 TO 300
 15150   PALETTE 1, 14
 15160   PALETTE 2, 12
@@ -1512,31 +1514,10 @@ REM error 41 ()
 15270   L22$ = INKEY$
 15280   IF L22$ = "" THEN GOTO 15300
 REM error 41 ()
-15290   GOTO 15320 'PASS2-RECON: exit outer FOR loop on keypress
+15290   GOTO 15316 'PASS2-RECON: exit outer FOR loop on keypress -> fire-ending music wrapper at 15316 (was GOTO 15320, which hit the tune's RETURN with no GOSUB on the stack = ERR 3)
 15300   I14 = 1
 15310 NEXT
-15320 RANDOMIZE TIMER
-15330 L579 = INT(RND * 4)
-15340 IF L579 <> 1 THEN GOTO 15370
-15350 GOTO 15440
-15360 GOTO 15440
-15370 IF L579 <> 2 THEN GOTO 15400
-15380 GOTO 15460
-15390 GOTO 15440
-15400 IF L579 <> 3 THEN GOTO 15430
-15410 GOTO 15490
-15420 GOTO 15440
-15430 GOTO 15510
-15440 PLAY "<<<g-2g8a+8f+8e8d-3e4f+5f+5e-5e3>d2>>"
-15450 RETURN  _
-'PASS2-RECON: lost RETURN (Spring left 15450 blank). The death-music routine (15320, GOSUB'd from 14590) picks ONE of 4 random tunes (L579) and jumps to it; each tune must RETURN so the death screen continues to the timer/INKEY$ wait + inventory at 14600+. Without it the chosen tune fell through into the other tunes and then into 15530 -> 16750 -> 18680 END: it played everything and quit.
-15460 PLAY "<<<d+8e-8<a8g8f3b8g8f+8e3"
-15470 PLAY "  g-2g8a8f+8e8d-3e4f+5c8c8c3>>>"
-15480 RETURN 'PASS2-RECON: lost RETURN - end of death tune 2 (15460/15470).
-15490 PLAY "<<<c3c3d-5d-5c3c3<b-5a-5>c3c3d-5e-5c3c3>>>"
-15500 RETURN 'PASS2-RECON: lost RETURN - end of death tune 3.
-15510 PLAY "<g8a8b-8b8<c8g8a8b-8a8a8b8a8>>"
-15520 RETURN 'PASS2-RECON: lost RETURN - end of death tune 4. This makes 15530 (GOTO 16750 -> 18680 END) dead code: it was only the fall-through quit the music kept hitting.
+15316 RUN 'PASS2-RECON: fire-ending exit. The flash loop (curtains burning) lands here on keypress (15290). RUN = restart at the intro, with NO tune - the original fire ending plays no music (DeathMusic is death-SCREEN only, called from 14590). The original quit to DOS here + DARKV.BAT re-ran GAME.EXE; RUN is the IDE/standalone equivalent.
 15530 GOTO 16750
 16750 GOTO 18680
 18680 END
@@ -2044,9 +2025,10 @@ SUB NotesSub   'PASS2-RECON: journal-note display, was module 12840-13920 (GOTO'
 12850 PALETTE 1, 7
 12860 PALETTE 2, 2
 12870 PALETTE 3, 15
+12875 DEF SEG = &HB800: BLOAD "book.pic", 0: DEF SEG 'PASS2-RECON: load the book/journal image (org BOOK.PIC). Spring lost this BLOAD, so only text showed and the bare 12850-12870 palette recolored the inventory (the white shift you saw). The image fills the screen during the wait below; 12930 CLS then clears it for the note text. Same lost-BLOAD pattern as map (15055) and intro (16915).
 12880 L137 = TIMER
 12890 L144 = L144 + 40
-12900 IF (TIMER - L137) >= XYZ THEN GOTO 12920
+12900 IF (TIMER - L137) >= XYZ THEN GOTO 12920 'PASS2-RECON: holds the book.pic image (BLOAD'd at 12875) on screen for XYZ(=2)s, then 12920+ does CLS+text. Reverted my .5 shortening - that was when the image was missing and the wait looked like a hang; with the book showing, this IS the intended book-then-text view. Tune XYZ if 2s feels off.
 12910 GOTO 12900
 12920 L270$ = "y"
 12930 CLS
@@ -2149,4 +2131,28 @@ SUB NotesSub   'PASS2-RECON: journal-note display, was module 12840-13920 (GOTO'
 13900 PRINT "I'm afraid he is becoming suspicous."
 13910 PRINT "(The rest of the page has been torn out)"
 13920 GOTO 13360
+END SUB
+
+SUB DeathMusic   'PASS2-RECON: random death/ending tune (was module 15320-15520). GOSUB'd from 14590 (death screen) and 15316 (fire ending); moved to a SUB for the 64KB module limit. The four RETURNs became EXIT SUB.
+15320 RANDOMIZE TIMER
+15330 L579 = INT(RND * 4)
+15340 IF L579 <> 1 THEN GOTO 15370
+15350 GOTO 15440
+15360 GOTO 15440
+15370 IF L579 <> 2 THEN GOTO 15400
+15380 GOTO 15460
+15390 GOTO 15440
+15400 IF L579 <> 3 THEN GOTO 15430
+15410 GOTO 15490
+15420 GOTO 15440
+15430 GOTO 15510
+15440 PLAY "<<<g-2g8a+8f+8e8d-3e4f+5f+5e-5e3>d2>>"
+15450 EXIT SUB 'PASS2-RECON: death tune 1 end (recovered lost RETURN; the routine picks 1 of 4 random tunes via L579, each RETURNs - see 15480/15500/15520).
+15460 PLAY "<<<d+8e-8<a8g8f3b8g8f+8e3"
+15470 PLAY "  g-2g8a8f+8e8d-3e4f+5c8c8c3>>>"
+15480 EXIT SUB 'PASS2-RECON: lost RETURN - end of death tune 2 (15460/15470).
+15490 PLAY "<<<c3c3d-5d-5c3c3<b-5a-5>c3c3d-5e-5c3c3>>>"
+15500 EXIT SUB 'PASS2-RECON: lost RETURN - end of death tune 3.
+15510 PLAY "<g8a8b-8b8<c8g8a8b-8a8a8b8a8>>"
+15520 EXIT SUB 'PASS2-RECON: lost RETURN - end of death tune 4. This makes 15530 (GOTO 16750 -> 18680 END) dead code: it was only the fall-through quit the music kept hitting.
 END SUB
