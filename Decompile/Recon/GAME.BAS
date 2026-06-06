@@ -1579,7 +1579,7 @@ L87 = 50: L88 = 500: L95 = 100: L113 = 200: L134 = 1000: L281 = 700   'SOUND fre
 L279 = 300: L280 = 450: L632 = 75   'SOUND freqs recovered by find_lost_constants.ps1
 L355 = 1047   'POKE target ADDRESS (7190 POKE L355,32); was 0 -> corrupting DGROUP offset 0
 L439 = 150: L441 = 156   'Joe X/Y for the facing direction-calc (9720/9730)
-L287 = 100   'PLACEHOLDER freq (5430/5470) - symbol is an address, real freq unrecoverable
+L287 = 10000   'RECOVERED from GAME.EXE: symbol-table column 2710 was the VALUE in hex (=10000 Hz), NOT an address - Spring prints the value for no-flag consts, an address only for type-flagged vars. Siren under-tone (Snd5410, was 5430/5470); verified as the immediate MOV AX,2710h in the SOUND call. (Earlier "unrecoverable" note was wrong.)
 L143 = 1 / 60: L144 = 0: L145 = 59: L149 = 119: L150 = 179   'L143=clock rate 1/60, L144=counter, hour-boundary thresholds
 L466 = 65: L467 = 74: L468 = 88: L191 = 71   'timed-death thresholds + inventory grid stride
 END SUB
