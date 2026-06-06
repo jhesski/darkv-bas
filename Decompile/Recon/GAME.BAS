@@ -8,6 +8,9 @@ DECLARE SUB Snd5410 ()
 DECLARE SUB Snd5520 ()
 DECLARE SUB NotesSub ()
 DECLARE SUB DeathMusic ()
+DECLARE SUB PctComplete ()
+DECLARE SUB InvGrid ()
+DECLARE SUB DoorOpen ()
 ' PASS2-RECON: DEFINT I,L,R,X removed - it BACKFIRED on this float-heavy code. The intro's single math (the I107/10 comparisons, animation) needed integer<->single conversions that cost more than the integer savings, pushing the 64KB overflow EARLIER (to ~line 2000). The DIM SHARED ... AS SINGLE declarations below are redundant without DEFINT but harmless. Real headroom comes from the SUB offloads instead.
 COMMON SHARED L10, I14, L22$, I24, I25, L30 'PASS2-RECON: removed I15()/L16()/L17()/L18() - door.pct GET/PUT sprite frames, moved to DIM SHARED AS INTEGER below. As SINGLE (COMMON default) PUT threw ERR 5 at 10600. Same fix as I404/L405.
 COMMON SHARED L36$, L39, L81, L87, L88, L95, L105, I107, L109, L110, L111
@@ -365,7 +368,7 @@ REM error 17 (2 )
 2600 L147 = INT(L144 * L143) - 180 'PASS2-RECON: INT for whole-minute display
 2610 LOCATE 3, 1
 2620 PRINT "The time is "; L146; ":"; L147;
-2630 GOSUB 14130
+2630 CALL PctComplete
 2640 PRINT "You are in the ";
 2650 IR12 = (L36$ = "room4")
 2660 IF ((L36$ = "openclos") OR (L36$ = "room4")) = 0 THEN GOTO 2680
@@ -585,7 +588,7 @@ REM error 17 (2 )
 4800 PRINT "Drug"
 4810 I186 = I186 + 1
 4820 I192((L191 * I188) + I186) = 34
-4830 GOSUB 14720
+4830 CALL InvGrid
 4840 LOCATE 25, 1
 4850 PRINT "r=restore,s=save,q=quit,x=exit inventory";
 4860 L22$ = INKEY$
@@ -622,7 +625,7 @@ REM error 17 (2 )
 5170 L275$ = ""
 5180 GOSUB 9230
 5190 IF I272 <> 1 THEN GOTO 5210
-5200 PUT (135, 135), L278, XOR
+5200 PUT (135, 135), I404, XOR 'PASS2-RECON: re-draw the doctor (I404) after the inventory exit reloads room4 (5140); was the L278 placeholder. Same fix as 14550. Only when I272=1 (doctor encounter active).
 5210 RETURN  _
 'PASS2-RECON: end of the inventory routine (2440, GOSUB'd from 7620). Line 5190 GOTOs here as an early exit. Without this RETURN, exiting inventory falls into the GET sound routine at 5220 (the stray beep). 5220 is reached only via GOSUB 5220 (the GET verb).
 ' PASS2-RECON: 5 sound routines (5220/5280/5330/5410/5520) moved to SUBs Snd5220..Snd5520 (file end) to free module-level code under QB's 64KB segment limit. GET/pick-up sound -> SUB Snd5220.
@@ -777,7 +780,7 @@ REM error 17 (2 )
 7060 L299 = (TIMER - L0) + L299
 7070 L0 = TIMER
 7080 IF (INT(L144 * L143)) <= 35 THEN GOTO 7100
-7090 GOSUB 10510
+7090 CALL DoorOpen
 7100 IF I272 <> 1 THEN GOTO 7180
 7110 IF (TIMER - L137) <= XYZ THEN GOTO 7180
 7120 LOCATE 1, 1
@@ -1133,34 +1136,6 @@ REM PASS2-RECON: removed 8 bogus GET (1,1)-(3,18) into L415-L429 (all grabbed th
 10480 SOUND L95, .2
 10490 SOUND L87, .5
 10500 GOTO 6880
-10510 REM PASS2-RECON: room3 door routine entry (GOSUB'd from 7090). UN-bypassed: the L455/457/459/461 PUTs below were Spring-corrupted array names (those are DIM 100, too small for the 31x31 door) - the real frames are door.pct's I15/L16/L17/L18 (DIM 150), loaded at 250-290. Fixed the PUTs + the 10540 RETURN. The tune at 10740 is the room3 door music.
-10515 IR12 = (I300(50) = 0)
-10520 IR14 = ((L36$ <> "room3") OR (I300(50) = 0))
-10530 IF ((L348$ = "d") OR (IR14)) = 0 THEN GOTO 10550
-10540 RETURN 'PASS2-RECON: lost RETURN - door-open conditions not met (not room3, prereq I300(50) unset, or already opened L348$="d"), so return without drawing. 10530 jumps past this to 10550 when the door SHOULD animate.
-10550 IF I300(42) <> 1 THEN GOTO 10570
-10560 GOTO 10720
-10570 FOR I408 = 1 TO 2
-10580   SOUND 32676, 1
-10590 NEXT
-10600 PUT (175, 109), I15, PSET 'PASS2-RECON: was L455 (Spring-corrupted; DIM 100 too small). I15 = door.pct frame 1.
-10610 FOR I408 = 1 TO 2
-10620   SOUND 32676, 1
-10630 NEXT
-10640 PUT (175, 109), L16, PSET 'PASS2-RECON: was L457. L16 = door.pct frame 2.
-10650 FOR I408 = 1 TO 2
-10660   SOUND 32676, 1
-10670 NEXT
-10680 PUT (175, 109), L17, PSET 'PASS2-RECON: was L459. L17 = door.pct frame 3.
-10690 FOR I408 = 1 TO 2
-10700   SOUND 32676, 1
-10710 NEXT
-10720 PUT (175, 109), L18, PSET 'PASS2-RECON: was L461. L18 = door.pct frame 4 (open door - also redrawn on later room3 visits via 10560).
-10730 IF I300(42) = 1 THEN GOTO 10750
-10740 PLAY "<<f6p20d7p20g-7p20e-7p20a5>>"
-10750 I300(42) = 1
-10760 L348$ = "d"
-10770 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 10770 and next line 10780 is a GOSUB'd subroutine, so 10770 is a routine-end RETURN.
 10780 IF I186 <= 22 THEN GOTO 10810
 10790 I188 = 21
 10800 I186 = 6
@@ -1371,13 +1346,13 @@ REM error 18 ()
 12820 GOTO 12800
 12830 RETURN 'PASS2-RECON: lost RETURN. The "insert chemicals into syringe" action (12700) ends with this TIMER delay; blank here fell straight into the journal-note display (12840). RETURN ends the action - and lets 12840-13920 move cleanly into SUB NotesSub for the 64KB module limit.
 13930 IF ((I272 = 2) OR (I272 = 1)) = 0 THEN GOTO 13950
-13940
+13940 RETURN 'PASS2-RECON: I272=2 (doctor injected) or 1 (death screen) -> attack already handled, return. Was blank.
 13950 IR12 = (I300(43) = 1)
 13960 IF ((L36$ = "room4") AND IR12) = 0 THEN GOTO 14010
-13970 L448$ = "y"
-13980 L142$ = "y"
-13990 GOSUB 10140
-14000 GOTO 14020
+13970 L448$ = "y": GOSUB 10140: PUT (135, 135), I404, XOR 'PASS2-RECON: REBUILT doctor attack (was auto-resolve 13970 L448$="y" + 14000 GOTO 14020). Only reached when I272=0 (13930 RETURNs once the encounter is active). Curtains+room4 -> doctor walks in (GOSUB 10140; L448$="y" survives-not-kills, 10390 erases) then re-draw at rest so he STOPS in front of you.
+13980 I272 = 1: L137 = TIMER 'PASS2-RECON: enter the doctor-encounter mode. I272=1 makes 7630/7640 route every verb to the doctor handler at 14330 (inject / look-action messages / the kill timer that lives there now). L137 = inject-window clock, frozen by the inventory (2450/5110).
+13990 RETURN
+14000 RETURN
 14010 RETURN  _
 'PASS2-RECON: "not won" exit of the win/ending-check routine (13930, GOSUB'd after every verb at 7720). Line 13960 GOTOs here when the win condition (room4 AND I300(43)=1) is false - i.e. normal play. Without this, every look/get/action falls into the % complete + credits ending screen. The win case (14000 GOTO 14020) jumps over this line.
 14020 L137 = TIMER
@@ -1392,30 +1367,18 @@ REM error 18 ()
 14110 GOTO 14090
 REM error 41 ()
 14120 GOTO 14250 'PASS2-RECON: was an undecodable hole. On the win/death screen (after the keypress at 14100), skip the % complete sub (14130-14240, which is GOSUB'd by the inventory at 2630) and go straight to the credits (14250).
-14130 I566 = 0
-14140 FOR I14 = 1 TO 51
-14150   IF I300(I14) <> 1 THEN GOTO 14170
-14160   I566 = I566 + 1
-14170 NEXT
-14180 IF I300(36) <> 1 THEN GOTO 14200
-14190 I566 = I566 + 2
-14200 IF I300(35) <> 1 THEN GOTO 14220
-14210 I566 = I566 + 2
-14220 I567 = CINT((I566 * 100) / 47)
-14230 PRINT I567; "% complete";
-14240 RETURN  _
-'PASS2-RECON: end of the "% complete" sub (GOSUB'd by the inventory at 2630). Without this it fell into CALL S15540 (credits = the stray song) and looped, so the inventory never drew the room name/Objects/items. The win flow now jumps to 14250 via 14120, so this RETURN is only reached via the inventory GOSUB.
 14250 CALL S15540
 14260 IF I300(43) <> 1 THEN GOTO 14290
-14270 GOTO 14250
+14270 CALL S15540: SYSTEM 'PASS2-RECON: END2 - curtains lit + escaped via the rope = the good ending. Credits (END2.PIC) then exit to DOS. Was GOTO 14250, an infinite credits loop (14250->14260->14270->14250).
 14280 GOTO 14300
-14290 GOTO 14050
+14290 CALL S15540: RUN 'PASS2-RECON: END1 - escaped without lighting the curtains. Credits (END1.PIC) then RUN restarts at the intro. Was GOTO 14050, which looped back through the credits.
 14300 SYSTEM
 14310 PRINT ERL
 14320 SYSTEM
 14330 IR12 = (I317 = 35)
 14340 IF ((L22$ = "u") AND IR12) = 0 THEN GOTO 14360
 14350 GOTO 14460
+14355 IF (TIMER - L137) > 5 THEN GOSUB 10140 'PASS2-RECON: doctor kill timer. A non-inject verb (look/action/wrong-item) past the ~5s window -> the doctor swings and kills (GOSUB 10140; L448$<>"y" here -> the death at 10400 -> death room). The inject path (14340-14350) jumps over this. L137 was started at 13980 and is frozen while you're in the inventory.
 14360 IF L22$ <> "u" THEN GOTO 14390
 14370 LOCATE 1, 1
 14380 PRINT "He sees what your trying do!                "
@@ -1425,7 +1388,7 @@ REM error 41 ()
 14420 IF L22$ <> "l" THEN GOTO 14450
 14430 LOCATE 1, 1
 14440 PRINT "The mental patient is preparing to kill you!"
-14450
+14450 RETURN 'PASS2-RECON: non-inject verbs RETURN to the main loop (handler is GOSUB'd at 7640 -> 7650 GOTO 7050). Covers the 'l'/'a'/'u'-no-syringe messages (14380/14410/14440) AND 'x' after leaving the inventory. Was GOTO 2440, which RE-ENTERED the inventory - you couldn't exit during the encounter. Only (u + syringe 35) at 14340-14350 reaches the inject.
 14460 SOUND L95, .2
 14470 SOUND L87, .5
 14480 SOUND 32676, 2
@@ -1435,9 +1398,9 @@ REM error 41 ()
 14520 LOCATE 1, 1
 14530 PRINT "You quickly inject him and he crumbles into a distorted heap. "
 14540 L22$ = "n"
-14550 PUT (135, 135), L278, XOR
+14550 PUT (135, 135), I404, XOR 'PASS2-RECON: erase the doctor with I404 (the golf/doctor sprite loaded at 10180); was the L278 placeholder.
 14560
-14570 GOTO 2440
+14570 RETURN 'PASS2-RECON: after injecting, RETURN to the game (handler GOSUB'd at 7640 -> 7650 GOTO 7050; I272=2 now so normal play resumes). Was GOTO 2440 = re-enter the inventory. (5130's smart-room exit also lands here; RETURN cleanly pops the inventory GOSUB.)
 14580 L137 = TIMER
 14590 CALL DeathMusic
 14600 IF (TIMER - L137) <= XYZ THEN GOTO 14620
@@ -1452,28 +1415,6 @@ REM error 41 ()
 14690 GOTO 14600
 14700 L36$ = "smart"
 14710 GOTO 2440
-14720 FOR I188 = 2 TO 21 STEP 19
-14730   FOR I186 = 5 TO 23
-14740     FOR I14 = 1 TO 40
-14750       IF I192((I186 + 1) + (L191 * I188)) <> L302(I14) THEN GOTO 14770
-14760       I574 = 1
-14770     NEXT
-14780     IF I574 = 1 THEN GOTO 14810
-14790     LOCATE I186, I188 - 1
-14800     PRINT "*"
-14810     I574 = 0
-14820   NEXT
-14830 NEXT
-14840 I14 = 0
-14850 FOR I188 = 2 TO 21 STEP 19
-14860   FOR I186 = 5 TO 23
-14870     I14 = I14 + 1
-14880     L302(I14) = I192((I186 + 1) + (L191 * I188))
-14890   NEXT
-14900 NEXT
-14910 I186 = 6
-14920 I188 = 2
-14930 RETURN 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 14930 and next line 14940 is a GOSUB'd subroutine, so 14930 is a routine-end RETURN.
 14940 IF I192((I186 + 1) + (L191 * I188)) <> 16 THEN GOTO 14960
 14950 GOTO 15030
 14960 IF ((I192((I186 + 1) + (L191 * I188)) = 3) OR (I192((I186 + 1) + (L191 * I188)) = 21)) = 0 THEN GOTO 14980
@@ -1643,139 +1584,76 @@ L143 = 1 / 60: L144 = 0: L145 = 59: L149 = 119: L150 = 179   'L143=clock rate 1/
 L466 = 65: L467 = 74: L468 = 88: L191 = 71   'timed-death thresholds + inventory grid stride
 END SUB
 
-15540 SUB S15540
-15550 DIM R28(600)
-15560 SCREEN 1
-15570 PALETTE 1, 8
-15580 PALETTE 2, 4
-15590 PALETTE 3, 14
-15600 KEY OFF
-15610 PLAY "e-6d5e-5d5f7p7"
-15620 PLAY "a5>c6<b6a5g6a4"
-REM error 12 (1  ,0  ,0 )
-15630 GOTO 15650 '????
-15640 SOUND 32761, 1
-15650 R32 = R32 + 1
-15660 IF R32 <= 5 THEN GOTO 15640
-REM error 12 (1 )
-15670 GOTO 15870 '????
-REM error 12 (1 )
-15680 GOTO 15860 '????
-15690 IF R36 <> 1 THEN GOTO 15720
-15700 R38 = 8
-15710 GOTO 15770
-15720 IF R36 <> 2 THEN GOTO 15750
-15730 R38 = 7
-15740 GOTO 15770
-15750 IF R36 <> 3 THEN GOTO 15770
-15760 R38 = 15
-15770 PALETTE R42, R38
-REM error 12 (1 )
-15780 GOTO 15840 '????
-15790 IF RND >= .9 THEN GOTO 15820
-15800 SOUND (RND * 71) + 50, (RND * .2) + .3
-15810 GOTO 15830
-15820 SOUND 32767, .5
-15830 R32 = R32 + 1
-15840 IF R32 <= 5 THEN GOTO 15790
-15850 R36 = R36 + 1
-15860 IF R36 <= 3 THEN GOTO 15690
-15870 R42 = R42 + 1
-15880 IF R42 <= 3 THEN GOTO 15680
-15890 PALETTE 0, 15
-15900 KEY OFF
-REM error 12 (1  ,0  ,0 )
-15910 GOTO 15930 '????
-15920 SOUND 32671, .5
-15930 R32 = R32 + 1
-15940 IF R32 <= 7 THEN GOTO 15920
-15950 PALETTE 0, 0
-REM error 12 (1 )
-15960 GOTO 16160 '????
-REM error 12 (1 )
-15970 GOTO 16150 '????
-15980 IF R36 <> 1 THEN GOTO 16010
-15990 R38 = 8
-16000 GOTO 16060
-16010 IF R36 <> 2 THEN GOTO 16040
-16020 R38 = 7
-16030 GOTO 16060
-16040 IF R36 <> 3 THEN GOTO 16060
-16050 GOSUB 16440
-16060 PALETTE R42, R38
-REM error 12 (1 )
-16070 GOTO 16130 '????
-16080 IF RND >= .9 THEN GOTO 16110
-16090 SOUND (RND * 71) + 50, (RND * .2) + .3
-16100 GOTO 16120
-16110 SOUND 32767, .5
-16120 R32 = R32 + 1
-16130 IF R32 <= 5 THEN GOTO 16080
-16140 R36 = R36 + 1
-16150 IF R36 <= 3 THEN GOTO 15980
-16160 R42 = R42 + 1
-16170 IF R42 <= 3 THEN GOTO 15970
-REM error 12 (1 )
-16180 GOTO 16200 '????
-16190 SOUND 32676, .1
-16200 R32 = R32 + 1
-16210 IF R32 <= 40 THEN GOTO 16190
-16220 GOSUB 16620
-REM error 12 (1 )
-16230 GOTO 16250 '????
-16240 SOUND 32761, 1
-16250 R32 = R32 + 1
-16260 IF R32 <= 20 THEN GOTO 16240
-16270 GOSUB 16510
-16280 PRINT "You run swiftly from the flaming"
-16290 PRINT "building that is being consumed by"
-16300 PRINT "the blaze. As you look back at the"
-16310 PRINT "burning house, spewing fiery shrapnel"
-16320 PRINT "about the grounds you wonder about"
-16330 PRINT "your uncle and his work. What was"
-16340 PRINT "he really like? What was obliterated"
-16350 PRINT "in the house? Did you leave something"
-16360 PRINT "behind or undone ...."
-16370 PRINT "Maybe some day you'll find out."
-16380 PRINT ""
-16390 PRINT "Press a key to exit."
-16400 R46$ = INKEY$
-16410 IF (R46$) <> "" THEN GOTO 16430
-16420 GOTO 16400
-16430 SYSTEM
-16440 IF R42 <> 1 THEN GOTO 16460
-16450 R38 = 8
-16460 IF R42 <> 2 THEN GOTO 16480
-16470 R38 = 2
-16480 IF R42 <> 3 THEN GOTO 16500
-16490 R38 = 6
-16500
-REM error 12 (1 )
-16510 GOTO 16580 '????
-REM error 12 (1 )
-16520 GOTO 16560 '????
-16530 LOCATE INT(RND * 23) + 1, INT(RND * 40) + 1
-16540 PRINT " "
-16550 SOUND 32676, .05
-16560 R50 = R50 + 1
-16570 IF R50 <= 40 THEN GOTO 16530
-16580 R32 = R32 + 1
-16590 IF R32 <= 23 THEN GOTO 16520
-16600 CLS
-16610
-16620 GET (212, 140)-(262, 160), R28
-16630 PUT (212, 140), R28, XOR
-16640 LINE (211, 148)-(265, 148), 1
-REM error 12 (212 )
-16650 GOTO 16710 '????
-16660 PUT (R54, 140), R28, XOR
-16670 SOUND (RND * 100) + 50, .1
-16680 SOUND L95, .1
-16690 PUT (R54, 140), R28, XOR
-16700 R54 = R54 - 1
-16710 IF R54 >= 65 THEN GOTO 16660
-16720
-16730 ERASE R28
+15540 SUB S15540   'PASS2-RECON: REBUILT faithfully from org\ENDER.PAC (the original uncorrupted END2 source). Spring's decompile was riddled with '???? jumps; ENDER.PAC has the real FOR/NEXT loops + GOSUB subs - palette helper (15640=ENDER 40), black-square wipe (15650=ENDER 50), car right-to-left (15660=ENDER 60). END1 (no curtains) = the simple branch at 15700.
+15550 DIM R28(600) AS INTEGER
+15551 SCREEN 1
+15552 KEY OFF
+15553 PALETTE 1, 8: PALETTE 2, 4: PALETTE 3, 14
+15554 IF I300(43) <> 1 THEN GOTO 15700
+15555 DEF SEG = &HB800: BLOAD "end.pic", 0: DEF SEG
+15556 PLAY "e-6d5e-5d5f7p7"
+15557 PLAY "a5>c6<b6a5g6a4"
+15558 FOR R32 = 1 TO 5: SOUND 32761, 1: NEXT R32
+15559 FOR R42 = 1 TO 3
+15560 FOR R36 = 1 TO 3
+15561 IF R36 = 1 THEN R38 = 8 ELSE IF R36 = 2 THEN R38 = 7 ELSE R38 = 15
+15562 PALETTE R42, R38
+15563 FOR R32 = 1 TO 5: IF RND < .9 THEN SOUND RND * 71 + 50, (RND * .2) + .3 ELSE SOUND 32767, .5
+15564 NEXT R32
+15565 NEXT R36: NEXT R42
+15566 PALETTE 0, 15
+15567 DEF SEG = &HB800: BLOAD "end2.pic", 0: DEF SEG
+15568 FOR R32 = 1 TO 7: SOUND 32671, .5: NEXT R32
+15569 PALETTE 0, 0
+15570 FOR R42 = 1 TO 3
+15571 FOR R36 = 1 TO 3
+15572 IF R36 = 1 THEN R38 = 8 ELSE IF R36 = 2 THEN R38 = 7 ELSE GOSUB 15640
+15573 PALETTE R42, R38
+15574 FOR R32 = 1 TO 5: IF RND < .9 THEN SOUND RND * 71 + 50, (RND * .2) + .3 ELSE SOUND 32767, .5
+15575 NEXT R32
+15576 NEXT R36: NEXT R42
+15577 FOR R32 = 1 TO 40: SOUND 32676, .1: NEXT R32
+15578 GOSUB 15660
+15579 FOR R32 = 1 TO 20: SOUND 32761, 1: NEXT R32
+15580 GOSUB 15650
+15581 PRINT "You run swiftly from the flaming"
+15582 PRINT "building that is being consumed by"
+15583 PRINT "the blaze. As you look back at the"
+15584 PRINT "burning house, spewing fiery shrapnel"
+15585 PRINT "about the grounds you wonder about"
+15586 PRINT "your uncle and his work. What was"
+15587 PRINT "he realy like? What was obliterated"
+15588 PRINT "in the house? Did you leave something"
+15589 PRINT "behind or undone ...."
+15590 PRINT "Maybe some day you'll find out."
+15591 PRINT "": PRINT "Press a key to exit."
+15592 IF INKEY$ = "" THEN GOTO 15592
+15593 EXIT SUB
+15640 IF R42 = 1 THEN R38 = 8
+15641 IF R42 = 2 THEN R38 = 2
+15642 IF R42 = 3 THEN R38 = 6
+15643 RETURN
+15650 FOR R32 = 1 TO 23: FOR R31 = 1 TO 40
+15651 LOCATE INT(RND * 23) + 1, INT(RND * 40) + 1: PRINT " "
+15652 SOUND 32676, .05
+15653 NEXT R31: NEXT R32
+15654 CLS
+15655 RETURN
+15660 GET (212, 140)-(262, 160), R28
+15661 PUT (212, 140), R28, XOR
+15662 LINE (211, 148)-(265, 148), 1
+15663 FOR R30 = 212 TO 65 STEP -1
+15664 PUT (R30, 140), R28, XOR
+15665 SOUND (RND * 100) + 50, .1: SOUND 100, .1
+15666 PUT (R30, 140), R28, XOR
+15667 NEXT R30
+15668 RETURN
+15700 DEF SEG = &HB800: BLOAD "end1.pic", 0: DEF SEG
+15701 PALETTE 1, 8: PALETTE 2, 4: PALETTE 3, 14
+15702 PLAY "e-6d5e-5d5f7p7"
+15703 PLAY "a5>c6<b6a5g6a4"
+15704 IF INKEY$ = "" THEN GOTO 15704
+15705 EXIT SUB
 16740 END SUB
 
 16760 SUB S16760
@@ -2155,4 +2033,75 @@ SUB DeathMusic   'PASS2-RECON: random death/ending tune (was module 15320-15520)
 15500 EXIT SUB 'PASS2-RECON: lost RETURN - end of death tune 3.
 15510 PLAY "<g8a8b-8b8<c8g8a8b-8a8a8b8a8>>"
 15520 EXIT SUB 'PASS2-RECON: lost RETURN - end of death tune 4. This makes 15530 (GOTO 16750 -> 18680 END) dead code: it was only the fall-through quit the music kept hitting.
+END SUB
+
+SUB PctComplete   'PASS2-RECON: completion-percent display (was module 14130-14240). GOSUB'd from the inventory at 2630; moved to a SUB for the 64KB module limit. RETURN -> EXIT SUB.
+14130 I566 = 0
+14140 FOR I14 = 1 TO 51
+14150   IF I300(I14) <> 1 THEN GOTO 14170
+14160   I566 = I566 + 1
+14170 NEXT
+14180 IF I300(36) <> 1 THEN GOTO 14200
+14190 I566 = I566 + 2
+14200 IF I300(35) <> 1 THEN GOTO 14220
+14210 I566 = I566 + 2
+14220 I567 = CINT((I566 * 100) / 47)
+14230 PRINT I567; "% complete";
+14240 EXIT SUB 'PASS2-RECON: end of the percent-complete sub (GOSUB'd by the inventory at 2630); moved to SUB PctComplete for the 64KB module limit.
+END SUB
+
+SUB InvGrid   'PASS2-RECON: inventory grid/marker display (was module 14720-14930). GOSUB'd from the inventory at 4830; moved to a SUB for the 64KB module limit. RETURN -> EXIT SUB.
+14720 FOR I188 = 2 TO 21 STEP 19
+14730   FOR I186 = 5 TO 23
+14740     FOR I14 = 1 TO 40
+14750       IF I192((I186 + 1) + (L191 * I188)) <> L302(I14) THEN GOTO 14770
+14760       I574 = 1
+14770     NEXT
+14780     IF I574 = 1 THEN GOTO 14810
+14790     LOCATE I186, I188 - 1
+14800     PRINT "*"
+14810     I574 = 0
+14820   NEXT
+14830 NEXT
+14840 I14 = 0
+14850 FOR I188 = 2 TO 21 STEP 19
+14860   FOR I186 = 5 TO 23
+14870     I14 = I14 + 1
+14880     L302(I14) = I192((I186 + 1) + (L191 * I188))
+14890   NEXT
+14900 NEXT
+14910 I186 = 6
+14920 I188 = 2
+14930 EXIT SUB 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 14930 and next line 14940 is a GOSUB'd subroutine, so 14930 is a routine-end RETURN.
+END SUB
+
+SUB DoorOpen   'PASS2-RECON: room3 safe-door open animation + music (was module 10510-10770). GOSUB'd from 7090; moved to a SUB for the 64KB module limit. RETURNs -> EXIT SUB.
+10510 REM PASS2-RECON: room3 door routine entry (GOSUB'd from 7090). UN-bypassed: the L455/457/459/461 PUTs below were Spring-corrupted array names (those are DIM 100, too small for the 31x31 door) - the real frames are door.pct's I15/L16/L17/L18 (DIM 150), loaded at 250-290. Fixed the PUTs + the 10540 RETURN. The tune at 10740 is the room3 door music.
+10515 IR12 = (I300(50) = 0)
+10520 IR14 = ((L36$ <> "room3") OR (I300(50) = 0))
+10530 IF ((L348$ = "d") OR (IR14)) = 0 THEN GOTO 10550
+10540 EXIT SUB 'PASS2-RECON: lost RETURN - door-open conditions not met (not room3, prereq I300(50) unset, or already opened L348$="d"), so return without drawing. 10530 jumps past this to 10550 when the door SHOULD animate.
+10550 IF I300(42) <> 1 THEN GOTO 10570
+10560 GOTO 10720
+10570 FOR I408 = 1 TO 2
+10580   SOUND 32676, 1
+10590 NEXT
+10600 PUT (175, 109), I15, PSET 'PASS2-RECON: was L455 (Spring-corrupted; DIM 100 too small). I15 = door.pct frame 1.
+10610 FOR I408 = 1 TO 2
+10620   SOUND 32676, 1
+10630 NEXT
+10640 PUT (175, 109), L16, PSET 'PASS2-RECON: was L457. L16 = door.pct frame 2.
+10650 FOR I408 = 1 TO 2
+10660   SOUND 32676, 1
+10670 NEXT
+10680 PUT (175, 109), L17, PSET 'PASS2-RECON: was L459. L17 = door.pct frame 3.
+10690 FOR I408 = 1 TO 2
+10700   SOUND 32676, 1
+10710 NEXT
+10720 PUT (175, 109), L18, PSET 'PASS2-RECON: was L461. L18 = door.pct frame 4 (open door - also redrawn on later room3 visits via 10560).
+10730 IF I300(42) = 1 THEN GOTO 10750
+10740 PLAY "<<f6p20d7p20g-7p20e-7p20a5>>"
+10750 I300(42) = 1
+10760 L348$ = "d"
+10770 EXIT SUB 'PASS2-RECON-AUTO: lost RETURN. Nothing jumps to 10770 and next line 10780 is a GOSUB'd subroutine, so 10770 is a routine-end RETURN.
 END SUB
