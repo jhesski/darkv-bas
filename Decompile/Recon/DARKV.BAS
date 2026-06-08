@@ -1,3 +1,4 @@
+REM $DYNAMIC
 '--Dark Visions  by Rob & Jon Kreuzer--
 'Programmed in QuickBASIC 4.5
 DECLARE SUB Intro ()
@@ -135,7 +136,7 @@ CALL InitVars
 770 PRINT " your uncle's residence"
 780 PRINT " PRESS ANY KEY TO CONTINUE "
 790 a$ = INKEY$
-800 IF a$ <> "" THEN GOTO 820
+800 IF a$ <> "" THEN SCREEN 1: RETURN
 810 GOTO 790
 820 SCREEN 1
 840 CLS

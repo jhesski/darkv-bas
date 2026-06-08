@@ -15,8 +15,8 @@ spriteFolder = ".\res\sp\"
 'dataFolder = ".\res\data\"
 
 intro:
-'intro.car
-'intro.hill
+intro.car
+intro.hill
 intro.enter
 SLEEP
 
@@ -64,7 +64,7 @@ SUB intro.car ()
 
 											 
 	FOR carX = 8 TO 220 STEP 4
-		motor = 37
+		motor = 50
 		carY = carY - .5
 		PUT (carX, carY), carMask(0), AND
 		PUT (carX, carY), car(0), XOR
@@ -95,7 +95,7 @@ intro.CarSound:
 
 intro.CarIncSound:
 	SOUND motor, .06
-	SOUND 80, .06
+	SOUND 100, .06
 	motor = motor + 18
 
 intro.carCheckSound:
@@ -147,9 +147,9 @@ SUB intro.enter ()
 			PUT (143, i), joe1(0), XOR
 		END IF
 
-		FOR j = 100 TO 250 STEP 10
+		FOR j = 50 TO 250 STEP 10
 			SOUND 100, .05
-			SOUND stp, .05
+			SOUND (450 - j) / 2, .05
 
 			SOUND j, .05
 		NEXT j
@@ -189,6 +189,9 @@ SUB intro.hill ()
 
 	GOSUB intro.hillWalk
 
+	delay 300
+	GOSUB intro.hillWalk2
+
 	delay 400
 EXIT SUB
 
@@ -200,7 +203,7 @@ intro.hillSound:
 
 intro.hillIncSound:
 	SOUND motor, .06
-	SOUND 69, .06
+	SOUND 100, .06
 	motor = motor + 18
 
 intro.hillCheckSound:
@@ -213,7 +216,7 @@ RETURN
 EXIT SUB
 
 intro.hillLSound:
-	SOUND 76, .04
+	SOUND 32676, .04
 	r76 = r76 + 1
 	IF r76 <= 2 THEN GOTO intro.hillLSound
 RETURN
@@ -227,6 +230,19 @@ intro.hillWalkSound:
 	motor = motor - 10
 intro.hillwalkCheck:
 	IF motor >= 50 THEN GOTO intro.hillWalkSound
+RETURN
+
+'+-----------------------+
+'|  2nd thunder sweep    |
+'+-----------------------+
+intro.hillWalk2:
+	motor = 200
+intro.hillWalk2Sound:
+	SOUND motor, .1
+	SOUND 50, .2
+	motor = motor - 30
+	IF motor >= 50 THEN GOTO intro.hillWalk2Sound
+	SOUND 300, .1
 RETURN
 
 END SUB
